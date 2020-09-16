@@ -3,3 +3,7 @@
   user-select: none;
   color: #757575;
 }
+
+div.editable {
+  box-shadow: 0 0 2px #000;
+}
