@@ -15,6 +15,10 @@ const sel = document.getSelection();
 sel.removeAllRanges();
 sel.addRange(range);
 
-['keydown', 'keypress', 'keyup'].forEach(x => {
-  div.dispatchEvent(new KeyboardEvent(x, { bubbles: true, cancelable: false }));
-});
+setTimeout(() => {
+  ['keydown', 'keypress', 'keyup'].forEach(x => {
+    div.dispatchEvent(
+      new KeyboardEvent(x, { bubbles: true, cancelable: false })
+    );
+  });
+}, 1000);
