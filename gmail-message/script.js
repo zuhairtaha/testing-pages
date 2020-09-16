@@ -21,4 +21,4 @@ setTimeout(() => {
       new KeyboardEvent(x, { bubbles: true, cancelable: false })
     );
   });
-}, 1000);
+}, 200);
