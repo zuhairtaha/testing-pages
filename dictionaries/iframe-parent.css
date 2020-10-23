@@ -11,16 +11,20 @@ body {
   font-family: 'Roboto', sans-serif;
   color: #191919;
   font-size: 16px;
+  display: block;
+  overflow: hidden;
 }
 
 main {
-  display: flex;
-  flex-flow: column;
   height: 100%;
 }
 
 #content {
-  flex: 1 1 auto;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 60px;
 }
 
 #content iframe {
@@ -29,12 +33,12 @@ main {
 }
 
 footer {
-  position: relative;
-  min-height: 60px;
-  /* height doesn't work with IE10 */
-  flex: 0 1 40px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: 60px;
   border-top: solid 1px #d7d7d7;
-  display: flex;
   z-index: 2;
   background-color: #e7ecf3;
   box-shadow: 0 1px 3px 2px rgba(0, 0, 0, 0.29);
@@ -63,7 +67,6 @@ footer {
 .dictionary-item {
   cursor: pointer;
   align-items: center;
-  display: flex;
   background-color: #e7ecf3;
 }
 
@@ -72,7 +75,7 @@ footer {
 }
 
 #selected-dictionary {
-  display: flex;
+  position: relative;
   height: 100%;
   line-height: 100%;
   padding-left: 0.5em;
@@ -82,6 +85,11 @@ footer {
 
 #selected-dictionary .dictionary-item {
   background-color: transparent;
+  line-height: 60px;
+}
+
+.dropdown-open #selected-dictionary {
+  background-color: #c7cdd7;
 }
 
 body:not(.dropdown-open) #selected-dictionary:hover {
@@ -97,12 +105,7 @@ body:not(.dropdown-open) #selected-dictionary:hover {
   border-color: transparent transparent #000 transparent;
 }
 
-.dropdown-open #dictionaries-list-container {
-  background-color: #c7cdd7;
-}
-
 #dictionaries-list .dictionary-item {
-  flex-direction: row;
   width: 100%;
   padding: 14px 40px 14px 14px;
 }

@@ -104,7 +104,7 @@ function updateSelectDictionaryButtonContent(el) {
 
 // :::::::::::::: MAIN :::::::::::::: //
 fillDictionariesList();
-const activeElement = /** @type {!HTMLElement} */(listContainer.getElementsByClassName('active')[0]);
+var activeElement = /** @type {!HTMLElement} */(listContainer.getElementsByClassName('active')[0]);
 updateSelectDictionaryButtonContent(activeElement);
 selectDictionaryButton.addEventListener('click', handleClickSelectDictionaryButton);
 
@@ -127,6 +127,6 @@ for (var i = 0; i < items.length; i++){
   items[i].addEventListener('click', function(e){
     var dictionary = this.getAttribute('dictionary');
     var url = generateIframeUrl(dictionary);
-    iframe.src = url;
+    // iframe.src = url;
   });
 }
