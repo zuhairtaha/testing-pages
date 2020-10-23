@@ -1,0 +1,139 @@
+var dictionariesListDiv = document.getElementById('dictionaries-list');
+var selectDictionaryButton = document.getElementById('selected-dictionary');
+var listContainer = document.getElementById('dictionaries-list-container');
+var iframe = document.getElementById('iframe');
+
+/** @type {!HTMLElement[]} */
+var dictionaryItems = [];
+
+function fillDictionariesList() {
+  for (var i = 0; i < DICTIONARIES.length; i++) {
+    var itemDiv = createDictionaryItem(i);
+    if (i === 0) {
+      itemDiv.classList.add('active');
+    }
+    itemDiv.addEventListener('click', handleClickDictionaryItem);
+    dictionariesListDiv.appendChild(itemDiv);
+    dictionaryItems.push(itemDiv);
+  }
+}
+
+/** @param {!Event} evt */
+function handleClickDictionaryItem(evt) {
+  var target = evt.currentTarget;
+  for (var i = 0; i < dictionaryItems.length; i++) {
+    var dictionaryItem = dictionaryItems[i];
+    if (target === dictionaryItem) {
+      dictionaryItem.classList.add('active');
+    } else {
+      dictionaryItem.classList.remove('active');
+    }
+  }
+  var el = /** @type {!HTMLElement} */ (target);
+  updateSelectDictionaryButtonContent(el);
+  listContainer.classList.remove('open');
+}
+
+/**
+ * @param {!number} index
+ * @return {!HTMLDivElement}
+ */
+function createDictionaryItem(index) {
+  var lang = DICTIONARIES[index];
+  var itemDiv = document.createElement('div');
+  itemDiv.setAttribute('value', lang.value);
+  itemDiv.className = 'dictionary-item' + (index == SELECTED_DICTIONARY_INDEX ? ' selected' : '');
+  itemDiv.setAttribute('dictionary', lang.value);
+
+  var span = document.createElement('span');
+  span.textContent = lang.title;
+
+  var icon = document.createElement('img');
+  icon.src = lang.icon;
+
+  itemDiv.appendChild(icon);
+
+  itemDiv.appendChild(span);
+  return itemDiv;
+}
+
+function handleClickSelectDictionaryButton() {
+  listContainer.classList.toggle('open');
+}
+
+function generateIframeUrl(dictionary){
+  var params = window.location.search.replace(/^\?/, '').split('&').map(function(param){
+    // Parse parameters and add dictionary selection
+    if (/^parameters=/.test(param)){
+      var strValue = decodeURIComponent(param.replace(/^parameters=/, ''));
+      try {
+        var value = JSON.parse(strValue);
+        if (!value || typeof(value) !== 'object' || value.forEach !== undefined){
+          throw new Error('Invalid parameters value.');
+        }
+        
+        value['dictionary'] = dictionary;
+        param = 'parameters=' + JSON.stringify(value);
+      }
+      catch (err){
+        // Use simple replacement
+        param = 'parameters=' + encodeURIComponent(strValue.replace(/[\s}]+$/, '') + ',"dictionary":"' + dictionary + '"}');
+      }
+    }
+
+    return param;
+  });
+  
+  var url = 
+    window.location.protocol + '//' +
+    window.location.host +
+    window.location.pathname +
+    '?' + params.join('&') +
+    window.location.hash;
+  
+    return url;
+}
+
+/** @param {HTMLElement=} el */
+function updateSelectDictionaryButtonContent(el) {
+  selectDictionaryButton.innerHTML = '';
+  var index = 0;
+  if (el) {
+    index = dictionaryItems.indexOf(el);
+  }
+  selectDictionaryButton.appendChild(createDictionaryItem(index));
+}
+
+// :::::::::::::: MAIN :::::::::::::: //
+fillDictionariesList();
+updateSelectDictionaryButtonContent(listContainer.getElementsByClassName('selected')[0]);
+selectDictionaryButton.addEventListener('click', handleClickSelectDictionaryButton);
+
+window.addEventListener('click', function () {
+  listContainer.classList.remove('open');
+});
+
+listContainer.addEventListener('click', function (evt) {
+  evt.stopPropagation();
+});
+
+window.addEventListener('blur', function () {
+  if (document.activeElement === iframe) {
+    listContainer.classList.remove('open');
+  }
+});
+
+var items = dictionariesListDiv.getElementsByClassName('dictionary-item');
+for (var i = 0; i < items.length; i++){
+  items[i].addEventListener('click', function(e){
+    var dictionary = this.getAttribute('dictionary');
+    var url = generateIframeUrl(dictionary);
+    window.top.location.href = url; // Temporary until iframing is allowed by third party providers
+    //document.getElementById('iframe').src = url;
+  });
+}
+
+// Temporary until iframing is allowed by third party providers
+if (/^ordbogen-/.test(DICTIONARIES[SELECTED_DICTIONARY_INDEX].value)){
+  window.top.location.href = generateIframeUrl(DICTIONARIES[SELECTED_DICTIONARY_INDEX].value);
+}

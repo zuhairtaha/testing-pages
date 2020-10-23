@@ -1,0 +1,124 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-family: sans-serif, Arial;
+  color: #191919;
+  font-size: 13px;
+}
+
+main {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+
+#content {
+  flex: 1 1 auto;
+}
+
+#content iframe {
+  height: 100%;
+  width: 100%;
+}
+
+footer {
+  flex: 0 1 40px;
+  border-top: solid 1px #d7d7d7;
+  display: flex;
+}
+
+#dictionaries-list-container {
+  position: relative;
+  user-select: none;
+}
+
+#dictionaries-list {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  overflow-y: auto;
+  background: #fff;
+  max-height: 250px;
+  box-shadow: 1px 0 3px 0 rgba(0, 0, 0, 0.2), 0 2px 3px 0 #d9d9d9;
+}
+
+#dictionaries-list {
+  display: none;
+}
+
+#dictionaries-list-container.open #dictionaries-list {
+  display: inline;
+}
+
+.dictionary-item {
+  cursor: pointer;
+  align-items: center;
+  display: flex;
+}
+
+#selected-dictionary {
+  display: flex;
+  height: 100%;
+  line-height: 100%;
+  padding-left: 0.5em;
+  padding-right: 2em;
+}
+
+#selected-dictionary:hover {
+  background: #eee;
+  cursor: pointer;
+}
+
+#dictionaries-list-container.open #selected-dictionary {
+  background: #eee;
+}
+
+#selected-dictionary span::after {
+  position: absolute;
+  content: '';
+  right: -1.5em;
+  width: 0;
+  height: 0;
+  border: 5px solid transparent;
+  border-color: transparent transparent #000 transparent;
+}
+
+#dictionaries-list-container.open #selected-dictionary span::after {
+  border-color: #000 transparent transparent transparent;
+  top: 0.5em;
+}
+
+#dictionaries-list .dictionary-item {
+  flex-direction: row;
+  width: 100%;
+  padding: 0.5em 1em 0.5em 0;
+}
+
+#dictionaries-list .dictionary-item.active {
+  background-color: #eee;
+}
+
+.dictionary-item:hover {
+  background: #eee;
+}
+
+.dictionary-item img {
+  width: 32px;
+  height: 20px;
+  vertical-align: middle;
+}
+
+.dictionary-item span {
+  padding-left: 10px;
+  line-height: 100%;
+  white-space: nowrap;
+}
+
+#selected-dictionary span {
+  position: relative;
+}

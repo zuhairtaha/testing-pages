@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  color: #191919;
+  font-size: 16px;
+}
+
+main {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+
+#content {
+  flex: 1 1 auto;
+}
+
+#content iframe {
+  height: 100%;
+  width: 100%;
+}
+
+footer {
+  position: relative;
+  min-height: 60px;
+  /* height doesn't work with IE10 */
+  flex: 0 1 40px;
+  border-top: solid 1px #d7d7d7;
+  display: flex;
+  z-index: 2;
+  background-color: #e7ecf3;
+  box-shadow: 0 1px 3px 2px rgba(0, 0, 0, 0.29);
+}
+
+#dictionaries-list-container {
+  position: relative;
+  user-select: none;
+  z-index: 2;
+}
+
+#dictionaries-list {
+  position: absolute;
+  bottom: 100%;
+  overflow-y: auto;
+  background: #fff;
+  max-height: 325px;
+  border-bottom: solid 1px #ccc;
+  visibility: hidden;
+}
+
+.dropdown-open #dictionaries-list {
+  visibility: visible;
+}
+
+.dictionary-item {
+  cursor: pointer;
+  align-items: center;
+  display: flex;
+  background-color: #e7ecf3;
+}
+
+.dictionary-item:hover {
+  background: #d6dce4;
+}
+
+#selected-dictionary {
+  display: flex;
+  height: 100%;
+  line-height: 100%;
+  padding-left: 0.5em;
+  padding-right: 2em;
+  cursor: pointer;
+}
+
+#selected-dictionary .dictionary-item {
+  background-color: transparent;
+}
+
+body:not(.dropdown-open) #selected-dictionary:hover {
+  background-color: #d6dce4;
+}
+
+#selected-dictionary::before {
+  position: absolute;
+  content: '';
+  top: 22px;
+  right: 1em;
+  border: 5px solid transparent;
+  border-color: transparent transparent #000 transparent;
+}
+
+.dropdown-open #dictionaries-list-container {
+  background-color: #c7cdd7;
+}
+
+#dictionaries-list .dictionary-item {
+  flex-direction: row;
+  width: 100%;
+  padding: 14px 40px 14px 14px;
+}
+
+#dictionaries-list .dictionary-item.active {
+  background-color: #c7cdd7;
+}
+
+.dictionary-item img {
+  width: 41.6px;
+  height: 26px;
+  vertical-align: middle;
+}
+
+.dictionary-item span {
+  padding-left: 10px;
+  line-height: 100%;
+  white-space: nowrap;
+}
+
+#selected-dictionary span {
+  position: relative;
+}
+
+.dropdown-open #backdrop {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}

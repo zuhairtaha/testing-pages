@@ -1,0 +1,437 @@
+body {
+    line-height: 1.4em;
+    font-family: Georgia,Times,"Times New Roman",serif;
+    /*text-align: justify;*/
+    -webkit-text-size-adjust: none; /* Never autoresize text */
+}
+
+#top{
+    height:28px;
+    background: #598AA3;
+    text-align: center;
+    font-variant: small-caps;
+    color: #FFF;
+    font-size: 18px; 
+    font-weight: bold;
+}
+
+#middle {
+    padding: 0 5px;
+}
+
+a, a:link {
+    -webkit-tap-highlight-color: rgba(200, 204, 206, 0.3);
+}
+
+.stempelNoBorder, .stempel {
+    color: #999;
+}
+
+.stempel {
+    font-size: 75%;
+}
+
+.diskret {
+    color: #CCCCCC;
+}
+
+a, a:visited, k a, k a:visited {
+    color: #273e49;
+    border-bottom: 1px solid #CCCCCC;
+    text-decoration: none;
+    font-style: normal;
+    
+    -webkit-tap-highlight-color:rgba(0,0,0,0); /*Removing highlight*/
+}
+
+a:hover {
+    border-bottom: none;
+    color: #336699;
+}
+
+.ar, .artikel, .article {
+    border-bottom: 4px solid #598AA3;
+    padding-bottom: 1em;
+}
+
+.article {
+    border-color: #356C9E;
+}
+
+.bogspalte {
+    padding-top: 0.5em;
+}
+
+.head .k, .idiom .k, .match {
+    color: #ca2323;
+    font-weight: bold;
+}
+
+.ar .idiom .k {
+    font-weight: normal;
+}
+
+.k .opt {
+    vertical-align: super;
+    font-size: 75%;
+}
+
+.pos {
+    font-style: italic;
+}
+
+.forms .k {
+    color: #ca2323;
+}
+
+.etym .k, .etym .k a {
+    font-style: italic;
+}
+
+.def, .m, .etym, .phon, .idiom, .ex, .onyms, .ar, .artikel, .forms, .article {
+    display: block;
+    margin-top: 0.5em;
+}
+
+.l {
+    float:left;
+    color: #273e49;
+    font-weight: bold;
+}
+
+.dtrn, .ex, .onyms {
+    margin-left: 35px;
+    display: block;
+}
+
+.dtrn .co {
+    font-style: italic;
+}
+
+.dtrn .k {
+    font-style: italic;
+}
+
+.dtrn .k a {
+    font-weight: normal;
+}
+
+.style {
+    font-style: italic;
+}
+
+.style:before {
+    content: '(';
+}
+
+.style:after {
+    content: ')';
+}
+
+span.onyms {
+    color: #666;
+}
+
+span.synonym .k, span.antonym .k, span.related .k {
+    color: #333; /*#929292;*/
+    font-style: normal;
+    font-weight: normal;
+}
+
+span.synonyms:before {
+    content: "syn";
+}
+span.antonyms:before {
+    content: "ant";
+}
+
+span.relateds:before {
+    content: "se også";
+}
+
+span.etym:before {
+    content: "hist";
+    margin-right: 4px;
+}
+
+span.phon:before {
+    content: "fon";
+    margin-right: 4px;
+}
+
+span.onyms:before, span.etym:before, span.phon:before {
+    font-variant: small-caps;
+    font-style: normal;
+    color: #9F8869;
+    font-weight: bold;
+    border: 1px solid #9F8869;
+    padding: 0 4px 3px 4px;
+}
+
+.onyms .co:before, .ex .co:before {
+    content: "(";
+}
+
+.onyms .co:after, .ex .co:after {
+    content: ")";
+}
+
+.ex {
+    clear: both;
+    background-color: #e0e5e8;
+    border-radius: 10px 10px 10px 10px;
+    padding: 6px 13px;
+}
+
+.onyms .co, .ex .co {
+    font-style: italic;
+}
+
+.def .def {
+    border-top: 4px solid #e0e5e8;
+    padding-top: 10px;
+}
+
+.def .def .def {
+    border-top: 2px solid #e0e5e8;
+    padding-top: 10px;
+}
+
+.idiom .def {
+    border-top: none;
+    padding-top: 0;
+}
+
+.idiom .def .def {
+    border-top: none;
+    padding-top: 0;
+}
+
+.idiom .idiom {
+    border-top: 4px solid #E0E5E8;
+    padding-top: 10px;
+}
+
+.search {
+    width: 100%;
+    margin-top: 1em;
+}
+
+.search input[type=text] {
+    font-family: Georgia,Times,"Times New Roman",serif;
+    font-size: 16px;
+    padding-left: 5px;
+    width: 100%;
+    font-size: 16px;
+    height: 26px;
+    margin-top: 3px;
+}
+.textfieldwrapper {
+    overflow: hidden; 
+    padding-right: .5em;
+}
+
+.search input[type=submit] {
+    background: url('btn-bg.png');
+    border: none;
+    color: white;
+    width: 70px;
+    height: 24px;
+    padding-bottom: 3px;
+    margin-left: 10px;
+    margin-top: 4px;
+    font-family: Georgia,Times,"Times New Roman",serif;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    float: right;
+}
+
+/* Andre elementer */
+
+.super {
+   vertical-align: super;
+   font-size: 75%;
+   margin-top: -0.3em;
+}
+
+.sub {
+   vertical-align: sub;
+   font-size: 75%;
+   margin-top: -0.3em;
+}
+
+.fraction {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.fraction, .numerator, .denominator {
+    padding: 0 5px;
+    line-height: 1em;
+}
+
+.numerator {
+    display: inline-block;
+    padding-bottom: 3px;
+}
+
+.denominater {
+    border-top: 1px solid #000;
+    display: block;
+}
+
+.artikelkilde{
+   margin-top: 16px;
+   padding-top: 8px;
+   line-height: 1em;
+}
+
+.short-result, .nomatch {
+    background-color: #e0e5e8;
+    background: -webkit-linear-gradient(left, #e0e5e8, #edf1f3);
+    background: linear-gradient(to right, #e0e5e8, #edf1f3);
+    margin-top: 10px;
+    border: 1px solid #c8ccce; 
+    padding: 10px;
+    border-radius: 10px 10px 10px 10px;
+}
+
+.short-result p, .nomatch p {
+    padding: 0;
+    margin: 0;
+}
+
+.short-result p span, .nomatch p span {
+    color: #ca2323;
+}
+
+.short-result ul, .nomatch ul {
+    list-style-type: none;
+    color: #273e49;
+    padding: 0;
+    margin: 0;
+}
+
+.short-result ul > li, .nomatch ul > li {
+    display: list-item;
+    width: 100%;
+    border-top: 1px solid #c8ccce;
+    margin: 0;
+    padding: 5px 0;
+}
+
+.short-result ul > li:last-child, .nomatch ul > li:last-child {
+    border-bottom: 1px solid #c8ccce;
+}
+
+.short-result ul > li > a, .nomatch ul > li > a {
+    width: 100%;
+    display: block;
+    border-bottom: none;
+    padding: 5px 0;
+}
+
+.short-result ul > li > a:active, .nomatch ul > li > a:active {
+    background-color: white;
+}
+
+.short-result ul > li > a:hover, .nomatch ul > li > a:hover {
+    background-color: #c8ccce;
+}
+
+.short-result sup, .nomatch sup {
+    font-size: 75%;
+}
+
+.short-result h3, .nomatch h3 {
+    font-size: inherit;
+    line-height: inherit;
+    margin: 0 0 5px 0;
+}
+
+.short-result h3 .highlight, .nomatch h3 .highlight {
+    color: #ca2323;
+}
+
+.short-result h2, .nomatch h2 {
+    margin: 0 0 5px 0;
+    font-size: 1.1em;
+    border: none;
+    font-weight: bold;
+}
+
+.infobox {
+    margin-top: 1em;
+    border-top: 2px solid #719BB2; 
+    padding: 10px 0;
+    font-size: 90%;
+    font-style: italic;
+}
+
+.wide-button {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.wide-button a {
+    background-color: #598AA3;
+    background: -webkit-linear-gradient(top, #598AA3, #396C86);
+    background: linear-gradient(to bottom, #598AA3, #396C86);
+    border: 2px solid #4f6c7a;
+    border-radius: 5px;
+    color: #FFF;
+    height: 30px;
+    line-height: 30px;
+    display: block;
+}
+
+.wide-button a:hover, .wide-button a:active {
+    background: -webkit-linear-gradient(top, #396C86, #598AA3);
+    background: linear-gradient(to bottom, #396C86, #598AA3);
+}
+
+.wide-button a:visited {
+    color: #FFF;
+}
+
+.copyright {
+    color: #999;
+    text-align: center;
+}
+
+.audio {
+    margin-left: 5px;
+}
+
+audio {
+    display: inline;
+    width: 0px;
+    height: 0px;
+}
+
+.audio a, .audio a:visited {
+    text-decoration: none;
+    border: none;
+    -webkit-tap-highlight-color: rgba(192, 192, 192, 0.8);
+    height: 24px;
+}
+
+.audio img {
+    vertical-align: bottom;
+    cursor: pointer;
+}
+
+sup {
+    vertical-align: super;
+    font-size: xx-small;
+}
+
+.em {
+    font-style: italic;
+}
+
+.hiddenStructure {
+    display: none;
+}

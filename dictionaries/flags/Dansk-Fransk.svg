@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="60px" height="41px" viewBox="0 0 60 41" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>Dansk-Fransk</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Dansk-Fransk" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-2">
+            <g id="denmark-(1)" fill-rule="nonzero">
+                <ellipse id="Oval" fill="#F0F0F0" cx="20.0980392" cy="20.5" rx="20.0980392" ry="20.5"></ellipse>
+                <g id="Group" transform="translate(0.157016, 0.000000)" fill="#D80027">
+                    <path d="M15.571898,17.8261113 L39.8689357,17.8261113 C38.5843099,7.76773828 30.1523189,0 19.9410233,0 C18.4403435,0 16.9787607,0.169205078 15.571898,0.487275391 L15.571898,17.8261113 Z" id="Shape"></path>
+                    <path d="M10.3289005,17.8261113 L10.3289005,2.4925918 C4.81034007,5.5639082 0.859662224,11.1974844 0.0131108303,17.8261113 L10.3289005,17.8261113 Z" id="Shape"></path>
+                    <path d="M10.3289005,23.1738887 L0.0131108303,23.1738887 C0.859662224,29.8025156 4.81034007,35.4360918 10.3289005,38.5073281 L10.3289005,23.1738887 Z" id="Shape"></path>
+                    <path d="M15.571898,23.1738887 L15.571898,40.5127246 C16.9787607,40.8307949 18.4403435,41 19.9410233,41 C30.1523189,41 38.5843099,33.2322617 39.8689357,23.1738887 L15.571898,23.1738887 Z" id="Shape"></path>
+                </g>
+            </g>
+            <g id="france-(1)" transform="translate(19.000000, 0.000000)">
+                <circle id="Oval" fill="#F0F0F0" cx="20.5" cy="20.5" r="20.5"></circle>
+                <path d="M41,20.5 C41,11.6857207 35.4368125,4.17158984 27.6303965,1.27508398 L27.6303965,39.7249961 C35.4368125,36.8284102 41,29.3142793 41,20.5 Z" id="Path" fill="#D80027"></path>
+                <path d="M0,20.5 C0,29.3142793 5.56326758,36.8284102 13.3696035,39.724916 L13.3696035,1.27508398 C5.56326758,4.17158984 0,11.6857207 0,20.5 Z" id="Path" fill="#0052B4"></path>
+            </g>
+            <rect id="Rectangle" stroke-opacity="0" stroke="#957272" x="0.5" y="0.5" width="59" height="40"></rect>
+        </g>
+    </g>
+</svg>

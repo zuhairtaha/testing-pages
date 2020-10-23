@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico">
+  <title>Wizkids</title>
+  <link rel="stylesheet" href="iframe-parent.css">
+</head>
+
+<body>
+  <main>
+    <div id="content">
+      <iframe id="iframe" src="ddo/" frameborder="0"></iframe>
+    </div>
+    <footer>
+      <div id="dictionaries-list-container">
+        <div id="selected-dictionary"></div>
+        <div id="dictionaries-list"></div>
+      </div>
+    </footer>
+    <div id="backdrop"></div>
+  </main>
+  <script>
+    var DICTIONARIES = [
+      { value: 'betydning-ordnet', title: 'Betydning', icon: './images/ordnet.svg' },
+      { value: 'ordbogen-daen', title: 'Dansk-Engelsk', icon: './images/ordbogendotcom.svg' },
+      { value: 'ordbogen-enda', title: 'Engelsk-Dansk', icon: './images/ordbogendotcom.svg' },
+      { value: 'ordbogen-dade', title: 'Dansk-Tysk', icon: './images/ordbogendotcom.svg' },
+      { value: 'ordbogen-deda', title: 'Tysk-Dansk', icon: './images/ordbogendotcom.svg' },
+      { value: 'ordbogen-dafr', title: 'Dansk-Fransk', icon: './images/ordbogendotcom.svg' },
+      { value: 'ordbogen-frda', title: 'Fransk-Dansk', icon: './images/ordbogendotcom.svg' },
+      { value: 'ordbogen-daes', title: 'Virker Ikke-spansk', icon: './images/ordbogendotcom.svg' },
+      { value: 'ordbogen-esda', title: 'Virker Ikke-dansk', icon: './images/ordbogendotcom.svg' },
+      { value: 'ordbogen-dasv', title: 'Dansk-Svensk', icon: './images/ordbogendotcom.svg' },
+      { value: 'ordbogen-svda', title: 'Svensk-Dansk', icon: './images/ordbogendotcom.svg' },
+      { value: 'ordbogen-ende', title: 'Engelsk-Tysk', icon: './images/ordbogendotcom.svg' },
+      { value: 'ordbogen-deen', title: 'Tysk-Engelsk', icon: './images/ordbogendotcom.svg' }
+    ];
+
+    var SELECTED_DICTIONARY_INDEX = 0;
+  </script>
+  <script src="iframe-parent.js"></script>
+</body>
+
+</html>
