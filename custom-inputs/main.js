@@ -3921,7 +3921,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lit_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lit-element */ "./node_modules/lit-element/lit-element.js");
- /* harmony default export */ __webpack_exports__["default"] = (lit_element__WEBPACK_IMPORTED_MODULE_0__["css"]`:host{margin:auto;display:block;display:flex;flex-direction:column;align-items:center}[contenteditable=true],input,textarea{width:50%;height:50px;padding:1em;font-size:20px;background-color:#fff;text-align:left}`);
+ /* harmony default export */ __webpack_exports__["default"] = (lit_element__WEBPACK_IMPORTED_MODULE_0__["css"]`[contenteditable=true],input,textarea{width:100%;height:50px;padding:1em;font-size:20px;text-align:left}[contenteditable=true]{border:solid 1px gray}`);
     
 
 /***/ }),
