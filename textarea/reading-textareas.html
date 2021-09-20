@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Textareas</title>
+  <style>
+    textarea {
+      display: block;
+      margin: 1em auto;
+      font-size: 1em;
+      font-family: cursive;
+      padding: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <textarea name="ta1" id="ta1" cols="30" rows="4">
+    Lorem, ipsum dolor sit amet consectetur adipisicing elit. In, nemo?
+  </textarea>
+
+  <textarea name="ta2" id="ta2" cols="30" rows="4" style='background-color: #000; color: #fff;'>
+    Lorem, ipsum dolor sit amet consectetur adipisicing elit. In, nemo?
+  </textarea>
+
+  <textarea name="ta3" id="ta3" cols="30" rows="4" style="background-image: url(https://www.w3schools.com/cssref/paper.gif);">
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem repellat ducimus quia consequatur deleniti sapiente aspernatur ex sed quisquam unde! Id provident est voluptas, sunt similique natus voluptatibus doloribus. Repudiandae id exercitationem ipsam expedita beatae aperiam illo cumque eius laborum sequi aspernatur suscipit iste nesciunt eos quaerat, optio similique maiores.
+  </textarea>
+
+  <textarea name="ta4" id="ta4" cols="30" rows="4" style="background: url(https://source.unsplash.com/random)">
+    Lorem, ipsum dolor sit amet consectetur adipisicing elit. In, nemo?
+  </textarea>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      ta3.scrollTop = 100;
+    });
+  </script>
+</body>
+
+</html>
