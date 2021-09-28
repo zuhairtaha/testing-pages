@@ -1,0 +1,54 @@
+body {
+  font-size: 1.5em;
+}
+
+#d {
+  border: solid 1px #ccc;
+  margin: 150px auto;
+  padding: 10px;
+  display: table;
+}
+
+b {
+  color: green;
+  font-size: 1.5em;
+  border: solid 10px red;
+}
+
+span {
+  color: rebeccapurple;
+  font-size: 2em;
+}
+
+#e {
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+mark {
+  border: solid 10px green;
+}
+
+main {
+  font-size: 30px;
+}
+
+.title {
+  width: 350px;
+  margin: auto;
+  border: solid;
+  margin-top: 50px;
+}
+
+.title span {
+  font-size: 1.1em;
+}
+
+.dre-article-body-paragraph {
+  --dre-line-height: 1.44444444;
+  --dre-text-scaler-factor: 1;
+
+  font-size: 1.125rem;
+  font-size: calc(1.125rem * var(--dre-text-scaler-factor, 1));
+  line-height: 1.44444444em;
+}
