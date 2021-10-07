@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    main {
+      padding-top: 1em;
+    }
+
+    .s {
+      position: absolute;
+      top: 1em;
+      left: 1em;
+    }
+
+    .box {
+      display: flex;
+      border: 1px solid black;
+      margin-top: 5em;
+    }
+
+    .box>p {
+      border: solid 1px black;
+    }
+
+    .box :nth-child(1) {
+      order: 2;
+    }
+
+    .box :nth-child(2) {
+      order: 3;
+    }
+
+    .box :nth-child(3) {
+      order: 1;
+    }
+
+    .box :nth-child(4) {
+      order: 3;
+    }
+
+    .box :nth-child(5) {
+      order: 1;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <h1>title goes here</h1>
+    <span class="s">some content is here</span>
+  </main>
+
+  <div class="box">
+    <p id="p1">One </p>
+    <p id="p2">Two </p>
+    <p id="p3">Three </p>
+  </div>
+
+  <button id='select'>select</button>
+  <script>
+    select.addEventListener('click', evt => {
+      const r = new Range();
+      r.setStartBefore(p1);
+      r.setEndAfter(p3);
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(r);
+    });
+  </script>
+
+</body>
+
+</html>

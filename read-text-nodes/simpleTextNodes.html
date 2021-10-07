@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple nodes</title>
+</head>
+
+<body>
+  <span>span</span>
+  <p id="p">
+    ab cd. ef gh. hi.
+  </p>
+
+  <button id="s">select</button>
+
+  <br><br><br>
+  <h1>A word in two nodes (hello)</h1>
+  hel<b>lo</b> world. bye <b>bye</b>. 
+
+  <script>
+    function select() {
+      const r = new Range();
+      r.selectNode(document.getElementById('p'));
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(r);
+    }
+    select();
+
+    document.getElementById('s').addEventListener('click', select);
+  </script>
+</body>
+
+
+</html>

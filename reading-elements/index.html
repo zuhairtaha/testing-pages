@@ -59,6 +59,21 @@
       amet vel at repudiandae deserunt.</p>
   </div>
 
+  <script>
+    var btn = document.createElement('button');
+    btn.textContent = 'select';
+    document.body.appendChild(btn);
+
+    btn.addEventListener('click', () => {
+      var r = new Range();
+      r.setStart(document.querySelector('h3').firstChild, 4);
+      r.setEndAfter(document.querySelector('h3').childNodes[1].childNodes[0])
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(r)
+    });
+
+  </script>
 </body>
 
 </html>

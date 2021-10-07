@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Selection has input elements </title>
+  <style>
+    body {
+      width: 800px;
+      margin: 0 auto;
+      padding: 50px 1em;
+      border: 1px solid #ccc;
+      height: 100vh;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="d">node
+
+    <p contenteditable="true">paragraph <b>goes</b> here </p>
+    <input type="text" value="input goes here">
+    <span>span</span>
+    <textarea>textarea</textarea>
+    <select>
+      <option>option 1</option>
+      <option>option 2</option>
+    </select>
+    <i>italic</i>
+  </div>
+
+  <br>
+  <button id="btn">select</button>
+  <script>
+    var btn = document.getElementById('btn');
+    var d = document.getElementById('d');
+    btn.addEventListener('click', function () {
+      var selection = window.getSelection();
+      var range = document.createRange();
+      range.selectNodeContents(d);
+      selection.removeAllRanges();
+      selection.addRange(range);
+    });
+  </script>
+</body>
+
+</html>
