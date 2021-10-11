@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wrapped text at inline element</title>
+  <style>
+    body {
+      font-family: cursive;
+      font-size: 1.5em;
+      width: 600px;
+      margin: 0 auto;
+      text-align: justify;
+      height: 200vh;
+      padding-top: 250px;
+    }
+
+    #s {
+      color: red;
+      font-weight: bold;
+      letter-spacing: -1px;
+    }
+
+    #i {
+      color: blue;
+      font-size: 1.2rem;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <p id="p">
+    Lorem ipsum dolor sit amet.
+    <span id="s">
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique ipsum repellat odit! Doloremque earum
+    </span>
+    <i id="i">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa, aliquam.</i>
+    Lorem ipsum dolor sit amet.
+  </p>
+</body>
+
+</html>
