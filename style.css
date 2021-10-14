@@ -1,7 +1,13 @@
 body {
   font-family: cursive;
+  width: 1000px;
+  margin: 0 auto;
 }
 
 a {
-  display: block;
+  display: table;
+}
+
+a:hover {
+  background-color: #eee;
 }
