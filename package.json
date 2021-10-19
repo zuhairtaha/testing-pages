@@ -1,0 +1,23 @@
+{
+  "name": "testing-pages",
+  "version": "1.0.0",
+  "description": "\"# testing-pages\"",
+  "main": ".eslintrc.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zuhairtaha/testing-pages.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zuhairtaha/testing-pages/issues"
+  },
+  "homepage": "https://github.com/zuhairtaha/testing-pages#readme",
+  "devDependencies": {
+    "@types/serviceworker": "^0.0.26"
+  }
+}
