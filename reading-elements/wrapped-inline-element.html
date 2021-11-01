@@ -10,7 +10,7 @@
     body {
       font-family: cursive;
       font-size: 1.5em;
-      width: 600px;
+      width: 288px;
       margin: 0 auto;
       text-align: justify;
       height: 200vh;
@@ -40,6 +40,13 @@
     <i id="i">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa, aliquam.</i>
     Lorem ipsum dolor sit amet.
   </p>
+  <script>
+    const range = document.createRange();
+    range.selectNodeContents(document.getElementById('i'));
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+  </script>
 </body>
 
 </html>
