@@ -1,17 +1,18 @@
 body {
   width: 1000px;
   margin: auto;
-  display: flex;
-  flex-direction: column;
   padding-top: 100px;
+  box-shadow: 0 0 5px #ccc;
 }
 
 input[type='text'] {
-  margin-top: 10px;
   font-size: 20px;
+  display: block;
+  margin: 10px auto;
+  box-shadow: 0 0 5px #ccc;
 }
 
-input[type='text']:nth-child(2) {
+#t2 {
   border: solid 20px #ccc;
   line-height: 40px;
 }
