@@ -14,6 +14,28 @@
       border: 1px solid #ccc;
       height: 100vh;
     }
+
+    #multiple {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: medium;
+      width: 30%;
+      height: 100px;
+    }
+
+    #long-option {
+      white-space: normal;
+    }
+
+    #first-option {
+      color: green;
+      font-weight: bold;
+      font-size: 22px;
+      text-decoration: wavy;
+      padding: 5px 10px 3px 6px;
+      border-bottom: solid 8px pink;
+      padding-left: 15px;
+      margin-top: 10px;
+    }
   </style>
 </head>
 
@@ -29,9 +51,27 @@
       <option>option 2</option>
     </select>
     <i>italic</i>
-  </div>
 
-  <br>
+
+    <br>
+    Lorem ipsum dolor sit amet.
+    <select id="multiple" multiple>
+      <option id="first-option">option 1</option>
+      <option>option 2</option>
+      <optgroup label="optgroup">
+        <option>option 3</option>
+        <option id="long-option">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla iusto tenetur explicabo
+          deserunt saepe assumenda?</option>
+        <option>option 4</option>
+      </optgroup>
+    </select>
+    Lorem ipsum dolor sit amet.
+    <br>
+
+
+
+    <br>
+  </div>
   <button id="btn">select</button>
   <script>
     var btn = document.getElementById('btn');
