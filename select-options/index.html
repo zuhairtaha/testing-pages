@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Select options</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <label for="standard-select">Standard Select</label>
+  <div class="select">
+    <select id="standard-select">
+      <option value="Option 1">Option 1</option>
+      <option value="Option 2">Option 2</option>
+      <option selected value="Option 3">Option 3</option>
+      <option selected value="Option 4">Option 4</option>
+      <option value="Option 5">Option 5</option>
+      <option value="Option length">Option that has too long of a value to fit</option>
+    </select>
+    <span class="focus"></span>
+  </div>
+
+  <label for="multi-select">Multiple Select</label>
+  <div class="select select--multiple">
+    <select id="multi-select" multiple>
+      <option value="Option 1">Option 1</option>
+      <option value="Option 2">Option 2</option>
+      <option selected value="Option 3">Option 3</option>
+      <option value="Option 4">Option 4</option>
+      <option value="Option 5">Option 5</option>
+      <option value="Option length">Option that has too long of a value to fit</option>
+    </select>
+    <span class="focus"></span>
+  </div>
+
+  <label for="standard-select-disabled">Disabled Select</label>
+  <div class="select select--disabled">
+    <select id="standard-select-disabled" disabled>
+      <option selected value="Option 1">Option 1</option>
+      <option selected value="Option 2">Option 2</option>
+      <option value="Option 3">Option 3</option>
+      <option value="Option 4">Option 4</option>
+      <option value="Option 5">Option 5</option>
+      <option value="Option length">Option that is a long value and could wrap</option>
+    </select>
+  </div>
+
+  <label for="standard-select">Disabled Multiple Select</label>
+  <div class="select select--disabled select--multiple">
+    <select id="multi-select-disabled" multiple disabled>
+      <option selected value="Option 1">Option 1</option>
+      <option value="Option 2">Option 2</option>
+      <option value="Option 3">Option 3</option>
+      <option value="Option 4">Option 4</option>
+      <option value="Option 5">Option 5</option>
+      <option selected value="Option length">Option that is a long value and could wrap</option>
+    </select>
+  </div>
+</body>
+
+</html>

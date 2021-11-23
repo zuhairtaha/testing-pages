@@ -1,5 +1,5 @@
 body {
-  width: 1000px;
+  width: 3000px;
   margin: auto;
   padding-top: 100px;
   box-shadow: 0 0 5px #ccc;
@@ -15,4 +15,10 @@ input[type='text'] {
 #t2 {
   border: solid 20px #ccc;
   line-height: 40px;
+}
+
+#t3 {
+  width: 2500px;
+  border: solid 20px #ccc;
+  margin-left: 50px;
 }
