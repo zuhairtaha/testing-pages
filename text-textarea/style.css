@@ -1,0 +1,8 @@
+body {
+  margin: auto;
+  width: 800px;
+  padding-top: 100px;
+}
+textarea {
+  height: 100px;
+}
