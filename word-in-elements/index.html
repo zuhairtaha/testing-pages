@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A word in 3 elements</title>
+  <style>
+    body {
+      margin: auto;
+      width: 500px;
+      font-size: 2em;
+      background-color: black;
+      color: white;
+    }
+
+    span:first-child {
+      color: red;
+      font-size: 1.5em;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    i {
+      color: orange;
+    }
+
+    span:last-child {
+      color: green;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>
+    first <span>te</span><span>st</span><i>ing</i> last
+  </h1>
+  <button>Select</button>
+  <script>
+    const btn = document.querySelector('button');
+    btn.addEventListener('click', () => {
+      const range = document.createRange();
+      range.selectNodeContents(document.querySelector('h1'));
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+    });
+  </script>
+</body>
+
+</html>
