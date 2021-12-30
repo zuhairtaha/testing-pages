@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>text input text</title>
+  <style>
+    body {
+      margin: auto;
+      width: 1000px;
+      padding-top: 100px;
+      font-size: 2em;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <main><select name="select">
+      <option value="1">first</option>
+      <option value="2">second</option>
+      <option value="3">third</option>
+    </select>
+    test
+  </main>
+  <button id='select'>select</button>
+  <script>
+    const btn = document.querySelector('#select');
+    btn.addEventListener('click', () => {
+      const selection = window.getSelection();
+      const range = document.createRange();
+      range.selectNodeContents(document.querySelector('main'));
+      selection.removeAllRanges();
+      selection.addRange(range);
+    });
+  </script>
+
+  <!------------------------------------------------>
+  <hr>
+  <section><select class="test" multiple>
+      <option selected value="1">first</option>
+      <option value="2">second</option>
+      <option selected value="3">third</option>
+    </select>
+    test
+  </section>
+  <button id='s2'>select</button>
+  <script>
+    const btn2 = document.getElementById('s2');
+    btn2.addEventListener('click', () => {
+      const selection = window.getSelection();
+      const range = document.createRange();
+      range.selectNodeContents(document.querySelector('section'));
+      selection.removeAllRanges();
+      selection.addRange(range);
+    });
+  </script>
+
+
+  <!------------------------------------------------>
+  <div id="img-div">
+    test 
+    <img src="https://tahasoft.com/uploads/photo/1625410187.gif" alt="Lorem ipsum dolor sit amet. if you. can">
+    test test test. test test.
+  </div>
+  <button id='img-btn'>select</button>
+  <script>
+    const btn3 = document.getElementById('img-btn');
+    btn3.addEventListener('click', () => {
+      const selection = window.getSelection();
+      const range = document.createRange();
+      range.selectNodeContents(document.querySelector('#img-div'));
+      selection.removeAllRanges();
+      selection.addRange(range);
+    });
+  </script>
+</body>
+
+</html>
