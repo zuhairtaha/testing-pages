@@ -3941,7 +3941,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_global_global_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/global/global-element */ "./src/components/global/global-element.ts");
 /* harmony import */ var _components_my_card__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/my-card */ "./src/components/my-card.ts");
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n    <h2>textarea</h2>\n    <textarea></textarea>\n\n    <h2>input text</h2>\n    <input type='text' />\n\n    <h2>content editable div</h2>\n    <div contenteditable=\"true\"></div>\n    "]);
+  const data = _taggedTemplateLiteral(["\n    <h2>textarea</h2>\n    <textarea>test test. test test test</textarea>\n\n    <h2>input text</h2>\n    <input type='text' value='test test test. test test' />\n\n    <h2>content editable div</h2>\n    <div contenteditable=\"true\">content editable</div>\n    "]);
 
   _templateObject = function () {
     return data;
