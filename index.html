@@ -53,6 +53,17 @@
   <a href="word-in-elements/index.html">Word in 3 elements</a>
   <a href="dropdown-lists/index.html">Dropdown lists & images with alt text</a>
   <a href="span-input/index.html">P + Input</a>
+
+  <button id="open-all">OPEN ALL</button>
+  <script>
+    document.getElementById('open-all').addEventListener('click', function() {
+      var links = document.querySelectorAll('a');
+      for (const link of links) {
+        link.target = '_blank';
+        link.click();
+      }
+    });
+  </script>
 </body>
 
 </html>
