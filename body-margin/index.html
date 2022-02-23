@@ -7,16 +7,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Body with margins</title>
   <style>
+    html {
+      background: #eee;
+    }
+
     body {
-      margin-left: 500px;
-      margin-right: 250px;
-      margin-top: 200px;
+      position: relative;
+      margin: auto;
+      max-width: 760px;
+      padding: 0 40px;
+      border: solid 1px;
+      background: #fff;
+    }
+
+    .abs {
+      position: absolute;
+      left: 400px;
+      top: 200px;
     }
   </style>
+
 </head>
 
 <body>
   <h1>Issue with menu popups position</h1>
+  <button id="change">Change position</button>
   <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium delectus reiciendis, voluptas voluptatum nisi,
     possimus facilis nam ab libero aspernatur tempore iste. Vel magnam voluptatem dolores, amet natus sequi quasi
     numquam harum nihil deleniti repellendus soluta non consequuntur nisi dolore nulla neque optio praesentium! Iste
@@ -84,6 +99,15 @@
     exercitationem ea quasi, fugiat placeat et iusto inventore voluptatum. Non veritatis animi odit fuga, repellendus
     laborum. Pariatur nulla ipsum odio, dignissimos tenetur dicta. Accusamus ipsa officiis veritatis fugit rem,
     reprehenderit dolorem numquam ipsum nihil, aspernatur deserunt impedit harum.</p>
+
+  <script>
+    const btn = document.getElementById('change');
+
+    btn.addEventListener('click', () => {
+      document.body.classList.toggle('abs');
+      btn.textContent = btn.textContent === 'Absolute' ? 'Relative' : 'Absolute';
+    });
+  </script>
 </body>
 
 </html>
