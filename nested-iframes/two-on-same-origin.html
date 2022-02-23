@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Two nested on same origin</title>
+  <style>
+    iframe {
+      width: 80%;
+      height: 500px;
+    }
+
+    body {
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Top level</h1>
+  <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</p>
+  <div><i>Next two iframes are on same origin</i><br><br></div>
+  <iframe src="https://tahasoft.com/t/nested-iframes/outer.html" frameborder="1"></iframe>
+</body>
+
+</html>
