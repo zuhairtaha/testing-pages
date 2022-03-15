@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="./my-element.js"></script>
   <title>IFrame</title>
   <style>
     body {
@@ -18,8 +19,13 @@
 <body>
   <textarea name="" id="" cols="30" rows="1">outer textarea</textarea>
   <br>
-  <iframe src="./iframe.html" frameborder="1" width="100%" height="300"></iframe>
-  <iframe src="https://tahasoft.com/t/iframe-editable.php" frameborder="1" width="100%" height="300"></iframe>
+  <my-element blank>
+    <iframe src="./iframe.html" frameborder="1" width="100%" height="300"></iframe>
+  </my-element>
+
+  <my-element blank>
+    <iframe src="https://tahasoft.com/t/iframe-editable.php" frameborder="1" width="100%" height="300"></iframe>
+  </my-element>
 </body>
 
 </html>
