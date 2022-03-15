@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="./my-element.js"></script>
   <title>Document</title>
   <style>
     body {
@@ -16,7 +17,9 @@
 
 <body>
   <textarea name="" id="" cols="30" rows="5">inner textarea</textarea>
-  <iframe name="iframe" src="./deep-iframe.html" frameborder="1" width="100%" height="150px"></iframe>
+  <my-element blank>
+    <iframe name="iframe" src="./deep-iframe.html" frameborder="1" width="100%" height="150px"></iframe>
+  </my-element>
 </body>
 
 </html>
