@@ -1,0 +1,9 @@
+body {
+  width: 1000px;
+  margin: 0 auto;
+}
+
+* {
+  font-size: 1.1em;
+  font-family: cursive;
+}
