@@ -12,7 +12,22 @@
 <body>
   <p>Lorem, ipsum dolor.</p>
   <iframe src="./iframe.html" width="100%" height="100%"></iframe>
-  <script src="./index.js"></script>
+  <script>
+    const iframe = document.querySelector('iframe');
+    iframe.addEventListener('load', () => {
+      const iframeDocument = iframe.contentDocument;
+      iframeDocument.addEventListener('mouseup', () => {
+        let ta = document.getElementById('ta');
+        if (!ta) {
+          ta = document.createElement('textarea');
+          ta.id = 'ta';
+          document.body.appendChild(ta);
+        }
+        ta.focus();
+      });
+    });
+
+  </script>
 </body>
 
 </html>
