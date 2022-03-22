@@ -11,3 +11,12 @@ a {
 a:hover {
   background-color: #eee;
 }
+
+#frame {
+  position: fixed;
+  right: -295px;
+  top: -240px;
+  transform: scale(0.4);
+  border: solid 5px #aaa;
+  box-shadow: 0 0 50px #aaa;
+}
