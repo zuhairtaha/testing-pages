@@ -6,13 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Testing pages</title>
   <link rel="stylesheet" href="style.css">
+  <script defer src="index.js"></script>
 </head>
 
 <body>
   <iframe id="frame" width="1000" height="800" src=""></iframe>
   <h1>Iput Fields</h1>
   <a href="textarea">Many input fields and textareas</a>
-  <a href="custom-inputs">Custom input fields</a>
   <a href="textarea/simple-textarea.html">simple-textarea</a>
   <a href="textarea/reading-textareas.html">Textareas with backgrounds</a>
   <a href="textarea/simple-textarea.html?longtext=true">simple-textarea with long text</a>
@@ -42,28 +42,6 @@
   <a href="reading-elements/wrapped-inline-element.html">Inlined texts</a>
 
   <br>
-  <h1>Others</h1>
-  <a href="empty">empty</a>
-  <a href="others/disable-style-sheet">Disable style sheet</a>
-  <a href="sw/index.html">Disable extensions resources by service worker</a>
-  <a href="select-options/index.html">Select options</a>
-  <a href="mixed-elements/index.html">Mixed elements (test htmlReader)</a>
-  <a href="incorrect-html-reader-case/index.html">Incorrect HTML clone</a>
-  <a href="text-textarea/index.html">text + textarea/img/menu + text</a>
-  <a href="nested-iframes/index.html">Nested iframes with textareas</a>
-  <a href="word-in-elements/index.html">Word in 3 elements</a>
-  <a href="dropdown-lists/index.html">Dropdown lists & images with alt text</a>
-  <a href="span-input/index.html">P + Input</a>
-  <a href="menu-position/index.html">Input elements</a>
-  <a href="menu-position/input-elements.html">Input elements with incorrect menu position</a>
-  <a href="menu-position/textarea-with-strockes.html">Textarea has border & outline</a>
-  <a href="iframe-scale/index.html">Iframe with scale</a>
-  <a href="scrollbale/index.html">scrollbale (elements with horizontal and vertical scrollbar)</a>
-  <a href="menu-position/overlap.html">Overlap</a>
-  <a href="body-margin/index.html">Body with margins</a>
-  <a href="nested-iframes/two-on-same-origin.html">Two iframes on same origin</a>
-  <a href="./shadow-dom/index.html">Shadow DOM</a>
-
   <h1>Google & Microsoft docs</h1>
   <a href="https://docs.google.com/document/d/1rCcelbCXtVWUyGy0A51voN5o7rk4xld3nbX7jNX6ftY/edit?usp=sharing">Google Docs
     - Read only</a>
@@ -74,29 +52,40 @@
   <a href="https://docs.google.com/presentation/d/1J6Dd4H7Bkvm2GVZfxphWhkpVcrF2177iQRNZd4HmnSc/edit?usp=sharing">-
     Google Slides - Comment only</a>
   <a href="https://1drv.ms/w/s!Anh4QX6tEeRvbu1pBz4gyvkWQec?e=yIr77P">Word - Read only</a>
+
+  <br>
+  <h1>Shadow DOM</h1>
+  <a href="./shadow-dom/index.html">Shadow DOM</a>
+  <a href="custom-inputs">Custom input fields</a>
+
+  <br>
+  <h1>Iframes</h1>
+  <a href="nested-iframes/index.html">Nested iframes with textareas</a>
+  <a href="iframe-scale/index.html">Iframe with scale</a>
+  <a href="nested-iframes/two-on-same-origin.html">Two iframes on same origin</a>
   <a href="./focus-outof-iframe/index.html">Focus out of iframe with mouseup</a>
 
+  <br>
+  <h1>Others</h1>
+  <a href="empty">Simple html content</a>
+  <a href="others/disable-style-sheet">Disable style sheet</a>
+  <a href="sw/index.html">Disable extensions resources by service worker</a>
+  <a href="select-options/index.html">Select options</a>
+  <a href="mixed-elements/index.html">Mixed elements (test htmlReader)</a>
+  <a href="incorrect-html-reader-case/index.html">Incorrect HTML clone</a>
+  <a href="text-textarea/index.html">text + textarea/img/menu + text</a>
+  <a href="word-in-elements/index.html">Word in 3 elements</a>
+  <a href="dropdown-lists/index.html">Dropdown lists & images with alt text</a>
+  <a href="span-input/index.html">P + Input</a>
+  <a href="menu-position/index.html">Input elements</a>
+  <a href="menu-position/input-elements.html">Input elements with incorrect menu position</a>
+  <a href="menu-position/textarea-with-strockes.html">Textarea has border & outline</a>
+  <a href="scrollbale/index.html">scrollbale (elements with horizontal and vertical scrollbar)</a>
+  <a href="menu-position/overlap.html">Overlap</a>
+  <a href="body-margin/index.html">Body with margins</a>
+
+
   <button id="open-all">OPEN ALL</button>
-
-  <script>
-    document.getElementById('open-all').addEventListener('click', function () {
-      var links = document.querySelectorAll('a');
-      for (const link of links) {
-        link.target = '_blank';
-        link.click();
-      }
-    });
-
-    const frame = document.getElementById('frame');
-
-    document.addEventListener('mousemove', evt => {
-      if (evt.target.tagName !== 'A') return;
-      if (frame.src === evt.target.href) return;
-      if (evt.target.classList.contains('download')) return;
-
-      frame.src = evt.target.href;
-    });
-  </script>
 </body>
 
 </html>
