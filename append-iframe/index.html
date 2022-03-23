@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Append Iframe</title>
+  <style>
+    iframe {
+      width: 800px;
+      height: 400px;
+    }
+  </style>
+</head>
+
+<body>
+  <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eveniet, assumenda?</p>
+  <div id="container"></div>
+  <button>Append iframe</button>
+  <script>
+    const button = document.querySelector('button');
+    const container = document.querySelector('#container');
+    button.addEventListener('click', () => {
+      const iframe = document.createElement('iframe');
+      iframe.src = 'iframe.html';
+      container.appendChild(iframe);
+    });
+  </script>
+</body>
+
+</html>
