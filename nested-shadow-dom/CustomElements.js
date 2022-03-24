@@ -27,10 +27,10 @@ class OuterElement extends HTMLElement {
   }
 }
 
-customElements.define('outer-element', OuterElement);
+customElements.define('outer-element', IframeContainer);
 
-class InnerElement extends OuterElement {}
+class InnerElement extends IframeContainer {}
 customElements.define('inner-element', InnerElement);
 
-class depperElement extends OuterElement {}
+class depperElement extends IframeContainer {}
 customElements.define('deeper-element', depperElement);
