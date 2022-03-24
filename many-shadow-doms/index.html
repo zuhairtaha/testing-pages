@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Many shadow doms</title>
+  <title>sequential & nested nodes have shadow</title>
   <style>
     main>* {
       font-size: 1.5em;
@@ -17,11 +17,39 @@
       margin: auto;
       width: 1000px;
     }
+
+    #shadow-root {
+      color: blue;
+      margin-top: 1em;
+    }
+
+    h2 {
+      text-align: center;
+    }
   </style>
 </head>
 
 <body>
   <main></main>
+
+  <h2>
+    <span class="span-has-shadow" data-text="lorem">
+      <span class="span-has-shadow" data-text="ipsum">
+        <span class="span-has-shadow" data-text="dolor">
+          <span class="span-has-shadow" data-text="sit">
+            <span class="span-has-shadow" data-text="amet">
+              <span class="span-has-shadow" data-text="consectetur">
+                <span class="span-has-shadow" data-text="adipiscing">
+                  <span class="span-has-shadow" data-text="elit">
+                  </span>
+                </span>
+              </span>
+            </span>
+          </span>
+        </span>
+      </span>
+    </span>
+  </h2>
 
   <script>
     const main = document.querySelector('main');
@@ -32,6 +60,20 @@
       shadowRoot.appendChild(document.createTextNode(arr[i] + " "));
       main.appendChild(div);
     }
+
+    const spans = [...document.querySelectorAll('.span-has-shadow')];
+    for (let i = 0; i < spans.length; i++) {
+      const span = spans[i];
+      const text = span.dataset.text;
+      const root = span.attachShadow({ mode: 'open' });
+      root.appendChild(document.createTextNode(text + " "));
+      if (i > 0) {
+        const prev = spans[i - 1];
+        prev.shadowRoot.appendChild(span);
+      }
+    }
+
+
   </script>
 </body>
 
