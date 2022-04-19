@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Textarea With Scale</title>
+  <style>
+    main {
+      transform: scale(1.5);
+      background-color: #eee;
+      width: 1000px;
+      height: 300px;
+      margin: 100px auto;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    textarea {
+      width: 80%;
+    }
+
+    .zoom {
+      transform: scale(1.5);
+
+    }
+
+    textarea.zoom {
+      transform-origin: -1164px -32px;
+      width: 516px;
+    }
+
+    input[type=text].zoom {
+      transform-origin: -800px;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+
+    <textarea name="text" id="text" cols="130" rows="10">
+      Din elbil, fladskærm, smartphone og vaskemaskine vil ikke fungere uden dem. De såkaldte mikrochips - bittesmå, komplicerede dimser - er altafgørende for en meget stor del af den teknologi, vi bruger i hverdagen. Men der er et problem.
+    </textarea>
+
+    <br>
+    <input type="text" value="Lorem, ipsum dolor." />
+  </main>
+
+  <textarea name="text" class="zoom" cols="130" rows="10">
+    I de seneste år har mikrochipsene været en mangelvare blandt andet på grund af coronakrisen. Og 2022 har indtil nu ikke vist sig at være året, hvor krisen klinger af. Tre ud af fire danske virksomheder, som er afhængige af mikrochips, mangler nemlig den efterspurgte vare. Det viser tal fra Dansk Industri, som DR har fået. Det svarer til over 1.000 danske virksomheder.
+  </textarea>
+
+
+  <br><br><br><br><br><br><br><br>
+  <input type="text" class="zoom" value="Lorem, ipsum dolor." />
+  <br><br><br><br><br><br><br><br><br><br>
+</body>
+
+</html>
