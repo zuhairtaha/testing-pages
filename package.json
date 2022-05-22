@@ -18,6 +18,12 @@
   },
   "homepage": "https://github.com/zuhairtaha/testing-pages#readme",
   "devDependencies": {
-    "@types/serviceworker": "^0.0.26"
+    "@types/chrome": "^0.0.188",
+    "@types/serviceworker": "^0.0.26",
+    "eslint": "^8.16.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-no-floating-promise": "^1.0.2",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-unicorn": "^42.0.0"
   }
 }
