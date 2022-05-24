@@ -37,7 +37,7 @@ module.exports = {
     'yoda': 'warn',
     'no-else-return': 'warn',
     'wrap-iife': 'warn',
-    'spaced-comment': 'warn',
+    'spaced-comment': ['warn', 'always', { 'markers': ['/ <reference'] }],
     'no-confusing-arrow': 'warn',
     'no-console': ['warn', { 'allow': ['warn', 'error'] }],
     'no-const-assign': 'warn',
