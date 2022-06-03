@@ -87,6 +87,11 @@
   resolved "https://registry.yarnpkg.com/@types/serviceworker/-/serviceworker-0.0.26.tgz#723875669c2db028df3992cfb5cf8101505e2c2f"
   integrity sha512-dowZK3XseM7LmL4v9DqTRf6f31qsaQqiP0yJ0lU1dNKWZvZEFsQqayiRDlbdxt28eMWLf5UyXYATBVqX6yXJdQ==
 
+"@types/sharedworker@^0.0.75":
+  version "0.0.75"
+  resolved "https://registry.yarnpkg.com/@types/sharedworker/-/sharedworker-0.0.75.tgz#a8f5cef18041f0ce26b79b1b87eae9f9f3e10e42"
+  integrity sha512-rYnCbu1O3rJDfBgsQqidpWRq4AP5no0WcaSYknSM5lghgb7owpcMi9Sr1x1yl2gfBBK19mqSe/yWQfRKvKH1lA==
+
 acorn-jsx@^5.3.2:
   version "5.3.2"
   resolved "https://registry.yarnpkg.com/acorn-jsx/-/acorn-jsx-5.3.2.tgz#7ed5bb55908b3b2f1bc55c6af1653bada7f07937"
