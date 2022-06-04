@@ -1,9 +1,8 @@
-const worker = new SharedWorker('shared-worker.js');
+const worker = new SharedWorker('shared-worker.js', { name: 'counter-worker' });
+worker.port.onmessage = function (event) {
+  console.log(event.data);
+};
 
-worker.port.addEventListener('message', evt => {
-  console.log(evt.data);
+document.addEventListener('click', () => {
+  worker.port.postMessage('click');
 });
-
-worker.port.start();
-
-worker.port.postMessage('a message from app.js');
