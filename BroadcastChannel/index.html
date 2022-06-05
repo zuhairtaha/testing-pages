@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BroadcastChannel cross-tab comunication</title>
+  </head>
+  <body>
+    <script>
+      // Create a new BroadcastChannel
+      var bc = new BroadcastChannel('my-channel');
+
+      // Listen for messages on the channel
+      bc.onmessage = function (event) {
+        console.log(event.data);
+      };
+
+      // Post a message to the channel (The other tabs will receive it)
+      document.addEventListener('click', function () {
+        bc.postMessage('Hello world!');
+      });
+    </script>
+  </body>
+</html>
