@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>iframe</title>
+    <meta charset="utf-8" />
+    <script>
+      window.addEventListener('message', msg => {
+        console.log(`Message from main window`, msg.data);
+        parent.postMessage(
+          JSON.stringify({
+            message: 'this should be delivered to main window'
+          })
+        );
+      });
+    </script>
+  </head>
+  <body>
+    <h1>Iframe body</h1>
+  </body>
+</html>
