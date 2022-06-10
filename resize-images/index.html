@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Images + resize</title>
+    <style>
+      img {
+        width: 250px;
+        display: block;
+        border: solid 1px #ccc;
+      }
+
+      img:nth-child(1) {
+        margin: auto;
+      }
+
+      img:nth-child(2) {
+        margin-left: calc(100vw - 270px);
+      }
+
+      img:nth-child(3) {
+        margin-left: 25%;
+      }
+
+      @media screen and (max-width: 600px) {
+        img:nth-child(4) {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <img src="https://docs.unity3d.com/Packages/com.unity.textmeshpro@3.2/manual/images/TMP_RichTextLineIndent.png" />
+    <img src="https://docs.unity3d.com/Packages/com.unity.textmeshpro@3.2/manual/images/TMP_RichTextLineIndent.png" />
+    <img src="https://docs.unity3d.com/Packages/com.unity.textmeshpro@3.2/manual/images/TMP_RichTextLineIndent.png" />
+    <img src="https://docs.unity3d.com/Packages/com.unity.textmeshpro@3.2/manual/images/TMP_RichTextLineIndent.png" />
+    <img src="https://docs.unity3d.com/Packages/com.unity.textmeshpro@3.2/manual/images/TMP_RichTextLineIndent.png" />
+  </body>
+</html>
