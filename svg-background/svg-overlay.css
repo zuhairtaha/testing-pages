@@ -1,0 +1,41 @@
+html {
+  background-color: black;
+}
+
+body {
+  width: 1000px;
+  margin: 0 auto;
+  font-family: cursive;
+  line-height: 2.2em;
+  font-size: 1.2em;
+  font-weight: 100;
+}
+
+h3 {
+  padding-top: 4em;
+  color: transparent;
+  background: url(svg.svg), url(svg2.svg);
+  background-position: -10px 20px, -10px 20px;
+  -webkit-background-clip: text, border-box;
+  background-clip: text, border-box;
+}
+
+#navbar {
+  background-color: #333;
+  padding: 0.5em;
+  margin-bottom: 1em;
+  position: fixed;
+  width: 100%;
+  left: 0;
+  top: 0;
+}
+
+#navbar ul {
+  list-style: none;
+  display: flex;
+}
+
+#navbar a {
+  color: white;
+  padding-right: 1em;
+}
