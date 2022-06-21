@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Box sizing</title>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: lightyellow;
+        margin: 1em 2em 3em 4em;
+        font-size: 22px;
+      }
+      #box1 {
+        box-sizing: border-box;
+      }
+
+      #box2 {
+        box-sizing: content-box;
+      }
+
+      #box1,
+      #box2 {
+        width: 500px;
+        height: 200px;
+        border: solid 50px darkblue;
+        background-color: lightblue;
+        overflow: scroll;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="box1">
+      Border box. Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+      Dolorem, illum, consequatur, cum quae commodi natus ullam qui voluptatum
+      dicta aut doloribus sint sed iste odio magni quis incidunt. Quod inventore
+      temporibus aperiam, quam doloremque, officia quaerat quae, optio quidem
+      tenetur corporis cupiditate voluptates nulla facilis. Distinctio illum
+      facere laboriosam nihil.
+    </div>
+
+    <div id="box2">
+      Content box. Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+      Dolorem, illum, consequatur, cum quae commodi natus ullam qui voluptatum
+      dicta aut doloribus sint sed iste odio magni quis incidunt. Quod inventore
+      temporibus aperiam, quam doloremque, officia quaerat quae, optio quidem
+      tenetur corporis cupiditate voluptates nulla facilis. Distinctio illum
+      facere laboriosam nihil.
+    </div>
+  </body>
+</html>
