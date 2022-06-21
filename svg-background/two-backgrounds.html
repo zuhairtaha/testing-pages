@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Multipe background images</title>
+    <style>
+      #example1 {
+        width: 800px;
+
+        padding: 15px;
+        margin: auto;
+        font-size: 1.3em;
+        font-family: cursive;
+        font-weight: 100;
+      }
+
+      .two-backgrounds-1 {
+        background-image: url(https://www.w3schools.com/css/img_flwr.gif),
+          url(https://www.w3schools.com/css/paper.gif);
+        background-position: right bottom, left top;
+        background-repeat: no-repeat, repeat;
+      }
+
+      .two-backgrounds-2 {
+        background: url(https://www.w3schools.com/css/img_flwr.gif) right bottom
+            no-repeat,
+          url(https://www.w3schools.com/css/paper.gif) left top repeat;
+      }
+
+      .three-backgrounds {
+        background-image: url('data:image/svg+xml;base64, PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MzAiIGhlaWdodD0iMTQ2IiB2aWV3Qm94PSIwIDAgODMwIDE0NiI+PHJlY3QgeD0iMzQ0LjM5MDYyNSIgeT0iMTUiIHdpZHRoPSI0NDguNzM0Mzc1IiBoZWlnaHQ9IjI5IiBmaWxsPSJyZ2IoMjAyLCAyMzgsIDI1NSkiLz48cmVjdCB4PSIxNSIgeT0iNDQiIHdpZHRoPSI3MjIuNDY4NzUiIGhlaWdodD0iMjkiIGZpbGw9InJnYigyMDIsIDIzOCwgMjU1KSIvPjxyZWN0IHg9IjE1IiB5PSI3MyIgd2lkdGg9Ijg0LjEyNSIgaGVpZ2h0PSIyOSIgZmlsbD0icmdiKDIwMiwgMjM4LCAyNTUpIi8+PHJlY3QgeD0iMzQ0LjM5MDYyNSIgeT0iMTUiIHdpZHRoPSIzNy41NzgxMjUiIGhlaWdodD0iMjkiIGZpbGw9InJnYigyNTUsIDI1NSwgMCkiLz48L3N2Zz4='),
+          url(https://www.w3schools.com/css/img_flwr.gif),
+          url(https://www.w3schools.com/css/paper.gif);
+        background-repeat: no-repeat, repeat, no-repeat;
+        background-position: 100% 100%, 0% 0%, 0% 0%;
+      }
+
+      .three-backgrounds2 {
+        --bg1: url('data:image/svg+xml;base64, PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MzAiIGhlaWdodD0iMTQ2IiB2aWV3Qm94PSIwIDAgODMwIDE0NiI+PHJlY3QgeD0iMzQ0LjM5MDYyNSIgeT0iMTUiIHdpZHRoPSI0NDguNzM0Mzc1IiBoZWlnaHQ9IjI5IiBmaWxsPSJyZ2IoMjAyLCAyMzgsIDI1NSkiLz48cmVjdCB4PSIxNSIgeT0iNDQiIHdpZHRoPSI3MjIuNDY4NzUiIGhlaWdodD0iMjkiIGZpbGw9InJnYigyMDIsIDIzOCwgMjU1KSIvPjxyZWN0IHg9IjE1IiB5PSI3MyIgd2lkdGg9Ijg0LjEyNSIgaGVpZ2h0PSIyOSIgZmlsbD0icmdiKDIwMiwgMjM4LCAyNTUpIi8+PHJlY3QgeD0iMzQ0LjM5MDYyNSIgeT0iMTUiIHdpZHRoPSIzNy41NzgxMjUiIGhlaWdodD0iMjkiIGZpbGw9InJnYigyNTUsIDI1NSwgMCkiLz48L3N2Zz4=');
+        --bg2: url(https://www.w3schools.com/css/img_flwr.gif);
+        --bg3: url(https://www.w3schools.com/css/paper.gif);
+
+        background-image: var(--bg1), var(--bg2), var(--bg3);
+        background-repeat: no-repeat, repeat, no-repeat;
+        background-position: 100% 100%, 0% 0%, 0% 0%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="example1" class="two-backgrounds-2">
+      Lorem Ipsum Dolor Lorem ipsum dolor sit amet, consectetuer adipiscing
+      elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna
+      aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci
+      tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo
+      consequat.
+    </div>
+
+    <select name="classes" id="classes">
+      <option value="two-backgrounds-1">.two-backgrounds-1</option>
+      <option value="two-backgrounds-2">.two-backgrounds-2</option>
+      <option value="three-backgrounds">.three-backgrounds</option>
+      <option value="three-backgrounds2">.three-backgrounds2</option>
+    </select>
+
+    <script>
+      classes.addEventListener('change', evt => {
+        const value = evt.target.value;
+        console.log(value);
+        example1.className = value;
+      });
+    </script>
+  </body>
+</html>
