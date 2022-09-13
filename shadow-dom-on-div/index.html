@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shadow DOM on Div</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shadow DOM on Div</title>
-</head>
+  <body>
+    test
+    <div></div>
+    end
+    <script>
+      const div = document.querySelector('div'); // host
+      div.attachShadow({ mode: 'open' }); // shadow root
+      div.shadowRoot.innerHTML = '<p>Shadow DOM on Div</p>'; // shadow tree
 
-<body>
-  <div></div>
-  <script>
-    const div = document.querySelector('div'); // host
-    div.attachShadow({ mode: 'open' }); // shadow root
-    div.shadowRoot.innerHTML = '<p>Shadow DOM on Div</p>'; // shadow tree
-
-    /*
-    OR
-    const root = div.attachShadow({ mode: 'open' });
-    root.innerHTML = '<p>Shadow DOM on Div</p>'; // or root.appendChild(...);
-    */
-  </script>
-</body>
-
+      /*
+      OR
+      const root = div.attachShadow({ mode: 'open' });
+      root.innerHTML = '<p>Shadow DOM on Div</p>'; // or root.appendChild(...);
+      */
+    </script>
+  </body>
 </html>
