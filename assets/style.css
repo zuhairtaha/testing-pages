@@ -20,3 +20,7 @@ a:hover {
   border: solid 5px #aaa;
   box-shadow: 0 0 50px #aaa;
 }
+
+.hidden {
+  display: none;
+}
