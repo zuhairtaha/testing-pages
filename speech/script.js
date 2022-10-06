@@ -1,9 +1,7 @@
-const synth = window.speechSynthesis;
-
 const inputForm = /** @type {!HTMLFormElement} */ (
   document.querySelector('form')
 );
-const inputTxt = /** @type {!HTMLInputElement} */ (
+const textarea = /** @type {!HTMLTextAreaElement} */ (
   document.querySelector('.txt')
 );
 const voiceSelect = /** @type {!HTMLSelectElement} */ (
@@ -45,7 +43,9 @@ function sortAlphabetically(a, b) {
 }
 
 function populateVoiceList() {
-  voices = synth.getVoices().sort((a, b) => sortAlphabetically(a.name, b.name));
+  voices = window.speechSynthesis
+    .getVoices()
+    .sort((a, b) => sortAlphabetically(a.name, b.name));
   const selectedIndex =
     voiceSelect.selectedIndex < 0 ? 0 : voiceSelect.selectedIndex;
   voiceSelect.innerHTML = '';
@@ -83,7 +83,7 @@ window.requestAnimationFrame(() => {
   }
   const text = window.localStorage.getItem('text');
   if (text) {
-    inputTxt.value = text;
+    textarea.value = text;
   }
   const lang = window.localStorage.getItem('lang');
   if (lang) {
@@ -97,21 +97,47 @@ if (speechSynthesis.onvoiceschanged !== undefined) {
 }
 
 function speak() {
-  if (synth.speaking) {
-    synth.cancel();
+  if (window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel();
     // console.error('speechSynthesis.speaking');
     // return;
   }
 
-  if (inputTxt.value !== '') {
-    const utterThis = new SpeechSynthesisUtterance(inputTxt.value);
+  if (textarea.value !== '') {
+    const utterThis = new SpeechSynthesisUtterance(textarea.value);
 
     utterThis.onend = function (event) {
-      console.log('SpeechSynthesisUtterance.onend');
+      console.log('SpeechSynthesisUtterance.onend', event);
+      textarea.setSelectionRange(0, 0);
     };
 
     utterThis.onerror = function (event) {
-      console.error('SpeechSynthesisUtterance.onerror');
+      console.error('SpeechSynthesisUtterance.onerror', event);
+    };
+
+    utterThis.onstart = function (event) {
+      console.log('SpeechSynthesisUtterance.onstart', event);
+    };
+
+    utterThis.onboundary = function (event) {
+      console.log('SpeechSynthesisUtterance.onboundary', event);
+
+      const start = event.charIndex;
+      const end = event.charIndex + event.charLength;
+      textarea.focus();
+      textarea.setSelectionRange(start, end);
+    };
+
+    utterThis.onmark = function (event) {
+      console.log('SpeechSynthesisUtterance.onmark', event);
+    };
+
+    utterThis.onpause = function (event) {
+      console.log('SpeechSynthesisUtterance.onpause', event);
+    };
+
+    utterThis.onresume = function (event) {
+      console.log('SpeechSynthesisUtterance.onresume', event);
     };
 
     const selectedOption =
@@ -125,7 +151,7 @@ function speak() {
     }
     utterThis.pitch = parseInt(pitch.value);
     utterThis.rate = parseInt(rate.value);
-    synth.speak(utterThis);
+    window.speechSynthesis.speak(utterThis);
   }
 }
 
@@ -134,7 +160,7 @@ inputForm.onsubmit = function (event) {
 
   speak();
 
-  inputTxt.blur();
+  textarea.blur();
 };
 
 pitch.onchange = function () {
@@ -158,6 +184,12 @@ function showVoicesWithSelectedLang() {
       option.hidden = true;
     }
   }
+
+  if (languagesSelect.value === 'ar' || languagesSelect.value === 'fa') {
+    textarea.dir = 'rtl';
+  } else {
+    textarea.dir = 'ltr';
+  }
 }
 
 languagesSelect.onchange = function () {
@@ -165,6 +197,6 @@ languagesSelect.onchange = function () {
   showVoicesWithSelectedLang();
 };
 
-inputTxt.oninput = function () {
-  window.localStorage.setItem('text', inputTxt.value);
+textarea.oninput = function () {
+  window.localStorage.setItem('text', textarea.value);
 };
