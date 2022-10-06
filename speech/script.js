@@ -10,12 +10,7 @@ const voiceSelect = /** @type {!HTMLSelectElement} */ (
 const languagesSelect = /** @type {!HTMLSelectElement} */ (
   document.querySelector('select[name=languages]')
 );
-const pitch = /** @type {!HTMLInputElement} */ (
-  document.querySelector('input#pitch')
-);
-const pitchValue = /** @type {!HTMLElement} */ (
-  document.querySelector('.pitch-value')
-);
+
 const rate = /** @type {!HTMLInputElement} */ (
   document.querySelector('input#rate')
 );
@@ -149,22 +144,41 @@ function speak() {
         break;
       }
     }
-    utterThis.pitch = parseInt(pitch.value);
     utterThis.rate = parseInt(rate.value);
     window.speechSynthesis.speak(utterThis);
   }
 }
 
-inputForm.onsubmit = function (event) {
-  event.preventDefault();
+const playButton = /** @type {!HTMLButtonElement} */ (
+  document.getElementById('play')
+);
 
-  speak();
+const pauseButton = /** @type {!HTMLButtonElement} */ (
+  document.getElementById('pause')
+);
 
-  textarea.blur();
+pauseButton.onclick = () => {
+  window.speechSynthesis.pause();
 };
 
-pitch.onchange = function () {
-  pitchValue.textContent = pitch.value;
+const resumeButton = /** @type {!HTMLButtonElement} */ (
+  document.getElementById('resume')
+);
+
+resumeButton.onclick = () => {
+  window.speechSynthesis.resume();
+};
+
+const cancelButton = /** @type {!HTMLButtonElement} */ (
+  document.getElementById('cancel')
+);
+
+cancelButton.onclick = () => {
+  window.speechSynthesis.cancel();
+};
+
+playButton.onclick = () => {
+  speak();
 };
 
 rate.onchange = function () {
@@ -173,7 +187,6 @@ rate.onchange = function () {
 
 voiceSelect.onchange = function () {
   window.localStorage.setItem('voice', voiceSelect.value);
-  speak();
 };
 
 function showVoicesWithSelectedLang() {
@@ -200,3 +213,8 @@ languagesSelect.onchange = function () {
 textarea.oninput = function () {
   window.localStorage.setItem('text', textarea.value);
 };
+
+const main = /** @type {!HTMLElement} */ (document.querySelector('main'));
+
+// 100vhv - main height
+textarea.style.height = `calc(100vh - ${main.offsetHeight + 16}px)`;
