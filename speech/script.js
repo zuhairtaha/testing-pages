@@ -213,8 +213,3 @@ languagesSelect.onchange = function () {
 textarea.oninput = function () {
   window.localStorage.setItem('text', textarea.value);
 };
-
-const main = /** @type {!HTMLElement} */ (document.querySelector('main'));
-
-// 100vhv - main height
-textarea.style.height = `calc(100vh - ${main.offsetHeight + 16}px)`;
