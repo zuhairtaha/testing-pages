@@ -8,10 +8,15 @@ const rateValue = /** @type {!HTMLElement} */ (document.querySelector(".rate-val
 
 const statusSpan = /** @type {!HTMLSpanElement} */ (document.querySelector(".status"));
 
+const repeatCheckbox = /** @type {HTMLInputElement} */ (document.getElementById("repeat"));
+
 const playButton = /** @type {!HTMLButtonElement} */ (document.getElementById("play"));
 const pauseButton = /** @type {!HTMLButtonElement} */ (document.getElementById("pause"));
 const resumeButton = /** @type {!HTMLButtonElement} */ (document.getElementById("resume"));
 const cancelButton = /** @type {!HTMLButtonElement} */ (document.getElementById("cancel"));
+
+let repeat = false;
+let stopping = false;
 
 let voices = [];
 
@@ -84,7 +89,7 @@ function stop() {
   window.speechSynthesis.cancel();
 }
 
-function speak() {
+function readText() {
   if (window.speechSynthesis.speaking) {
     stop();
   }
@@ -92,44 +97,47 @@ function speak() {
   if (textarea.value !== "") {
     const utterance = new SpeechSynthesisUtterance(textarea.value);
 
-    utterance.addEventListener("end", function (event) {
-      console.log("SpeechSynthesisUtterance.onend", event);
+    utterance.addEventListener("end", evt => {
+      console.log("SpeechSynthesisUtterance.onend", evt);
       statusSpan.textContent = "End";
       textarea.setSelectionRange(0, 0);
+      if (repeat && !stopping) {
+        readText();
+      }
     });
 
-    utterance.addEventListener("error", function (event) {
-      console.error("SpeechSynthesisUtterance.onerror", event);
+    utterance.addEventListener("error", evt => {
+      console.error("SpeechSynthesisUtterance.onerror", evt);
       statusSpan.textContent = "Error";
     });
 
-    utterance.addEventListener("start", function (event) {
-      console.log("SpeechSynthesisUtterance.onstart", event);
+    utterance.addEventListener("start", evt => {
+      console.log("SpeechSynthesisUtterance.onstart", evt);
       statusSpan.textContent = "Start";
     });
 
-    utterance.addEventListener("boundary", function (event) {
-      console.log("SpeechSynthesisUtterance.onboundary", event);
+    utterance.addEventListener("boundary", evt => {
+      console.log("SpeechSynthesisUtterance.onboundary", evt);
       statusSpan.textContent = "Boundary";
 
-      const start = event.charIndex;
-      const end = event.charIndex + event.charLength;
+      const start = evt.charIndex;
+      const end = evt.charIndex + evt.charLength;
       textarea.focus();
       textarea.setSelectionRange(start, end);
     });
 
-    utterance.addEventListener("mark", function (event) {
-      console.log("SpeechSynthesisUtterance.onmark", event);
+    utterance.addEventListener("mark", evt => {
+      console.log("SpeechSynthesisUtterance.onmark", evt);
       statusSpan.textContent = "Mark";
     });
 
-    utterance.addEventListener("pause", function (event) {
-      console.log("SpeechSynthesisUtterance.onpause", event);
+    utterance.addEventListener("pause", evt => {
+      console.log("SpeechSynthesisUtterance.onpause", evt);
       statusSpan.textContent = "Pause";
     });
 
-    utterance.addEventListener("resume", function (event) {
-      console.log("SpeechSynthesisUtterance.onresume", event);
+    utterance.addEventListener("resume", evt => {
+      console.log("SpeechSynthesisUtterance.onresume", evt);
       statusSpan.textContent = "Resume";
     });
 
@@ -147,30 +155,34 @@ function speak() {
 }
 
 pauseButton.addEventListener("click", () => {
+  stopping = false;
   statusSpan.textContent = "Pausing...";
   window.speechSynthesis.pause();
 });
 
 resumeButton.addEventListener("click", () => {
+  stopping = false;
   statusSpan.textContent = "Resuming...";
   window.speechSynthesis.resume();
 });
 
 cancelButton.addEventListener("click", () => {
+  stopping = true;
   statusSpan.textContent = "Stopping...";
   stop();
 });
 
 playButton.addEventListener("click", () => {
+  stopping = false;
   statusSpan.textContent = "Starting...";
-  speak();
+  readText();
 });
 
-rate.addEventListener("change", function () {
+rate.addEventListener("change", () => {
   rateValue.textContent = rate.value;
 });
 
-voiceSelect.addEventListener("change", function () {
+voiceSelect.addEventListener("change", () => {
   window.localStorage.setItem("voice", voiceSelect.value);
 });
 
@@ -182,19 +194,27 @@ function showVoicesWithSelectedLang() {
   textarea.dir = languagesSelect.value === "ar" || languagesSelect.value === "fa" ? "rtl" : "ltr";
 }
 
-languagesSelect.addEventListener("change", function () {
+languagesSelect.addEventListener("change", () => {
   window.localStorage.setItem("lang", languagesSelect.value);
   showVoicesWithSelectedLang();
 });
 
-textarea.addEventListener("input", function () {
+textarea.addEventListener("input", () => {
   window.localStorage.setItem("text", textarea.value);
 });
 
-textarea.addEventListener("keydown", function (event) {
+textarea.addEventListener("mousedown", () => {
   stop();
 });
 
-textarea.addEventListener("click", function (event) {
+textarea.addEventListener("keydown", evt => {
   stop();
+});
+
+textarea.addEventListener("mousedown", evt => {
+  cancelButton.click();
+});
+
+repeatCheckbox.addEventListener("change", () => {
+  repeat = repeatCheckbox.checked;
 });
