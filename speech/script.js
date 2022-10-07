@@ -41,9 +41,17 @@ function populateVoiceList() {
   const selectedIndex = voiceSelect.selectedIndex < 0 ? 0 : voiceSelect.selectedIndex;
   voiceSelect.innerHTML = "";
 
+  const lang = window.localStorage.getItem("lang");
+
   for (const voice of voices) {
-    const option = document.createElement("option");
-    option.textContent = `${voice.name} (${voice.lang})`;
+    const voiceValue = `${voice.name} (${voice.lang})`;
+
+    if (lang && voice.lang.slice(0, 2) !== lang) {
+      continue;
+    }
+
+    const option = new Option(voiceValue);
+    option.selected = window.localStorage.getItem("voice") === voiceValue;
 
     if (voice.default) {
       option.textContent += " -- DEFAULT";
@@ -59,27 +67,14 @@ function populateVoiceList() {
   const languages = new Set(voices.map(voice => voice.lang.slice(0, 2)).sort(sortAlphabetically));
   for (const lang of languages) {
     const option = new Option(lang, lang);
+    option.selected = lang === window.localStorage.getItem("lang");
     languagesSelect.add(option);
   }
 }
 
 populateVoiceList();
 
-window.requestAnimationFrame(() => {
-  const voice = window.localStorage.getItem("voice");
-  if (voice) {
-    voiceSelect.value = voice;
-  }
-  const text = window.localStorage.getItem("text");
-  if (text) {
-    textarea.value = text;
-  }
-  const lang = window.localStorage.getItem("lang");
-  if (lang) {
-    languagesSelect.value = lang;
-    showVoicesWithSelectedLang();
-  }
-});
+textarea.value = window.localStorage.getItem("text") || "";
 
 speechSynthesis.addEventListener("voiceschanged", () => {
   populateVoiceList();
@@ -99,7 +94,7 @@ function readText() {
 
     utterance.addEventListener("end", evt => {
       console.log("SpeechSynthesisUtterance.onend", evt);
-      statusSpan.textContent = "End";
+      setStatus("End");
       textarea.setSelectionRange(0, 0);
       if (repeat && !stopping) {
         readText();
@@ -108,17 +103,17 @@ function readText() {
 
     utterance.addEventListener("error", evt => {
       console.error("SpeechSynthesisUtterance.onerror", evt);
-      statusSpan.textContent = "Error";
+      setStatus("Error");
     });
 
     utterance.addEventListener("start", evt => {
       console.log("SpeechSynthesisUtterance.onstart", evt);
-      statusSpan.textContent = "Start";
+      setStatus("Start");
     });
 
     utterance.addEventListener("boundary", evt => {
       console.log("SpeechSynthesisUtterance.onboundary", evt);
-      statusSpan.textContent = "Boundary";
+      setStatus("Boundary");
 
       const start = evt.charIndex;
       const end = evt.charIndex + evt.charLength;
@@ -128,17 +123,17 @@ function readText() {
 
     utterance.addEventListener("mark", evt => {
       console.log("SpeechSynthesisUtterance.onmark", evt);
-      statusSpan.textContent = "Mark";
+      setStatus("Mark");
     });
 
     utterance.addEventListener("pause", evt => {
       console.log("SpeechSynthesisUtterance.onpause", evt);
-      statusSpan.textContent = "Pause";
+      setStatus("Pause");
     });
 
     utterance.addEventListener("resume", evt => {
       console.log("SpeechSynthesisUtterance.onresume", evt);
-      statusSpan.textContent = "Resume";
+      setStatus("Resume");
     });
 
     const selectedOption = voiceSelect.selectedOptions[0].getAttribute("data-name");
@@ -156,25 +151,25 @@ function readText() {
 
 pauseButton.addEventListener("click", () => {
   stopping = false;
-  statusSpan.textContent = "Pausing...";
+  setStatus("Pausing...");
   window.speechSynthesis.pause();
 });
 
 resumeButton.addEventListener("click", () => {
   stopping = false;
-  statusSpan.textContent = "Resuming...";
+  setStatus("Resuming...");
   window.speechSynthesis.resume();
 });
 
 cancelButton.addEventListener("click", () => {
   stopping = true;
-  statusSpan.textContent = "Stopping...";
+  setStatus("Stopping...");
   stop();
 });
 
 playButton.addEventListener("click", () => {
   stopping = false;
-  statusSpan.textContent = "Starting...";
+  setStatus("Starting...");
   readText();
 });
 
@@ -217,4 +212,17 @@ textarea.addEventListener("mousedown", evt => {
 
 repeatCheckbox.addEventListener("change", () => {
   repeat = repeatCheckbox.checked;
+});
+
+/**
+ * @param {string} status
+ */
+function setStatus(status) {
+  statusSpan.textContent = status;
+
+  playButton.classList.toggle("loading", ["Starting...", "Start"].includes(status));
+}
+
+window.addEventListener("beforeunload", () => {
+  stop();
 });

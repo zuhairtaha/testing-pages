@@ -1,0 +1,24 @@
+#play img[alt="loading"] {
+  display: none;
+}
+
+#play.loading img[alt="loading"] {
+  display: inline;
+}
+
+#play.loading img[alt="play"] {
+  display: none;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+img[alt="loading"] {
+  animation: rotate 2s linear infinite;
+}
