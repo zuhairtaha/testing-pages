@@ -4,7 +4,7 @@
   "semi": true,
   "quoteProps": "preserve",
   "tabWidth": 2,
-  "printWidth": 80,
+  "printWidth": 120,
   "arrowParens": "avoid",
   "trailingComma": "none"
 }

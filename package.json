@@ -21,10 +21,10 @@
     "@types/chrome": "^0.0.188",
     "@types/serviceworker": "^0.0.26",
     "@types/sharedworker": "^0.0.75",
-    "eslint": "^8.16.0",
+    "eslint": "^8.24.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-no-floating-promise": "^1.0.2",
-    "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-unicorn": "^42.0.0"
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-unicorn": "^44.0.2"
   }
 }
