@@ -1,19 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Content editable</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Content editable</title>
-</head>
+      body {
+        margin: 0;
+        padding: 0;
+      }
 
-<body>
-  <main contenteditable="true">
-    <h1>This is a heading</h1>
-    <p>This is a paragraph</p>
-    <p>This is another paragraph</p>
-  </main>
-</body>
+      main {
+        border-left: solid #ccc 1px;
+        border-right: solid #ccc 1px;
+        height: 100vh;
+        padding: 1em;
+        font-size: 1.3em;
+        font-family: cursive;
+        line-height: 1.7em;
+        letter-spacing: 0.5px;
+        background: #fff;
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+    </style>
+  </head>
 
+  <body>
+    <main contenteditable="true"></main>
+    <script>
+      const main = document.querySelector("main");
+      main.innerHTML = window.localStorage.getItem("content-editable") || "";
+
+      main.addEventListener("input", e => {
+        window.localStorage.setItem("content-editable", main.innerHTML);
+      });
+    </script>
+  </body>
 </html>
