@@ -9,8 +9,10 @@
   <body>
     <main></main>
     <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const length = Number.parseInt(urlParams.get('items')) || 10;
       document.querySelector("main").append(
-        ...new Array(3000).fill().map(() => {
+        ...new Array(length).fill().map(() => {
           const div = document.createElement("div");
           div.textContent = "Hello World";
           return div;
