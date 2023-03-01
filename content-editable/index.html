@@ -48,6 +48,16 @@
       main.addEventListener("input", e => {
         window.localStorage.setItem("content-editable", main.innerHTML);
       });
+
+      main.addEventListener("mousedown", e => {
+        if (e.button === 1) {
+          // switch contenteditable on/off on middle mouse click and save in local storage
+          main.contentEditable = main.contentEditable === "true" ? "false" : "true";
+          window.localStorage.setItem("content-editable", main.contentEditable);
+        }
+      });
+
+      main.contentEditable = window.localStorage.getItem("content-editable") || "true";
     </script>
   </body>
 </html>
