@@ -49,10 +49,25 @@
         window.localStorage.setItem("content-editable", main.innerHTML);
       });
 
+      function toggleEditable() {
+        main.contentEditable = main.contentEditable === "true" ? "false" : "true";
+        window.localStorage.setItem("is-content-editable", main.contentEditable);
+      }
+
       main.addEventListener("mousedown", e => {
         if (e.button === 1) {
-          main.contentEditable = main.contentEditable === "true" ? "false" : "true";
-          window.localStorage.setItem("is-content-editable", main.contentEditable);
+          toggleEditable();
+        }
+      });
+
+      // if Alt pressed tow times toggle editable
+      let altPressed = false;
+      document.addEventListener("keydown", e => {
+        if (e.key === "Alt") {
+          if (altPressed) {
+            toggleEditable();
+          }
+          altPressed = true;
         }
       });
 
