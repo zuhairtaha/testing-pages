@@ -29,6 +29,10 @@ const monthNames = [
 ];
 
 const calendar = document.getElementById("calendar");
+const today = new Date();
+const currentYear = today.getFullYear();
+const currentMonth = today.getMonth();
+const currentDate = today.getDate();
 
 for (let month = 0; month < 12; month++) {
   const monthContainer = document.createElement("div");
@@ -58,24 +62,28 @@ for (let month = 0; month < 12; month++) {
   const tbody = document.createElement("tbody");
   table.append(tbody);
 
-  const currentDate = new Date(`2023-${month + 1}-01`);
+  const date = new Date(`2023-${month + 1}-01`);
   let row;
 
-  while (currentDate.getMonth() === month) {
-    if (currentDate.getDate() === 1 || currentDate.getDay() === 0) {
+  while (date.getMonth() === month) {
+    if (date.getDate() === 1 || date.getDay() === 0) {
       row = tbody.insertRow();
     }
 
     const cell = row.insertCell();
-    cell.textContent = currentDate.getDate();
+    cell.textContent = date.getDate();
 
-    const formattedDate = `${currentDate.getMonth() + 1}-${currentDate.getDate()}`;
+    const formattedDate = `${date.getMonth() + 1}-${date.getDate()}`;
     if (holidays.hasOwnProperty(formattedDate)) {
       cell.classList.add("holiday");
       cell.title = holidays[formattedDate];
     }
 
-    currentDate.setDate(currentDate.getDate() + 1);
+    if (date.getFullYear() === currentYear && date.getMonth() === currentMonth && date.getDate() === currentDate) {
+      cell.style.backgroundColor = "#ccffcc"; // Highlight today's cell with a different color
+    }
+
+    date.setDate(date.getDate() + 1);
   }
 
   // Fill in the remaining empty cells
