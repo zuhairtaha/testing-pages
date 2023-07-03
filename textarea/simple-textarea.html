@@ -1,59 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon.ico" />
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon.ico">
+    <title>Pure textarea</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-  <title>Pure textarea</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+      body {
+        width: 80%;
+        margin: 0 auto;
+        overflow: hidden;
+      }
 
-    body {
-      width: 80%;
-      margin: 0 auto;
-      overflow: hidden;
-    }
+      textarea,
+      textarea:focus {
+        width: 100%;
+        height: 100vh;
+        border: 1px solid #ccc;
+        border-top: 0;
+        border-bottom: 0;
+        outline: 0;
+        padding: 1em;
+        font-size: 1.3em;
+        font-family: cursive;
+        line-height: 1.7em;
+        letter-spacing: 0.5px;
+      }
 
-    textarea,
-    textarea:focus {
-      width: 100%;
-      height: 100vh;
-      border: 1px solid #ccc;
-      border-top: 0;
-      border-bottom: 0;
-      outline: 0;
-      padding: 1em;
-      font-size: 1.3em;
-      font-family: cursive;
-      line-height: 1.7em;
-      letter-spacing: 0.5px;
-    }
+      #count {
+        border: 1px solid;
+        width: 7em;
+        height: 2em;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
+  </head>
 
-    #count {
-      border: 1px solid;
-      width: 7em;
-      height: 2em;
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-  </style>
-</head>
-
-<body>
-  <textarea id="ta"></textarea>
-  <div id="count"></div>
-  <script>
-    const longText = `I Danmark har sundhedsmyndighederne været mere tilbageholdende med at anbefale mundbind end myndighederne i andre lande.
+  <body>
+    <textarea id="ta"></textarea>
+    <div id="count"></div>
+    <script>
+      const longText = `I Danmark har sundhedsmyndighederne været mere tilbageholdende med at anbefale mundbind end myndighederne i andre lande.
 
 Så sent som i begyndelsen af sidste uge sagde Sundhedsstyrelsens direktør, Søren Brostrøm, at mundbind i det offentlige rum "giver ingen mening i den nuværende situation".
 Men i fredags var meldingen fra styrelsen så, at man anbefalede brug af mundbind i myldretiden i den kollektive trafik.
@@ -331,28 +330,35 @@ Men i fredags var meldingen fra styrelsen så, at man anbefalede brug af mundbin
 Hvad ændrede sig på så få dage?
 `;
 
-    const ta = /** @type {!HTMLTextAreaElement } */ (document.getElementById('ta'));
-    const count = document.getElementById('count');
-    ta.addEventListener('input', () => localStorage.setItem(`ta-value`, ta.value));
+      const ta = /** @type {!HTMLTextAreaElement } */ (document.getElementById("ta"));
+      const count = document.getElementById("count");
+      ta.addEventListener("input", () => localStorage.setItem(`ta-value`, ta.value));
 
-    const updateCount = () => { count.textContent = ta.value.length };
-    const initTextarea = () => { ta.textContent = localStorage.getItem(`ta-value`) }
+      const updateCount = () => {
+        count.textContent = ta.value.length;
+      };
+      const initTextarea = () => {
+        ta.textContent = localStorage.getItem(`ta-value`);
+      };
 
-    ta.addEventListener('input', updateCount);
+      ta.addEventListener("input", updateCount);
 
-    const checkQueryString = () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('longtext') !== 'true') return;
+      const checkQueryString = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get("longtext") === "true") {
+          ta.value = longText;
+        }
 
-      ta.value = longText;
-    };
+        if (urlParams.get("empty") === "true") {
+          ta.value = "";
+        }
+      };
 
-    window.addEventListener('DOMContentLoaded', () => {
-      initTextarea();
-      checkQueryString();
-      updateCount();
-    });
-  </script>
-</body>
-
+      window.addEventListener("DOMContentLoaded", () => {
+        initTextarea();
+        checkQueryString();
+        updateCount();
+      });
+    </script>
+  </body>
 </html>
