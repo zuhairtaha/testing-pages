@@ -1,17 +1,23 @@
 body {
-  background-color: rgb(0 0 0 / 2%);
   margin: 0;
   padding: 0;
   font-family: cursive;
-}
-
-main {
   width: 90%;
   margin: 1em auto;
   padding: 2em;
-  background-color: #fdfdff;
   border-radius: 0.5em;
   box-shadow: 2px 3px 7px 2px rgb(0 0 0 / 2%);
   font-size: 18px;
   line-height: 1.8em;
+  background-color: #fdfdff;
+}
+
+html {
+  background-color: rgb(0 0 0 / 6%);
+}
+
+select {
+  margin-bottom: 1em;
+  font-family: cursive;
+  font-size: 14px;
 }

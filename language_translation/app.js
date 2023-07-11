@@ -3,6 +3,59 @@ const App = new (class {
   _contentElement = /** @type {!HTMLElement} */ (document.getElementById("content"));
 
   /** @private */
+  _languageElement = /** @type {!HTMLSelectElement} */ (document.getElementById("languageSelector"));
+
+  /** @private */
+  _langs = [
+    { name: "Arabic", locale: "ar-EG" },
+    { name: "Welsh", locale: "cy-WA" },
+    { name: "Danish", locale: "da-DK" },
+    { name: "German", locale: "de-DE" },
+    { name: "English (Australian)", locale: "en-AU" },
+    { name: "English (British)", locale: "en-GB" },
+    { name: "English (US)", locale: "en-US" },
+    { name: "English (Wales)", locale: "en-WA" },
+    { name: "Spanish", locale: "es-ES" },
+    { name: "French", locale: "fr-FR" },
+    { name: "French (Canadian)", locale: "fr-CA" },
+    { name: "Icelandic", locale: "is-IS" },
+    { name: "Italian", locale: "it-IT" },
+    { name: "Norwegian (Bokmål)", locale: "nb-NO" },
+    { name: "Dutch", locale: "nl-NL" },
+    { name: "Norwegian (Nynorsk)", locale: "nn-NO" },
+    { name: "Polish", locale: "pl-PL" },
+    { name: "Romanian", locale: "ro-RO" },
+    { name: "Swedish", locale: "sv-SE" },
+    { name: "English (India)", locale: "en-IN" },
+    { name: "English (Scotland)", locale: "en-X0" },
+    { name: "Finnish", locale: "fi-FI" },
+    { name: "Finnish (Sweden)", locale: "fi-SE" },
+    { name: "Faroese", locale: "fo-FO" },
+    { name: "Greek", locale: "el-GR" },
+    { name: "Hindi", locale: "hi-IN" },
+    { name: "Dutch (Belgium)", locale: "nl-BE" },
+    { name: "Japanese", locale: "ja-JP" },
+    { name: "Chinese (Mandarin)", locale: "zh-CH" },
+    { name: "Korean", locale: "ko-KR" },
+    { name: "Portuguese (Brazil)", locale: "pt-BR" },
+    { name: "Portuguese", locale: "pt-PT" },
+    { name: "Russian", locale: "ru-RU" },
+    { name: "Sami (Northern)", locale: "se-X0" },
+    { name: "Sami (Lule)", locale: "se-X1" },
+    { name: "Catalan", locale: "ca-ES" },
+    { name: "Spanish (Mexico)", locale: "es-MX" },
+    { name: "Spanish (USA)", locale: "es-US" },
+    { name: "Czech", locale: "cs-CZ" },
+    { name: "Turkish", locale: "tr-TR" },
+    { name: "Ukrainian", locale: "uk-UA" },
+    { name: "Tamil", locale: "ta-LK" },
+    { name: "Chinese (Cantonese)", locale: "zh-HK" },
+    { name: "Thai", locale: "th-TH" },
+    { name: "Croatian", locale: "hr-HR" },
+    { name: "Farsi", locale: "fa-IR" }
+  ];
+
+  /** @private */
   _text = `
 Welcome to our language translation page. We are devoted to helping individuals and businesses communicate
 effectively, break language barriers, and expand their horizons. Language is an essential tool for understanding
@@ -33,11 +86,34 @@ time.
 `;
 
   constructor() {
+    this._initLanguageSelector();
+
     this._updateContent();
 
     window.addEventListener("popstate", () => {
       this._updateContent();
     });
+
+    this._languageElement.addEventListener("change", evt => {
+      const newLocale = evt.target.value;
+      window.history.pushState({}, "", `?language=${newLocale}`);
+
+      this._updateContent();
+    });
+  }
+
+  /** @private */
+  _initLanguageSelector() {
+    const language = this._getLanguage();
+
+    for (const lang of this._langs) {
+      const option = new Option(lang.name, lang.locale);
+      this._languageElement.append(option);
+
+      if (lang.locale === language) {
+        option.selected = true;
+      }
+    }
   }
 
   /**
