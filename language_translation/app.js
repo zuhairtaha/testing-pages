@@ -1,3 +1,78 @@
+const UnsupportedByGoogle = {
+  // https://translate.ling.helsinki.fi/ui/sami
+  se: `Buresboahtin giellajorgalansiidui. Mii leat oamastan veahkehit priváhtaolbmuid ja fitnodagaid kommuniseret suokkardit giellafámuid beaktilit ja viiddidit geahččanguovlluideaset. Giella lea dehálaš áddejumi gaskaoapmi eará kultuvrrain ja geahččanguovlluin, ja leat čeavlát sáhttit ovddidit dán áddejumi. Ain eanet globaliseren máilmmis giellamuvrraid rasttildeaddji kommunikašuvdna lea deháleabbo go goassige ovdal. Leago dat fitnodat mii háliida viiddidit ođđa márkaniidda dahje`
+};
+
+const GoogleTranslateLanguage = {
+  Afrikaans: "af",
+  Albanian: "sq",
+  Amharic: "am",
+  Arabic: "ar",
+  Armenian: "hy",
+  Azerbaijani: "az",
+  Basque: "eu",
+  Belarusian: "be",
+  Bengali: "bn",
+  Bosnian: "bs",
+  Bulgarian: "bg",
+  Catalan: "ca",
+  Cebuano: "ceb",
+  ChineseSimplified: "zh-CN",
+  ChineseTraditional: "zh-TW",
+  Corsican: "co",
+  Croatian: "hr",
+  Czech: "cs",
+  Danish: "da",
+  Dutch: "nl",
+  English: "en",
+  Esperanto: "eo",
+  Estonian: "et",
+  Finnish: "fi",
+  French: "fr",
+  Frisian: "fy",
+  Galician: "gl",
+  Georgian: "ka",
+  German: "de",
+  Greek: "el",
+  Gujarati: "gu",
+  HaitianCreole: "ht",
+  Hausa: "ha",
+  Hawaiian: "haw",
+  Hebrew: "he",
+  Hindi: "hi",
+  Hmong: "hmn",
+  Hungarian: "hu",
+  Icelandic: "is",
+  Igbo: "ig",
+  Indonesian: "id",
+  Irish: "ga",
+  Italian: "it",
+  Japanese: "ja",
+  Javanese: "jw",
+  Kannada: "kn",
+  Kazakh: "kk",
+  Khmer: "km",
+  Korean: "ko",
+  Kurdish: "ku",
+  Russian: "ru",
+  Spanish: "es",
+  Portuguese: "pt",
+  Norwegian: "no",
+  Welsh: "cy",
+  Polish: "pl",
+  Romanian: "ro",
+  Swedish: "sv",
+  Faroese: "fo",
+  Chinese: "zh",
+  Sami: "se",
+  Turkish: "tr",
+  Ukrainian: "uk",
+  Tamil: "ta",
+  Thai: "th",
+  Farsi: "fa"
+  // ...
+};
+
 const App = new (class {
   /** @private */
   _contentElement = /** @type {!HTMLElement} */ (document.getElementById("content"));
@@ -95,7 +170,7 @@ time.
     });
 
     this._languageElement.addEventListener("change", evt => {
-      const newLocale = evt.target.value;
+      const newLocale = /** @type {!HTMLSelectElement} */ (evt.target).value;
       window.history.pushState({}, "", `?language=${newLocale}`);
 
       this._updateContent();
@@ -136,6 +211,19 @@ time.
    */
   async _translate(targetLanguage) {
     targetLanguage = targetLanguage.slice(0, 2);
+
+    if (["nb", "nn"].includes(targetLanguage)) {
+      targetLanguage = "no";
+    }
+
+    if (UnsupportedByGoogle[targetLanguage]) {
+      return Array.from({ length: 5 }).fill(UnsupportedByGoogle[targetLanguage]).join(" ");
+    }
+
+    if (!Object.values(GoogleTranslateLanguage).includes(targetLanguage)) {
+      throw new Error(`Invalid target language: ${targetLanguage}`);
+    }
+
     const encodedText = window.encodeURIComponent(this._text);
     const response = await fetch(
       `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${targetLanguage}&dt=t&q=${encodedText}`
