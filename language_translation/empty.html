@@ -9,5 +9,12 @@
     <main>
       <p id="content"></p>
     </main>
+
+    <script>
+      const content = document.getElementById("content");
+      const urlParams = new URLSearchParams(window.location.search);
+      const encodedText = urlParams.get("text");
+      content.innerText = decodeURIComponent(encodedText);
+    </script>
   </body>
 </html>
