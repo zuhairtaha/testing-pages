@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Popup window opener</title>
+  </head>
+  <body>
+    <a href="javascript:void(0)" onclick="openPopup()">Open Popup</a>
+    <script>
+      function openPopup() {
+        window.open("popup.html", "popupWindow", "width=600,height=400,left=100,top=100,resizeable=yes");
+      }
+    </script>
+  </body>
+</html>
