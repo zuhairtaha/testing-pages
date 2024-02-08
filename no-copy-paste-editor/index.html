@@ -1,0 +1,229 @@
+<!DOCTYPE html><html>
+                <head><title>Test af tekstfelt</title>
+                    <meta charset="utf-8">
+                    <link rel="stylesheet" type="text/css" href="./assets/css/bundled.css">
+                    <script src="./assets/js/bundled.js"></script>
+                    <script type="text/javascript">var subtitles = {};
+
+                function UndefinedToZero(value) {
+                    if(typeof value === "undefined") {
+                        return 0;
+                    }
+                    return value;
+                }
+
+                function _Time(frames, seconds, minutes, hours) {
+                    frames = UndefinedToZero(frames) / 24;
+                    seconds = UndefinedToZero(seconds);
+                    minutes = UndefinedToZero(minutes) * 60;
+                    hours = UndefinedToZero(hours) * 3600;
+                    return hours + minutes + seconds + frames;
+                }
+
+                function TTime(value) {
+                    if(typeof value === "undefined") {
+                        value = "00:00:00:00";
+                    }
+                    var split = value.split(":");
+                    var frames = (split[3]*1)/24;
+                    var seconds = split[2]*1;
+                    var minutes = (split[1]*1)*60;
+                    var hours = (split[0]*1)*3600;
+                    var output = hours + minutes + seconds + frames;
+                    return output;
+                }
+
+                function T(start, end, text, direction) {
+                    if(typeof direction === "undefined") {
+                        direction = "ltr";
+                    }
+                    return {
+                        start: start,
+                        end: end,
+                        text: text,
+                        direction: direction
+                    }
+                }</script>
+                    <script src="./assets/tinymce_6.8.2/tinymce/js/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
+                    
+            <script>
+                tinymce.init({
+                    selector:'.tinymce-editor',
+                    language:'da',
+                    promotion: false,
+                    branding: false,
+                    browser_spellcheck: false,
+                    plugins:'lists fullscreen charmap wordcount autosave table',
+					autosave_interval: '1s',
+					autosave_retention: '300m',
+					autosave_restore_when_empty: true,
+                    autosave_prefix:'tinymce-{id}',
+                    toolbar: 'print | undo redo | blocks | formatselect bold italic underline | bullist numlist | alignleft aligncenter alignright alignjustify lineheight outdent indent | charmap wordcount fullscreen',
+                    menubar: 'edit insert format tools',
+                    menu: {
+                edit: { title: 'Edit', items: 'undo redo' },
+                insert: { title: 'Insert', items: 'charmap hr | pagebreak nonbreaking anchor' },
+                format: { title: 'Format', items: 'bold italic underline strikethrough superscript subscript codeformat | styles blocks fontfamily fontsize align lineheight | forecolor backcolor | removeformat' },
+                tools: { title: 'Tools', items: 'wordcount' }
+            },
+                    setup: 
+            function (editor) {
+                editor.on('init', function () {
+                    editor.getBody().setAttribute('translate', 'no');
+					
+                    let editorContent = localStorage.getItem('tinymce-' + editor.id + 'draft');
+					editorContent = editorContent ? editorContent : '';
+                    if (!editorContent.includes('tinymce-elevinfo-tabel')) {
+						editor.setContent('<table class="tinymce-elevinfo-tabel" style="border-collapse: collapse; width: 100%; border-width: 1px; border-style: double; height: 67.1718px;" border="1"><colgroup><col style="width: 17.162%;"><col style="width: 82.838%;"></colgroup><tbody><tr style="height: 22.3906px;"><td style="height: 22.3906px;">Unilogin:</td><td style="height: 22.3906px;"><br></td></tr><tr style="height: 22.3906px;"><td style="height: 22.3906px;">Klasse:</td><td style="height: 22.3906px;"><br></td></tr><tr style="height: 22.3906px;"><td style="height: 22.3906px;">Skole:</td><td style="height: 22.3906px;"><br></td></tr></tbody></table>' + editorContent);
+					}
+                });
+            },
+                    paste_preprocess: function(editor, args) {
+                        if (!args.internal) {
+                            args.content = '';
+                        }
+                    }
+                });
+            </script></head>
+                <body>
+                <style>
+                    a:hover {
+                        cursor: pointer;
+                    } 
+
+                    .content-editable {
+                        position: relative; 
+                    }
+
+                    .draggable-reading-field {
+                        display: inline-block; 
+                        position: absolute; 
+                        z-index: 9; 
+                        border: 1px solid gray;
+                        padding: 2px;
+                    }
+
+                    .draggable-reading-field-invisible {
+                        opacity: 0 !important;
+                        border-style: none;
+                    }
+
+                    .line-numbers-container {
+                        resize: none !important;
+                        border: none !important;
+                        padding: 0 !important;
+                        counter-reset: line;
+                    }
+
+                    .line-numbers-container p.numbered-line {
+                        margin-block-start: 0;
+                        margin-block-end: 0;
+                    }
+
+                    .line-numbers-container .numbered-line:before {
+                        content: counter(line);
+                        counter-increment: line;
+                        color: #888;
+                        visibility: hidden;
+                        display: inline-block;
+                        width: auto;
+                        min-width: 18px;
+                        padding-left: 8px;
+                        padding-right: 10px;
+                        text-align: right;
+                        font-weight: 100;
+                        font-size: 1rem;
+                        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+                    }
+
+                    .line-numbers-container .numbered-line:first-child:before, 
+                    .line-numbers-container .numbered-line:nth-child(5n of .numbered-line):before {
+                        visibility: visible;
+                    }
+                </style>
+            <div class="skabelon">
+                <header class="skabelon-header">
+                    <div class="skabelon-header-institution_logo"></div>
+                    <img alt="stuk_logo" class="skabelon-header-stuk_logo" id="uvm_logo" src="assets/images/uvm_logo_stuk.png">
+                </header>
+                <div class="skabelon-wrapper">
+                    <div class="skabelon-wrapper-menu" id="skabelon-wrapper-menu">
+                        <ul><ul>
+<li><a href="javascript:void(0)" class="web-document-link active parent-document" id="web-document-link-323" data-document-id="323" onclick="changeDocument(this);VideoPlayer.InitPlayers('.web-document-active .new-player');VideoPlayer.PauseAll();">Forside</a></li>
+<li><a href="javascript:void(0)" class="web-document-link parent-document" id="web-document-link-324" data-document-id="324" onclick="changeDocument(this);VideoPlayer.InitPlayers('.web-document-active .new-player');VideoPlayer.PauseAll();">Test af tekstfelt 1</a></li>
+</ul></ul>
+                        <a id="proeveforekomst"></a>
+                    </div>
+                    <div class="skabelon-wrapper-content">
+                        <div class="content-editable" id="content-editable"><style>.web-document { display: none; } .web-document-active { display: block; }</style><div class="web-document " id="web-document-324"><h2>Velkommen til den foreløbige udgave af tekstfeltet uden stave- og grammartikkontrol</h2><p>Nedenfor findes en foreløbig udgave at tekstfeltet uden uden stave- og grammartikkontrol. Tekstfeltet skal bruges første gang ved folkeskolens prøver i engelsk, tysk og fransk maj 2024. Tekstfeltet er udviklet, så det forebygger utilsigtet og tilsigtet snyd, fx ordopslag, stavekontrol, copy/paste mv. </p><p>Prøvesættet er fortroligt og må ikke videregives til tredjepart uden aftale med Styrelsen for It og Læring. </p><p>Indeværende prøvesæt er udelukkende beregnet til at teste den foreløbige udgave af tekstfeltet, og der kan derfor forekomme fejl. Vi vil meget gerne høre om dine oplevelser med tekstfeltet, herunder eventuelle fejl og uhensigtsmæssigheder, som du støder på. Send gerne dine erfaringer på e-mail til STIL på følgende e-mail: Simon.Hjorth@STIL.dk.</p><p>På forhånd tak for hjælpen.</p><textarea id="147f44a7-a6a2-4088-af84-43b5e7d3fe4e" class="tinymce-editor"></textarea><p> </p><p><br data-mce-bogus="1"></p><p><br data-mce-bogus="1"></p><p><br data-mce-bogus="1"></p><p><br data-mce-bogus="1"></p></div><div class="web-document frontpage-web-document web-document-active" id="web-document-323">
+                <div class="frontpage-fields">
+                    <h1 class="frontpage-proeve-title" contenteditable="false">Tekstfelt afprøvning</h1>
+                    <p class="frontpage-proeve-proeveordning" contenteditable="false"></p>
+                    <p class="frontpage-dato-for-afholdelse" contenteditable="false">Søndag den 3. marts 2024</p><p class="frontpage-proeve-start-slut-tidspunkt" contenteditable="false"></p></div><p class="optional-textfield-1">Se gerne "Test af tekstfelt 1" for vejledning</p><p><br data-mce-bogus="1"></p></div></div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                (function resetWordCounters() {
+                    var wordCounters = document.getElementsByClassName('word-counter')
+                    Array.prototype.forEach.call(wordCounters, function(wordCounter) {
+                        wordCounter.innerHTML = 0;
+                    });
+                })();
+
+                function countWords(obj) {
+                    let res = [];
+                    let str = obj.value.replace(/[\t\n\r\.\?\!]/gm, ' ').split(' ');
+                    str.map((s) => {
+                        let trimStr = s.trim();
+                        if (trimStr.length > 0)
+                        {
+                          res.push(trimStr);
+                        }
+                    });
+                    obj.closest('.wordcount-textarea').getElementsByClassName('word-counter')[0].innerHTML = res.length;
+                }
+            </script>
+            <script>
+            function changeDocument(element) {
+              	document.querySelectorAll(".web-document").forEach(element => {
+                	if(element.classList.contains("web-document-active")) {
+                    	element.classList.remove("web-document-active");
+                    }
+                });
+            	var webDocument = document.getElementById("web-document-" + element.getAttribute("data-document-id"));
+                if (!webDocument.classList.contains("web-document-active")) {
+                	webDocument.classList.add("web-document-active");
+                }
+                this.changeActiveMenuLink(element.id);
+            }
+            
+            function changeActiveMenuLink(elementId) {
+              	document.querySelectorAll(".web-document-link").forEach(element => {
+                	if(element.classList.contains("active")) {
+                    	element.classList.remove("active");
+                    }
+                });
+                
+            	var activeElement = document.getElementById(elementId);
+                if (!activeElement.classList.contains("active")) {
+                	activeElement.classList.add("active");
+                }
+
+                var activeElementParentId = activeElement.getAttribute("data-document-id");
+                if (activeElement.hasAttribute("data-parent-document-id")) {
+                    activeElementParentId = activeElement.getAttribute("data-parent-document-id");
+                }
+
+                document.querySelectorAll(".web-document-link").forEach(document => {
+                    if(document.classList.contains("parent-document") || activeElementParentId == document.getAttribute("data-parent-document-id")) {
+                        document.classList.remove("noActiveRelation");
+                    } else {
+                        document.classList.add("noActiveRelation");
+                    }
+                });
+            }
+
+            VideoPlayer.InitPlayers('.web-document-active .new-player');
+            VideoPlayer.PauseAll();
+            </script></body></html>
