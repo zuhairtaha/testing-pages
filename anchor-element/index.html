@@ -23,6 +23,9 @@
       document.addEventListener("DOMContentLoaded", () => {
         const range = new Range();
         range.selectNodeContents(document.body);
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
       });
     </script>
   </body>
