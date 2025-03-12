@@ -3,12 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Drag and Drop File Reader</title>
+    <title>Drag & Drop File Reader</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div id="drop-zone">Drag and drop files here</div>
-    <textarea id="file-content" readonly></textarea>
-    <script src="./script.js"></script>
+    <h2>Drag & Drop Files or Folders</h2>
+    <div id="dropZone">Drop files or folders here</div>
+    <textarea id="textArea" readonly></textarea>
+    <div class="buttons">
+      <button id="copyBtn" disabled>Copy</button>
+      <button id="downloadBtn" disabled>Download</button>
+    </div>
+
+    <script src="script.js"></script>
   </body>
 </html>
