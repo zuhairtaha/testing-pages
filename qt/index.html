@@ -3,11 +3,42 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Testing pages Qt</title>
+    <title>Testing pages</title>
     <link rel="shortcut icon" type="image/x-icon" href="../assets/favicon.ico" />
+    <style>
+      @import url(https://fonts.googleapis.com/css2?family=Roboto&display=swap);
+
+      html {
+        background-color: #f0f0f0;
+        font-family: Roboto, sans-serif;
+      }
+
+      body {
+        font: '16px / 24px Roboto, "Noto Sans", "Noto Sans JP", "Noto Sans KR", "Noto Naskh Arabic", "Noto Sans Thai", "Noto Sans Hebrew", "Noto Sans Bengali", sans-serif';
+        display: flex;
+        flex-direction: column;
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #fff;
+        min-height: 100dvh;
+        padding: 1rem;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      a {
+        text-decoration: none;
+        padding: 0.3rem;
+        color: rgb(85, 85, 85);
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    </style>
   </head>
 
   <body>
     <a href="drag-drop-reader/">Drag Drop Reader</a>
+    <a href="highlight/">CSS.highlights</a>
   </body>
 </html>

@@ -1,0 +1,15 @@
+body {
+  font-family: cursive;
+  width: 1000px;
+  margin: 0 auto;
+}
+
+::highlight(search-term-highlight) {
+  background-color: yellow;
+  color: black;
+}
+
+::highlight(blue-highlight) {
+  background-color: green;
+  color: white;
+}
