@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Styled selection</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f3f4f6;
+        padding: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
+      }
+
+      main {
+        background-color: white;
+        border-radius: 0.5rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        width: 100%;
+        max-width: 80vbw;
+        overflow: hidden;
+        padding: 2rem;
+      }
+
+      ::selection {
+        background-color: #9e3903;
+        color: white;
+      }
+
+      ::-moz-selection {
+        background-color: #9e3903;
+        color: white;
+      }
+
+      h1 {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Styled Selection Example</h1>
+      <p>This is an example of a styled selection using CSS.</p>
+
+      <p>Select this text to see the styled selection effect.</p>
+
+      <p>Note: The styles for selection may not work in all browsers.</p>
+      <p>
+        This example uses the <code>::selection</code> and <code>::-moz-selection</code> pseudo-elements
+        to change the background color and text color of selected text.
+      </p>
+    </main>
+  </body>
+</html>
