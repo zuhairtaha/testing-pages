@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>الأحزاب السياسية في الدنمارك</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body class="bg-gray-50 text-gray-800">
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+      <header class="text-center mb-8">
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-900">الأحزاب السياسية في الدنمارك</h1>
+        <p class="text-lg text-gray-600 mt-2">
+          جدول تفاعلي قابل للفرز. انقر على رؤوس الأعمدة للترتيب، أو على أيقونة ❓ لعرض أسئلة امتحان الجنسية ذات الصلة.
+        </p>
+      </header>
+
+      <div class="table-container bg-white rounded-lg shadow-md overflow-hidden">
+        <table id="partiesTable" class="w-full text-sm text-right text-gray-600">
+          <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+            <tr>
+              <th scope="col" class="px-2 py-3">الشعار</th>
+              <th scope="col" class="px-2 py-3">الأسئلة</th>
+              <th scope="col" class="px-4 py-3 sortable" data-column="name-da" data-type="string">
+                اسم الحزب (دنماركي)<span class="sort-indicator">↕</span>
+              </th>
+              <th scope="col" class="px-4 py-3 sortable" data-column="name-ar" data-type="string">
+                الترجمة العربية<span class="sort-indicator">↕</span>
+              </th>
+              <th scope="col" class="px-4 py-3">نبذة عن الحزب</th>
+              <th scope="col" class="px-4 py-3 sortable" data-column="leader" data-type="string">
+                رئيس الحزب<span class="sort-indicator">↕</span>
+              </th>
+              <th scope="col" class="px-4 py-3 sortable" data-column="founded" data-type="number">
+                سنة التأسيس<span class="sort-indicator">↕</span>
+              </th>
+              <th scope="col" class="px-4 py-3 sortable" data-column="members" data-type="number">
+                عدد الأعضاء<span class="sort-indicator">↕</span>
+              </th>
+              <th scope="col" class="px-4 py-3 sortable" data-column="seats" data-type="number">
+                المقاعد<span class="sort-indicator">↕</span>
+              </th>
+              <th scope="col" class="px-4 py-3">سنوات رئاسة الحكومة</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Data will be populated by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+
+      <footer class="text-center mt-8 text-sm text-gray-500">
+        <p>البيانات المذكورة هي تقديرية وقد تتغير. المصدر: معرفة عامة حتى عام 2024.</p>
+        <p>تشمل القائمة جميع الأحزاب الممثلة في البرلمان بعد انتخابات 2022.</p>
+      </footer>
+    </div>
+
+    <!-- Modal structure -->
+    <div id="questionsModal" class="modal-overlay">
+      <div class="modal-content">
+        <button id="closeModal" class="absolute top-4 left-4 text-2xl font-bold text-gray-600 hover:text-gray-900">
+          &times;
+        </button>
+        <h2 id="modalTitle" class="text-2xl font-bold mb-4 text-center">أسئلة ذات صلة</h2>
+        <div id="modalBody" class="space-y-6">
+          <!-- Questions will be injected here -->
+        </div>
+      </div>
+    </div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,68 @@
+body {
+  font-family: "Cairo", sans-serif;
+}
+th.sortable {
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+}
+th.sortable .sort-indicator {
+  margin-right: 8px;
+  display: inline-block;
+  width: 1em;
+  text-align: center;
+}
+th.sortable .sort-indicator {
+  color: #9ca3af;
+}
+th[aria-sort] .sort-indicator {
+  color: #1f2937;
+}
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+table {
+  width: 100%;
+  min-width: 1300px;
+}
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+.modal-content {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  max-width: 90%;
+  width: 700px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  transform: translateY(-50px);
+  transition: transform 0.3s ease;
+}
+.modal-overlay.active .modal-content {
+  transform: translateY(0);
+}
+.correct-answer {
+  background-color: #d1fae5; /* Tailwind green-100 */
+  font-weight: bold;
+}
