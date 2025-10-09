@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch Statement Cleaner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <!-- Added highlight.js for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        textarea, code {
+            font-family: 'Fira Code', monospace;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Make contenteditable placeholder visible */
+        [contenteditable="true"]:empty:before {
+            content: attr(placeholder);
+            pointer-events: none;
+            display: block; /* For Firefox */
+            color: #6b7280; /* Equivalent to text-gray-500 */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen flex flex-col items-center justify-center p-4">
+
+    <div class="w-full max-w-6xl mx-auto">
+        <!-- Header Section -->
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white">Fetch Statement Cleaner</h1>
+            <p class="mt-3 text-lg text-gray-600 dark:text-gray-400">Paste your raw `fetch` code from browser dev tools to simplify it.</p>
+        </header>
+
+        <main class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Input Card -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+                <div class="p-5">
+                    <label for="input-code" class="text-lg font-semibold text-gray-700 dark:text-gray-300">Original Fetch Code</label>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 mb-3">Copy the statement directly from the "Copy as fetch" option in your browser's network tab.</p>
+                    <textarea id="input-code" class="w-full h-80 p-4 bg-gray-50 dark:bg-gray-900/50 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 text-sm" placeholder='fetch("https://example.com/api/...", {
+  "headers": {
+    "accept": "*/*",
+    ...
+  },
+  "body": "{\"key\":\"value\"}",
+  "method": "POST"
+});'></textarea>
+                </div>
+                <div class="px-5 py-3 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-gray-700">
+                    <button id="clean-btn" class="w-full bg-indigo-600 text-white font-bold py-2.5 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-300 dark:focus:ring-indigo-800 transition-all duration-300 ease-in-out transform hover:scale-105">
+                        Clean & Format
+                    </button>
+                </div>
+            </div>
+
+            <!-- Output Card -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+                <div class="p-5">
+                    <div class="flex justify-between items-center">
+                        <label for="output-code" class="text-lg font-semibold text-gray-700 dark:text-gray-300">Cleaned Code</label>
+                        <button id="copy-btn" class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold py-1.5 px-4 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-800 focus:ring-indigo-500 transition duration-200">
+                            <span id="copy-btn-text">Copy</span>
+                        </button>
+                    </div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 mb-3">Unnecessary headers are removed and the body is formatted as a JSON object.</p>
+                    <div class="w-full h-80 bg-gray-900 border border-gray-600 rounded-lg overflow-auto">
+                      <pre class="h-full"><code id="output-code" class="language-javascript text-sm p-4 block h-full w-full focus:outline-none" contenteditable="true" placeholder="Cleaned code will appear here..."></code></pre>
+                    </div>
+                </div>
+                 <div class="px-5 py-3 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-gray-700 text-center">
+                    <p id="error-message" class="text-red-500 font-medium h-6"></p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputCodeEl = document.getElementById('input-code');
+            const outputCodeEl = document.getElementById('output-code');
+            const cleanBtn = document.getElementById('clean-btn');
+            const copyBtn = document.getElementById('copy-btn');
+            const copyBtnText = document.getElementById('copy-btn-text');
+            const errorMessageEl = document.getElementById('error-message');
+
+            // --- Load from localStorage on page load ---
+            const loadFromStorage = () => {
+                const savedInput = localStorage.getItem('fetchCleanerInput');
+                const savedOutputHtml = localStorage.getItem('fetchCleanerOutputHtml');
+
+                if (savedInput) {
+                    inputCodeEl.value = savedInput;
+                }
+                if (savedOutputHtml) {
+                    // Restore the HTML which includes the highlighting spans
+                    outputCodeEl.innerHTML = savedOutputHtml;
+                }
+            };
+
+            // --- Main Cleaning Function ---
+            const cleanFetchStatement = () => {
+                const inputText = inputCodeEl.value.trim();
+                errorMessageEl.textContent = '';
+                outputCodeEl.textContent = '';
+                // Use closest to target the parent card for the animation
+                const outputCard = outputCodeEl.closest('.bg-white');
+                if (outputCard) {
+                    outputCard.classList.remove('fade-in');
+                }
+
+
+                if (!inputText) {
+                    errorMessageEl.textContent = 'Input is empty.';
+                    return;
+                }
+
+                try {
+                    // 1. Extract URL
+                    const urlMatch = inputText.match(/fetch\(([^,]+),/);
+                    if (!urlMatch || !urlMatch[1]) {
+                        throw new Error("Couldn't find a valid URL in the fetch statement.");
+                    }
+                    const url = urlMatch[1].trim();
+
+                    // 2. Extract the options object string by finding matching braces
+                    const startIndex = inputText.indexOf('{');
+                    if (startIndex === -1) throw new Error("Could not find the start of the options object '{'.");
+                    
+                    let braceCount = 1;
+                    let endIndex = -1;
+                    for (let i = startIndex + 1; i < inputText.length; i++) {
+                        if (inputText[i] === '{') braceCount++;
+                        if (inputText[i] === '}') braceCount--;
+                        if (braceCount === 0) {
+                            endIndex = i;
+                            break;
+                        }
+                    }
+
+                    if (endIndex === -1) throw new Error("Could not find the end of the options object '}'.");
+                    
+                    const optionsString = inputText.substring(startIndex, endIndex + 1);
+
+                    // 3. Parse the options string into a JavaScript object
+                    // Using new Function is safer than eval for this purpose.
+                    const optionsObj = new Function('return ' + optionsString)();
+
+                    // 4. Filter headers to keep only essential ones
+                    const headersToKeep = ['content-type', 'x-request-verification-token', 'x-xsrf-token', 'authorization'];
+                    const cleanedHeaders = {};
+                    if (optionsObj.headers) {
+                        for (const key in optionsObj.headers) {
+                            if (headersToKeep.includes(key.toLowerCase())) {
+                                cleanedHeaders[key] = optionsObj.headers[key];
+                            }
+                        }
+                    }
+                    
+                    // 5. Parse and prettify the body
+                    let bodyObj = null;
+                    if (optionsObj.body) {
+                       try {
+                           bodyObj = JSON.parse(optionsObj.body);
+                       } catch(e) {
+                           throw new Error("The 'body' property is not valid JSON.");
+                       }
+                    }
+
+                    // 6. Build the final, clean output string
+                    const indent = '  ';
+                    let output = `await fetch(${url}, {\n`;
+                    
+                    // Add headers if any exist
+                    if(Object.keys(cleanedHeaders).length > 0) {
+                      output += `${indent}"headers": {\n`;
+                      const headerKeys = Object.keys(cleanedHeaders);
+                      headerKeys.forEach((key, index) => {
+                          output += `${indent}${indent}"${key}": "${cleanedHeaders[key]}"`;
+                          if (index < headerKeys.length - 1) output += ',';
+                          output += '\n';
+                      });
+                      output += `${indent}},\n`;
+                    }
+                    
+                    // Add body if it exists
+                    if (bodyObj) {
+                        const prettyBody = JSON.stringify(bodyObj, null, 4);
+                        const indentedBody = prettyBody.replace(/\n/g, `\n${indent}${indent}`);
+                        output += `${indent}"body": JSON.stringify(${indentedBody}),\n`;
+                    }
+
+                    // Add other essential properties
+                    if (optionsObj.method) output += `${indent}"method": "${optionsObj.method}",\n`;
+                    if (optionsObj.credentials) output += `${indent}"credentials": "${optionsObj.credentials}",\n`;
+
+                    // Remove trailing comma and add closing brace
+                    if (output.endsWith(',\n')) {
+                        output = output.slice(0, -2) + '\n';
+                    }
+                    output += `}).then(response => response.json());`;
+
+                    outputCodeEl.textContent = output;
+                    // Apply syntax highlighting
+                    hljs.highlightElement(outputCodeEl);
+                    if (outputCard) {
+                       outputCard.classList.add('fade-in');
+                    }
+                    
+                    // --- Save to localStorage after successful cleaning ---
+                    localStorage.setItem('fetchCleanerInput', inputText);
+                    localStorage.setItem('fetchCleanerOutputHtml', outputCodeEl.innerHTML); // Save HTML to preserve colors
+
+
+                } catch (error) {
+                    console.error('Parsing Error:', error);
+                    errorMessageEl.textContent = `Error: ${error.message}`;
+                    outputCodeEl.textContent = '';
+                }
+            };
+            
+            // --- Event Listeners ---
+            cleanBtn.addEventListener('click', cleanFetchStatement);
+
+            copyBtn.addEventListener('click', () => {
+                if (!outputCodeEl.textContent) return;
+                
+                // Using document.execCommand as a fallback for iframe environments
+                const textarea = document.createElement('textarea');
+                textarea.value = outputCodeEl.textContent;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    copyBtnText.textContent = 'Copied!';
+                    copyBtn.classList.add('bg-green-500', 'text-white');
+                    setTimeout(() => {
+                        copyBtnText.textContent = 'Copy';
+                        copyBtn.classList.remove('bg-green-500', 'text-white');
+                    }, 2000);
+                } catch (err) {
+                    console.error('Failed to copy text: ', err);
+                    copyBtnText.textContent = 'Failed!';
+                     setTimeout(() => {
+                        copyBtnText.textContent = 'Copy';
+                    }, 2000);
+                }
+                document.body.removeChild(textarea);
+            });
+
+            // --- Save content to localStorage on user input ---
+            inputCodeEl.addEventListener('input', () => {
+                localStorage.setItem('fetchCleanerInput', inputCodeEl.value);
+            });
+            
+            outputCodeEl.addEventListener('input', () => {
+                // For contenteditable, we save the innerHTML to preserve any formatting/highlighting
+                localStorage.setItem('fetchCleanerOutputHtml', outputCodeEl.innerHTML);
+            });
+
+            // --- Initial load from storage ---
+            loadFromStorage();
+        });
+    </script>
+</body>
+</html>
+
