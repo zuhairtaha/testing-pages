@@ -56,8 +56,12 @@
   "method": "POST"
 });'></textarea>
                 </div>
-                <div class="px-5 py-3 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-gray-700">
-                    <button id="clean-btn" class="w-full bg-indigo-600 text-white font-bold py-2.5 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-300 dark:focus:ring-indigo-800 transition-all duration-300 ease-in-out transform hover:scale-105">
+                <div class="px-5 py-3 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row sm:items-center gap-3">
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="dynamic-dates-toggle" class="h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500">
+                        <label for="dynamic-dates-toggle" class="text-sm text-gray-600 dark:text-gray-400 select-none">Use dynamic last 14 days for from/to</label>
+                    </div>
+                    <button id="clean-btn" class="w-full sm:w-auto flex-1 bg-indigo-600 text-white font-bold py-2.5 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-300 dark:focus:ring-indigo-800 transition-all duration-300 ease-in-out transform hover:scale-105">
                         Clean & Format
                     </button>
                 </div>
@@ -92,11 +96,13 @@
             const copyBtn = document.getElementById('copy-btn');
             const copyBtnText = document.getElementById('copy-btn-text');
             const errorMessageEl = document.getElementById('error-message');
+            const dynamicDatesToggle = document.getElementById('dynamic-dates-toggle');
 
             // --- Load from localStorage on page load ---
             const loadFromStorage = () => {
                 const savedInput = localStorage.getItem('fetchCleanerInput');
                 const savedOutputHtml = localStorage.getItem('fetchCleanerOutputHtml');
+                const savedDynamicDates = localStorage.getItem('fetchCleanerDynamicDates');
 
                 if (savedInput) {
                     inputCodeEl.value = savedInput;
@@ -105,6 +111,7 @@
                     // Restore the HTML which includes the highlighting spans
                     outputCodeEl.innerHTML = savedOutputHtml;
                 }
+                if (savedDynamicDates === 'true') dynamicDatesToggle.checked = true;
             };
 
             // --- Main Cleaning Function ---
@@ -175,7 +182,12 @@
                            throw new Error("The 'body' property is not valid JSON.");
                        }
                     }
-
+                    // Inject dynamic placeholders if toggle enabled and keys exist
+                    const useDynamicDates = dynamicDatesToggle.checked;
+                    if (useDynamicDates && bodyObj && Object.prototype.hasOwnProperty.call(bodyObj,'from') && Object.prototype.hasOwnProperty.call(bodyObj,'to')) {
+                        bodyObj.from = "__DYNAMIC_FROM__";
+                        bodyObj.to = "__DYNAMIC_TO__";
+                    }
                     // 6. Build the final, clean output string
                     const indent = '  ';
                     let output = `await fetch(${url}, {\n`;
@@ -194,7 +206,12 @@
                     
                     // Add body if it exists
                     if (bodyObj) {
-                        const prettyBody = JSON.stringify(bodyObj, null, 4);
+                        let prettyBody = JSON.stringify(bodyObj, null, 4);
+                        if (useDynamicDates) {
+                            prettyBody = prettyBody
+                                .replace('"__DYNAMIC_FROM__"', 'new Date(new Date().getTime() - 14 * 24 * 60 * 60 * 1000).toISOString()')
+                                .replace('"__DYNAMIC_TO__"', 'new Date().toISOString()');
+                        }
                         const indentedBody = prettyBody.replace(/\n/g, `\n${indent}${indent}`);
                         output += `${indent}"body": JSON.stringify(${indentedBody}),\n`;
                     }
@@ -265,6 +282,10 @@
             outputCodeEl.addEventListener('input', () => {
                 // For contenteditable, we save the innerHTML to preserve any formatting/highlighting
                 localStorage.setItem('fetchCleanerOutputHtml', outputCodeEl.innerHTML);
+            });
+
+            dynamicDatesToggle.addEventListener('change', () => {
+                localStorage.setItem('fetchCleanerDynamicDates', dynamicDatesToggle.checked);
             });
 
             // --- Initial load from storage ---
