@@ -3,13 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <title>تواريخ</title>
+    <link rel="stylesheet" href="../tables.css" />
+    <script defer src="../sortable-table.js"></script>
   </head>
   <body>
     <div id="content"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
-      document.getElementById("content").innerHTML = marked.parse(`### 🗓️ **Cheat Sheet – Datoer og årstal i Indfødsretsprøver**
+      document.getElementById("content").innerHTML =
+        marked.parse(`### 🗓️ **Cheat Sheet – Datoer og årstal i Indfødsretsprøver**
 
 | Årstal / Dato nævnt i spørgsmål | Eksamen (måned/år) | Info på dansk                                                                | الترجمة بالعربية                                                          |
 | ------------------------------- | ------------------ | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
@@ -46,6 +49,7 @@
 | **2011**                        | 06/2023            | **Helle Thorning-Schmidt** blev **Danmarks første kvindelige statsminister** | أصبحت **هيله تورنينغ شميت** أول **رئيسة وزراء**                           |
 | **2019**                        | 11/2023, 11/2024   | **Mette Frederiksen** blev **statsminister**                                 | أصبحت **ميتّه فريدريكسن** **رئيسة الوزراء**                               |
 | **2024**                        | 11/2024            | **Margrethe 2. abdicerede** – **Frederik 10.** blev konge                    | **تنازلت مارغريت الثانية** وأصبح **فريدريك العاشر** ملكًا                 |
-`); </script>
+`);
+    </script>
   </body>
 </html>
