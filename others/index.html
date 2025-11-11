@@ -6,28 +6,88 @@
     <link rel="shortcut icon" type="image/x-icon" href="../assets/favicon.ico" />
     <title>Other pages</title>
     <style>
+      * {
+        box-sizing: border-box;
+      }
+
       body {
-        font-family: cursive;
-        width: 1000px;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        max-width: 1000px;
         margin: 0 auto;
+        padding: 20px;
+        background-color: #f8f9fa;
+        line-height: 1.6;
+      }
+
+      h2 {
+        color: #2c3e50;
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 2rem;
       }
 
       a {
-        display: table;
+        display: block;
+        text-decoration: none;
+        color: #2c3e50;
+        background-color: white;
+        padding: 15px 20px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        font-size: 1.1rem;
+        border: 1px solid #e1e8ed;
+        direction: rtl;
       }
 
       a:hover {
-        background-color: #eee;
+        background-color: #3498db;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding: 15px;
+        }
+
+        h2 {
+          font-size: 1.5rem;
+          margin-bottom: 20px;
+        }
+
+        a {
+          padding: 12px 15px;
+          font-size: 1rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        body {
+          padding: 10px;
+        }
+
+        h2 {
+          font-size: 1.3rem;
+        }
+
+        a {
+          padding: 10px 12px;
+          font-size: 0.9rem;
+        }
       }
     </style>
   </head>
   <body>
-    <a href="disable-style-sheet/index.html">Disable Stylesheet</a>
     <h2>Danish Citizenship</h2>
-    <a href="parites/index.html">Parties</a>
-    <a href="characters/index.html">Characters</a>
-    <a href="dates/index.html">Dates</a>
-    <a href="wars/index.html">Wars</a>
-    <a href="area/index.html">Area</a>
+    <a href="parites/index.html">الأحزاب</a>
+    <a href="characters/index.html">شخصيات</a>
+    <a href="dates/index.html">التواريخ</a>
+    <a href="wars/index.html">الحروب</a>
+    <a href="area/index.html">تغيرات خريطة الدنمارك</a>
+    <a href="search/index.html">الأسئلة مع البحث</a>
+    <a href="links/index.html">روابط امتحانات سابقة</a>
   </body>
 </html>

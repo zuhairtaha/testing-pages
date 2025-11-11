@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>روابط امتحانات سابقة</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background-color: #f4f4f4;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #2c3e50;
+      }
+
+      .link-section {
+        margin-bottom: 40px;
+      }
+
+      .link-section h2 {
+        color: #34495e;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #3498db;
+      }
+
+      .link-list {
+        display: grid;
+        gap: 15px;
+      }
+
+      .link-item {
+        background: #ecf0f1;
+        padding: 15px;
+        border-radius: 5px;
+        border-left: 4px solid #3498db;
+        transition: all 0.3s ease;
+      }
+
+      .link-item:hover {
+        background: #d5dbdb;
+        transform: translateX(5px);
+      }
+
+      .link-item a {
+        text-decoration: none;
+        color: #2980b9;
+        font-weight: 500;
+        word-break: break-all;
+      }
+
+      .link-item a:hover {
+        color: #1abc9c;
+      }
+
+      .link-description {
+        font-size: 0.9em;
+        color: #7f8c8d;
+        margin-top: 5px;
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding: 10px;
+        }
+
+        .container {
+          padding: 15px;
+        }
+
+        h1 {
+          font-size: 1.5em;
+          margin-bottom: 20px;
+        }
+
+        .link-section h2 {
+          font-size: 1.2em;
+        }
+
+        .link-item {
+          padding: 12px;
+        }
+
+        .link-item a {
+          font-size: 0.9em;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .container {
+          padding: 10px;
+        }
+
+        .link-item {
+          padding: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="link-section">
+        <h2>UIM</h2>
+        <div class="link-list" id="uim-links"></div>
+      </div>
+
+      <div class="link-section">
+        <h2>Dansk og Prøver</h2>
+        <div class="link-list" id="danskogproever-links"></div>
+      </div>
+    </div>
+
+    <script>
+      const uimLinks = [
+        "https://uim.dk/media/yqjpwhfg/indfodsretsproven-sommer-2019.pdf",
+        "https://uim.dk/media/qmtjv1jv/indfodsretsproven-retteark-sommer-2019.pdf",
+        "https://uim.dk/media/4ivnqkjc/ansoegning-om-statsborgerskab-voksne-med-bilag-november-2024.pdf"
+      ];
+
+      const danskogproeverLinks = [
+        "https://danskogproever.dk/media/lwxou1oq/indfoedsretsproeven-2025-05.pdf",
+        "https://danskogproever.dk/media/lruk42s5/indfoedsretsproeven-2025-05-retteark.pdf",
+        "https://danskogproever.dk/media/0ajdmdql/indfoedsretsproeven-2024-11.pdf",
+        "https://danskogproever.dk/media/flmdlg0u/indfoedsretsproeven-2024-11-retteark.pdf",
+        "https://danskogproever.dk/media/ylmf1tdq/indfoedsretsproeven-2024-05.pdf",
+        "https://danskogproever.dk/media/pdkprgkg/indfoedsretsproeven-2024-05-retteark.pdf",
+        "https://danskogproever.dk/media/x3vcejp1/indfoedsretsproeven-2023-11.pdf",
+        "https://danskogproever.dk/media/edjpqoyw/indfoedsretsproeven-2023-11-retteark.pdf",
+        "https://danskogproever.dk/media/0qgkii0s/indfoedsretsproeven-2023-05.pdf",
+        "https://danskogproever.dk/media/4vcnp542/indfoedsretsproeven-2023-05-retteark.pdf",
+        "https://danskogproever.dk/media/0gsm03il/indfoedsretsproeven-2022-11.pdf",
+        "https://danskogproever.dk/media/0qqiknz2/indfoedsretsproeven-2022-11-retteark.pdf",
+        "https://danskogproever.dk/media/ostotbif/indfoedsretsproeven-2022-06.pdf",
+        "https://danskogproever.dk/media/v1ajvi0d/indfoedsretsproeven-2022-06-retteark.pdf",
+        "https://danskogproever.dk/media/4hznqjjq/indfoedsretsproeven-2021-11.pdf",
+        "https://danskogproever.dk/media/rjxiemyq/indfoedsretsproeven-2021-11-retteark.pdf",
+        "https://danskogproever.dk/media/jk4inhpt/indfoedsretsproeven-2021-06.pdf",
+        "https://danskogproever.dk/media/au0pinbm/indfoedsretsproeven-2021-06-retteark.pdf",
+        "https://danskogproever.dk/media/gcppyafs/indfoedsretsproeven-2020-11.pdf",
+        "https://danskogproever.dk/media/xjej1r3i/indfoedsretsproeven-2020-11-retteark.pdf",
+        "https://danskogproever.dk/media/z1qhvz0v/indfoedsretsproeven-2020-06.pdf",
+        "https://danskogproever.dk/media/0bqhngsc/indfoedsretsproeven-2020-06-retteark.pdf"
+      ];
+
+      function getFileName(url) {
+        return url.split("/").pop().replace(".pdf", "").replace(/-/g, " ");
+      }
+
+      function renderLinks(links, containerId) {
+        const container = document.getElementById(containerId);
+        links.forEach(link => {
+          const linkItem = document.createElement("div");
+          linkItem.className = "link-item";
+
+          const fileName = getFileName(link);
+          linkItem.innerHTML = `
+            <a href="${link}" target="_blank">${fileName}</a>
+          `;
+
+          container.appendChild(linkItem);
+        });
+      }
+
+      // Render links when page loads
+      document.addEventListener("DOMContentLoaded", function () {
+        renderLinks(uimLinks, "uim-links");
+        renderLinks(danskogproeverLinks, "danskogproever-links");
+      });
+    </script>
+  </body>
+</html>
