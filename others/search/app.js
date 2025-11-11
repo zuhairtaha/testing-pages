@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const questionText = document.createElement("div");
     questionText.className = "question-text";
-    questionText.textContent = `Spørgsmål ${index}: ${q.question}`;
+    questionText.textContent = `${index}: ${q.question}`;
 
     const answerList = document.createElement("ul");
     answerList.className = "answer-list";
