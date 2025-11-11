@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // Funktion til at normalisere tekst til case-insensitiv søgning
-  const normalizeText = text => text.toString().toLowerCase().trim();
+  const normalizeText = text => text.toString().toLowerCase();
 
   // Funktion til at opdatere resultattælleren
   const updateResultsHeader = count => {
@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let totalMatches = 0;
 
     // Vis alle sektioner, hvis søgefeltet er tomt
-    if (searchTerm === "") {
+    if (searchTerm.trim() === "") {
       renderAllQuestions();
       updateResultsHeader(Object.values(allExams).flat().length);
       return;
