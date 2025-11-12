@@ -37,7 +37,7 @@
 | **Slut 1960'erne** | `Ungdomsoprør`تمرد الشباب<br>`Mere accepteret at få børn uden at være gift`تقبّل إنجاب الأطفال خارج الزواج |
 | **1972** | `Folkeafstemning om EF`استفتاء شعبي حول الانضمام إلى السوق الأوروبية المشتركة (EF) |
 | **1973** | `Medlem af EF`الانضمام إلى السوق الأوروبية المشتركة<br>`Jordskredsvalget`"الانتخابات المزلزلة" (تغيير كبير في المشهد السياسي) |
-| **1970'erne** | `Oliekrise`أزمة النفط<br>`Høj arbejdsløshed`ارتفاع البطالة |
+| **1970'erne** | `Oliekrise`أزمة النفط<br>`Høj arbejdsløshed`ارتفاع البطالة <br>`Ligestilling mellem kvinder og mænd`المساواة بين النساء والرجال |
 | **1982-93** | `Poul Schlüter statsminister`بول شلوتر رئيساً للوزراء (حزب المحافظين) |
 | **~1990** | `Den Kolde Krig ophørte`نهاية الحرب الباردة |
 | **1990'erne** | `Aqua - 'Barbie Girl'`فرقة "أكوا" وأغنية "باربي جيرل" |
