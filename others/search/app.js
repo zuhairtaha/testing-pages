@@ -57,6 +57,14 @@ document.addEventListener("DOMContentLoaded", () => {
   // Funktion til at normalisere tekst til case-insensitiv søgning
   const normalizeText = text => text.toString().toLowerCase();
 
+  // Funktion til at fremhæve søgeord i tekst
+  const highlightSearchTerm = (text, searchTerm) => {
+    if (!searchTerm || searchTerm.trim() === "") return text;
+    
+    const regex = new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    return text.replace(regex, '<span class="highlight">$1</span>');
+  };
+
   // Funktion til at opdatere resultattælleren
   const updateResultsHeader = count => {
     if (count > 0) {
@@ -67,20 +75,22 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // Funktion til at oprette spørgsmålskortet
-  const createQuestionCard = (q, index) => {
+  const createQuestionCard = (q, index, searchTerm = "") => {
     const card = document.createElement("div");
     card.className = "question-card";
 
     const questionText = document.createElement("div");
     questionText.className = "question-text";
-    questionText.textContent = `${index}: ${q.question}`;
+    const highlightedQuestion = highlightSearchTerm(`${index}: ${q.question}`, searchTerm);
+    questionText.innerHTML = highlightedQuestion;
 
     const answerList = document.createElement("ul");
     answerList.className = "answer-list";
 
     q.answers.forEach((answer, ansIndex) => {
       const li = document.createElement("li");
-      li.textContent = answer;
+      const highlightedAnswer = highlightSearchTerm(answer, searchTerm);
+      li.innerHTML = highlightedAnswer;
       if (ansIndex === q.correctIndex) {
         li.className = "correct-answer";
       } else {
@@ -164,7 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
         matchingQuestions.forEach(q => {
           // Find det originale indeks for spørgsmålet
           const originalIndex = allExams[examDate].indexOf(q);
-          const questionCard = createQuestionCard(q, originalIndex + 1);
+          const questionCard = createQuestionCard(q, originalIndex + 1, rawSearchTerm);
           content.appendChild(questionCard);
         });
 

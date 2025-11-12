@@ -40,6 +40,10 @@ h1 {
   font-size: 16px;
   box-sizing: border-box;
 }
+#search-input:focus {
+  outline: none;
+  border-color: #4285f4;
+}
 #options-container {
   display: flex;
   align-items: center;
@@ -77,6 +81,9 @@ h1 {
 .exam-content {
   padding: 0 15px 15px 15px;
 }
+.exam-content.hidden {
+  display: none;
+}
 .question-card {
   background-color: #f9f9f9;
   border-left: 5px solid #2196f3;
@@ -97,6 +104,11 @@ h1 {
   padding-left: 0;
   margin: 0;
 }
+.answer-list li {
+  margin-bottom: 8px;
+  padding: 8px;
+  border-radius: 4px;
+}
 .correct-answer {
   color: #28a745;
   font-weight: bold;
@@ -112,4 +124,17 @@ h1 {
 }
 .hidden {
   display: none;
+}
+
+/* Highlight styling for search terms */
+.highlight {
+    background-color: #fff3896e;
+    /* padding: 1px 2px; */
+    /* border-radius: 2px; */
+    /* font-weight: 500; */
+    text-decoration: underline;
+    text-decoration-color: #f57c00;
+    text-decoration-thickness: 3px;
+    text-underline-offset: 2px;
+
 }
