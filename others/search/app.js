@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const includeWrongAnswersCheckbox = document.getElementById("include-wrong-answers");
   const resultsContainer = document.getElementById("results-container");
   const resultsHeader = document.getElementById("results-header");
+  const scrollToTopButton = document.getElementById("scroll-to-top");
 
   // Translation cache to avoid repeated API calls
   const translationCache = new Map();
@@ -312,6 +313,29 @@ document.addEventListener("DOMContentLoaded", () => {
       resultsContainer.appendChild(examSection);
     }
   };
+
+  // Scroll to top functionality
+  const handleScrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
+  const handleScroll = () => {
+    // Show button when user scrolls down more than 300px
+    if (window.pageYOffset > 300) {
+      scrollToTopButton.classList.add('visible');
+    } else {
+      scrollToTopButton.classList.remove('visible');
+    }
+  };
+
+  // Add scroll event listener
+  window.addEventListener('scroll', handleScroll);
+
+  // Add click event listener to scroll-to-top button
+  scrollToTopButton.addEventListener('click', handleScrollToTop);
 
   // Initialize from URL parameters first
   initializeFromURL();
