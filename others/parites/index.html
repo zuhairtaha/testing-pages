@@ -5,6 +5,21 @@
     <title>أحزاب</title>
     <link rel="stylesheet" href="../tables.css" />
     <script defer src="../sortable-table.js"></script>
+    <style>
+      .tag {
+        display: inline-block;
+        background-color: #e0e0e0;
+        color: #333;
+        padding: 2px 6px;
+        margin: 2px;
+        border-radius: 4px;
+        text-decoration: none;
+      }
+
+      .tag:hover {
+        background-color: #c0c0c0;
+      }
+    </style>
   </head>
   <body>
     <div id="content"></div>
@@ -12,24 +27,15 @@
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="./timeline.js"></script>
-<script>
-  document.getElementById("content").innerHTML = marked.parse(`
-| الشعار                                                 | الحزب                                                   | الموقف من الهجرة | نبذة عن الحزب                                                                                  | رئيس الحزب                                  | سنة التأسيس | عدد الأعضاء | المقاعد | سنوات رئاسة الحكومة                                                                             | مجموع مرات رئاسة الحكومة |
-| ------------------------------------------------------ | ------------------------------------------------------- | ---------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------- | ----------- | ----------- | ------- | ----------------------------------------------------------------------------------------------- | ------------------------ |
-| ![A](https://placehold.co/100x50/F6433F/FFFFFF?text=A) | **Socialdemokratiet**<br>الحزب الاشتراكي الديمقراطي     | ❌                | حزب يسار وسط، أكبر حزب تاريخياً. يركز على دولة الرفاهية والعدالة الاجتماعية والاقتصاد المختلط. | Mette Frederiksen<br>ميتي فريدريكسن         | 1871        | 41,500      | 50      | 1924–26, 1929–40, 1945, 1947–50, 1953–68, 1971, 1972–73, 1975–82, 1993–2001, 2011–15, 2019–الآن | 12                     |
-| ![V](https://placehold.co/100x50/004470/FFFFFF?text=V) | **Venstre**<br>الحزب الليبرالي (فينسترا)                | ❌                | حزب يمين وسط ليبرالي محافظ. يدعم اقتصاد السوق الحر، تخفيض الضرائب، واللامركزية.                | Troels Lund Poulsen<br>ترويلز لوند بولسن    | 1870        | 28,000      | 23      | 1901–09, 1910–13, 1920–24, 1926–29, 1945, 1950–53, 1968–71, 1973–75, 1982–93, 2001–11, 2015–19  | 11                     |
-| ![C](https://placehold.co/100x50/00554E/FFFFFF?text=C) | **Det Konservative Folkeparti**<br>حزب الشعب المحافظ    | ❌                | حزب يمين وسط محافظ، يركز على الدفاع عن التقاليد الوطنية، وتعزيز الدفاع، ودعم الأعمال التجارية. | Søren Pape Poulsen<br>سورين بابه بولسن      | 1916        | 18,500      | 10      | 1909–10, 1940–45 (وحدة), 1950–53, 1968–71, 1982–93                                              | 5                      |
-| ![F](https://placehold.co/100x50/990000/FFFFFF?text=F) | **Socialistisk Folkeparti (SF)**<br>حزب الشعب الاشتراكي |                  | حزب يسار يركز على الاشتراكية الشعبية، البيئة، والنسوية.                                        | Pia Olsen Dyhr<br>بيا أولسن ديور            | 1959        | 17,800      | 15      | لم يترأس الحكومة قط                                                                             | 0                      |
-| ![B](https://placehold.co/100x50/EB008B/FFFFFF?text=B) | **Radikale Venstre**<br>الحزب الليبرالي الاجتماعي       | ✅                | حزب وسط ليبرالي اجتماعي. يدعم التعاون الدولي، الحقوق المدنية، والاقتصاد الاجتماعي.             | Martin Lidegaard<br>مارتن ليديجارد          | 1905        | 13,000      | 7       | 1909–10, 1913–20, 1968–71, 2011–15 (ائتلاف)                                                     | 4                      |
-| ![Ø](https://placehold.co/100x50/FF0000/FFFFFF?text=Ø) | **Enhedslisten**<br>القائمة الموحدة                     | ✅                | تحالف يساري راديكالي. يركز على المساواة، البيئة، وحقوق العمال.                                 | Kollektiv ledelse<br>قيادة جماعية           | 1989        | 9,500       | 9       | لم يترأس الحكومة قط                                                                             | 0                      |
-| ![I](https://placehold.co/100x50/063161/FFFFFF?text=I) | **Liberal Alliance**<br>التحالف الليبرالي               | ❌                | حزب يميني ليبرالي كلاسيكي يدعو لتقليل الضرائب وتقليص الدولة.                                   | Alex Vanopslagh<br>أليكس فاندوبسلاغ         | 2007        | 8,500       | 14      | لم يترأس الحكومة قط                                                                             | 0                      |
-| ![O](https://placehold.co/100x50/FFD400/000000?text=O) | **Dansk Folkeparti (DF)**<br>حزب الشعب الدنماركي        | ⛔                | حزب يميني وطني شعبي. يركز على تقييد الهجرة والحفاظ على الثقافة الدنماركية.                     | Morten Messerschmidt<br>مورتن ميسيرشميت     | 1995        | 7,800       | 5       | لم يترأس الحكومة قط                                                                             | 0                      |
-| ![M](https://placehold.co/100x50/6633FF/FFFFFF?text=M) | **Moderaterne**<br>المعتدلون                            | ❌                | حزب وسطي براغماتي يهدف إلى التعاون بين اليسار واليمين.                                         | Lars Løkke Rasmussen<br>لارس لوكه راسموسن   | 2022        | 5,000       | 16      | لم يترأس الحكومة قط                                                                             | 0                      |
-| ![Å](https://placehold.co/100x50/41B08F/FFFFFF?text=Å) | **Alternativet**<br>البديل                              | ✅                | حزب يسار أخضر يركز على الاستدامة البيئية والاجتماعية.                                          | Franciska Rosenkilde<br>فرانسيسكا روزنكيلده | 2013        | 4,200       | 6       | لم يترأس الحكومة قط                                                                             | 0                      |
-| ![Æ](https://placehold.co/100x50/002E54/FFFFFF?text=Æ) | **Danmarksdemokraterne**<br>ديمقراطيو الدنمارك          | ⛔                | حزب يميني شعبي يهتم بالمناطق خارج المدن وتقييد الهجرة.                                         | Inger Støjberg<br>إنغر ستويبرغ              | 2022        | 3,500       | 14      | لم يترأس الحكومة قط                                                                             | 0                      |
-| ![D](https://placehold.co/100x50/1C385B/FFFFFF?text=D) | **Nye Borgerlige**<br>اليمين الجديد                     | ⛔                | حزب يميني قومي محافظ متشدد، تم حله في 2024.                                                    | Opløst<br>تم حله                            | 2015        | 2,500       | 0       | لم يترأس الحكومة قط                                                                             | 0                      |
-| ![K](https://placehold.co/100x50/CC0000/FFFFFF?text=K) | **Kommunistiske Parti**<br>الحزب الشيوعي                | ✅                | حزب شيوعي يساري راديكالي، يدعو للثورة الاشتراكية والطبقة العاملة.                             | Henrik Støier<br>هنريك ستوير                | 1919        | 500         | 0       | لم يترأس الحكومة قط                                                                             | 0                      |
-| ![Z](https://placehold.co/100x50/0066CC/FFFFFF?text=Z) | **Fremskridtspartiet**<br>حزب التقدم                     | ❌                | حزب يميني ليبرالي شعبي، دعا لتخفيض الضرائب وإلغاء البيروقراطية. تم حله في 1999.                | Opløst<br>تم حله                            | 1972        | 0           | 0       | لم يترأس الحكومة قط                                                                             | 0                      |
-| ![DKP](https://placehold.co/100x50/FF0000/FFFFFF?text=DKP) | **Danmarks Kommunistiske Parti**<br>الحزب الشيوعي الدنماركي | ✅                | حزب شيوعي ماركسي لينيني، يركز على حقوق العمال والأممية الاشتراكية.                           | Kollektiv ledelse<br>قيادة جماعية           | 1919        | 800         | 0       | لم يترأس الحكومة قط                                                                             | 0                      |
-`);
-</script>
+    <script type="module">
+      const text = await fetch("./parties.md").then(response => response.text());
+      const html = marked.parse(text);
+      // replace <code>xxx</code> with <a href="https://zuhairtaha.github.io/testing-pages/others/search/index.html?q=xxx">xxx</a>
+      const linkedHtml = html.replace(/<code>(.*?)<\/code>/g, (match, codeSegment) => {
+        const query = encodeURIComponent(codeSegment);
+        return `<a target="_blank" class="tag" href="https://zuhairtaha.github.io/testing-pages/others/search/index.html?q=${query}">${codeSegment}</a>`;
+      });
+      document.getElementById("content").innerHTML = linkedHtml;
+    </script>
+  </body>
+</html>
