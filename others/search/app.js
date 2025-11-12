@@ -24,17 +24,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      const url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=da&tl=ar&dt=t&q=" + encodeURIComponent(text);
+      const url =
+        "https://translate.googleapis.com/translate_a/single?client=gtx&sl=da&tl=ar&dt=t&q=" + encodeURIComponent(text);
       const response = await fetch(url);
       const data = await response.json();
-      const translation = data[0].map(item => item[0]).join('');
-      
+      const translation = data[0].map(item => item[0]).join("");
+
       // Cache the translation
       translationCache.set(text, translation);
       return translation;
     } catch (error) {
-      console.error('Translation error:', error);
-      return 'خطأ في الترجمة';
+      console.error("Translation error:", error);
+      return "خطأ في الترجمة";
     }
   }
 
@@ -52,18 +53,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const batchSize = 3;
     for (let i = 0; i < elementsToProcess.length; i += batchSize) {
       const batch = elementsToProcess.slice(i, i + batchSize);
-      
-      await Promise.all(batch.map(async (element) => {
-        const text = element.dataset.originalText;
-        if (text && !elementTranslationCache.has(element)) {
-          try {
-            const translation = await translateDanishToArabic(text);
-            elementTranslationCache.set(element, translation);
-          } catch (error) {
-            elementTranslationCache.set(element, 'خطأ في الترجمة');
+
+      await Promise.all(
+        batch.map(async element => {
+          const text = element.dataset.originalText;
+          if (text && !elementTranslationCache.has(element)) {
+            try {
+              const translation = await translateDanishToArabic(text);
+              elementTranslationCache.set(element, translation);
+            } catch (error) {
+              elementTranslationCache.set(element, "خطأ في الترجمة");
+            }
           }
-        }
-      }));
+        })
+      );
 
       // Small delay between batches to be respectful to the API
       if (i + batchSize < elementsToProcess.length) {
@@ -81,24 +84,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Intersection Observer for viewport translation
   const createViewportObserver = () => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const element = entry.target;
-          if (element.dataset.originalText && !elementTranslationCache.has(element)) {
-            translationQueue.add(element);
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const element = entry.target;
+            if (element.dataset.originalText && !elementTranslationCache.has(element)) {
+              translationQueue.add(element);
+            }
           }
-        }
-      });
+        });
 
-      // Process translation queue
-      if (translationQueue.size > 0) {
-        setTimeout(processTranslationQueue, 100);
+        // Process translation queue
+        if (translationQueue.size > 0) {
+          setTimeout(processTranslationQueue, 100);
+        }
+      },
+      {
+        rootMargin: "100px", // Start translating 100px before element enters viewport
+        threshold: 0.1
       }
-    }, {
-      rootMargin: '100px', // Start translating 100px before element enters viewport
-      threshold: 0.1
-    });
+    );
 
     return observer;
   };
@@ -107,11 +113,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Tooltip functions
   const createTooltip = () => {
-    let tooltip = document.getElementById('translation-tooltip');
+    let tooltip = document.getElementById("translation-tooltip");
     if (!tooltip) {
-      tooltip = document.createElement('div');
-      tooltip.id = 'translation-tooltip';
-      tooltip.className = 'tooltip';
+      tooltip = document.createElement("div");
+      tooltip.id = "translation-tooltip";
+      tooltip.className = "tooltip";
       document.body.appendChild(tooltip);
     }
     return tooltip;
@@ -119,21 +125,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const showTooltip = async (element, text) => {
     const tooltip = createTooltip();
-    
+
     // Check if we have a pre-cached translation for this element
     const cachedTranslation = elementTranslationCache.get(element);
-    
+
     if (cachedTranslation) {
       tooltip.textContent = cachedTranslation;
     } else {
-      tooltip.textContent = 'جاري الترجمة...';
+      tooltip.textContent = "جاري الترجمة...";
     }
-    
-    tooltip.style.display = 'block';
-    
+
+    tooltip.style.display = "block";
+
     const rect = element.getBoundingClientRect();
-    tooltip.style.left = rect.left + (rect.width / 2) + 'px';
-    tooltip.style.top = (rect.top - tooltip.offsetHeight - 10) + 'px';
+    tooltip.style.left = rect.left + rect.width / 2 + "px";
+    tooltip.style.top = rect.top - tooltip.offsetHeight - 10 + "px";
 
     // If not cached, translate and update
     if (!cachedTranslation) {
@@ -141,56 +147,54 @@ document.addEventListener("DOMContentLoaded", () => {
         const translation = await translateDanishToArabic(text);
         elementTranslationCache.set(element, translation);
         tooltip.textContent = translation;
-        
+
         // Reposition after content change
         const newRect = element.getBoundingClientRect();
-        tooltip.style.left = newRect.left + (newRect.width / 2) - (tooltip.offsetWidth / 2) + 'px';
-        tooltip.style.top = (newRect.top - tooltip.offsetHeight - 10) + 'px';
+        tooltip.style.left = newRect.left + newRect.width / 2 - tooltip.offsetWidth / 2 + "px";
+        tooltip.style.top = newRect.top - tooltip.offsetHeight - 10 + "px";
       } catch (error) {
-        const errorMsg = 'خطأ في الترجمة';
+        const errorMsg = "خطأ في الترجمة";
         elementTranslationCache.set(element, errorMsg);
         tooltip.textContent = errorMsg;
       }
     } else {
       // Reposition with cached content
       const newRect = element.getBoundingClientRect();
-      tooltip.style.left = newRect.left + (newRect.width / 2) - (tooltip.offsetWidth / 2) + 'px';
-      tooltip.style.top = (newRect.top - tooltip.offsetHeight - 10) + 'px';
+      tooltip.style.left = newRect.left + newRect.width / 2 - tooltip.offsetWidth / 2 + "px";
+      tooltip.style.top = newRect.top - tooltip.offsetHeight - 10 + "px";
     }
   };
 
   const hideTooltip = () => {
-    const tooltip = document.getElementById('translation-tooltip');
+    const tooltip = document.getElementById("translation-tooltip");
     if (tooltip) {
-      tooltip.style.display = 'none';
+      tooltip.style.display = "none";
     }
   };
 
   const addTooltipEvents = (element, text) => {
     let hoverTimeout;
-    
+
     // Store original text for background translation
     element.dataset.originalText = text;
-    
+
     // Observe element for viewport translation
     viewportObserver.observe(element);
-    
-    element.addEventListener('mouseenter', () => {
-      hoverTimeout = setTimeout(() => {
-        showTooltip(element, text);
-      }, 500); // 500ms delay before showing tooltip
+
+    element.addEventListener("mouseenter", () => {
+      showTooltip(element, text);
     });
 
-    element.addEventListener('mouseleave', () => {
+    element.addEventListener("mouseleave", () => {
       clearTimeout(hoverTimeout);
       hideTooltip();
     });
 
-    element.addEventListener('mousemove', (e) => {
-      const tooltip = document.getElementById('translation-tooltip');
-      if (tooltip && tooltip.style.display === 'block') {
-        tooltip.style.left = e.pageX - (tooltip.offsetWidth / 2) + 'px';
-        tooltip.style.top = e.pageY - tooltip.offsetHeight - 10 + 'px';
+    element.addEventListener("mousemove", e => {
+      const tooltip = document.getElementById("translation-tooltip");
+      if (tooltip && tooltip.style.display === "block") {
+        tooltip.style.left = e.pageX - tooltip.offsetWidth / 2 + "px";
+        tooltip.style.top = e.pageY - tooltip.offsetHeight - 10 + "px";
       }
     });
   };
@@ -249,8 +253,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Funktion til at fremhæve søgeord i tekst
   const highlightSearchTerm = (text, searchTerm) => {
     if (!searchTerm || searchTerm.trim() === "") return text;
-    
-    const regex = new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+
+    const regex = new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi");
     return text.replace(regex, '<span class="highlight">$1</span>');
   };
 
@@ -272,7 +276,7 @@ document.addEventListener("DOMContentLoaded", () => {
     questionText.className = "question-text";
     const highlightedQuestion = highlightSearchTerm(`${index}: ${q.question}`, searchTerm);
     questionText.innerHTML = highlightedQuestion;
-    
+
     // Add tooltip for question text
     addTooltipEvents(questionText, q.question);
 
@@ -288,10 +292,10 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         li.className = "incorrect-answer";
       }
-      
+
       // Add tooltip for answer text
       addTooltipEvents(li, answer);
-      
+
       answerList.appendChild(li);
     });
 
@@ -417,24 +421,24 @@ document.addEventListener("DOMContentLoaded", () => {
   const handleScrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
+      behavior: "smooth"
     });
   };
 
   const handleScroll = () => {
     // Show button when user scrolls down more than 300px
     if (window.pageYOffset > 300) {
-      scrollToTopButton.classList.add('visible');
+      scrollToTopButton.classList.add("visible");
     } else {
-      scrollToTopButton.classList.remove('visible');
+      scrollToTopButton.classList.remove("visible");
     }
   };
 
   // Add scroll event listener
-  window.addEventListener('scroll', handleScroll);
+  window.addEventListener("scroll", handleScroll);
 
   // Add click event listener to scroll-to-top button
-  scrollToTopButton.addEventListener('click', handleScrollToTop);
+  scrollToTopButton.addEventListener("click", handleScrollToTop);
 
   // Initialize from URL parameters first
   initializeFromURL();
