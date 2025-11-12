@@ -138,3 +138,49 @@ h1 {
     text-underline-offset: 2px;
 
 }
+
+/* Tooltip styling */
+.tooltip {
+  position: absolute;
+  background-color: #333;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 400;
+  max-width: 300px;
+  word-wrap: break-word;
+  text-align: center;
+  z-index: 1000;
+  pointer-events: none;
+  display: none;
+  direction: rtl;
+  font-family: 'Arial', sans-serif;
+  line-height: 1.4;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
+}
+
+/* Loading state for tooltip */
+.tooltip.loading {
+  color: #ccc;
+  font-style: italic;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .tooltip {
+    max-width: 250px;
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+}

@@ -6,6 +6,95 @@ document.addEventListener("DOMContentLoaded", () => {
   const resultsContainer = document.getElementById("results-container");
   const resultsHeader = document.getElementById("results-header");
 
+  // Translation cache to avoid repeated API calls
+  const translationCache = new Map();
+
+  // Translation function
+  async function translateDanishToArabic(text) {
+    // Check cache first
+    if (translationCache.has(text)) {
+      return translationCache.get(text);
+    }
+
+    try {
+      const url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=da&tl=ar&dt=t&q=" + encodeURIComponent(text);
+      const response = await fetch(url);
+      const data = await response.json();
+      const translation = data[0].map(item => item[0]).join('');
+      
+      // Cache the translation
+      translationCache.set(text, translation);
+      return translation;
+    } catch (error) {
+      console.error('Translation error:', error);
+      return 'خطأ في الترجمة';
+    }
+  }
+
+  // Tooltip functions
+  const createTooltip = () => {
+    let tooltip = document.getElementById('translation-tooltip');
+    if (!tooltip) {
+      tooltip = document.createElement('div');
+      tooltip.id = 'translation-tooltip';
+      tooltip.className = 'tooltip';
+      document.body.appendChild(tooltip);
+    }
+    return tooltip;
+  };
+
+  const showTooltip = async (element, text) => {
+    const tooltip = createTooltip();
+    tooltip.textContent = 'جاري الترجمة...';
+    tooltip.style.display = 'block';
+    
+    const rect = element.getBoundingClientRect();
+    tooltip.style.left = rect.left + (rect.width / 2) + 'px';
+    tooltip.style.top = (rect.top - tooltip.offsetHeight - 10) + 'px';
+
+    try {
+      const translation = await translateDanishToArabic(text);
+      tooltip.textContent = translation;
+      
+      // Reposition after content change
+      const newRect = element.getBoundingClientRect();
+      tooltip.style.left = newRect.left + (newRect.width / 2) - (tooltip.offsetWidth / 2) + 'px';
+      tooltip.style.top = (newRect.top - tooltip.offsetHeight - 10) + 'px';
+    } catch (error) {
+      tooltip.textContent = 'خطأ في الترجمة';
+    }
+  };
+
+  const hideTooltip = () => {
+    const tooltip = document.getElementById('translation-tooltip');
+    if (tooltip) {
+      tooltip.style.display = 'none';
+    }
+  };
+
+  const addTooltipEvents = (element, text) => {
+    let hoverTimeout;
+    
+    element.addEventListener('mouseenter', () => {
+      hoverTimeout = setTimeout(() => {
+        showTooltip(element, text);
+      }, 500); // 500ms delay before showing tooltip
+    });
+
+    element.addEventListener('mouseleave', () => {
+      clearTimeout(hoverTimeout);
+      hideTooltip();
+    });
+
+    element.addEventListener('mousemove', (e) => {
+      const tooltip = document.getElementById('translation-tooltip');
+      if (tooltip && tooltip.style.display === 'block') {
+        tooltip.style.left = e.pageX - (tooltip.offsetWidth / 2) + 'px';
+        tooltip.style.top = e.pageY - tooltip.offsetHeight - 10 + 'px';
+      }
+    });
+  };
+
   // Tjekker om data er indlæst
   if (typeof lastYearsQuestions === "undefined" || Object.keys(lastYearsQuestions).length === 0) {
     resultsContainer.innerHTML =
@@ -83,6 +172,9 @@ document.addEventListener("DOMContentLoaded", () => {
     questionText.className = "question-text";
     const highlightedQuestion = highlightSearchTerm(`${index}: ${q.question}`, searchTerm);
     questionText.innerHTML = highlightedQuestion;
+    
+    // Add tooltip for question text
+    addTooltipEvents(questionText, q.question);
 
     const answerList = document.createElement("ul");
     answerList.className = "answer-list";
@@ -96,6 +188,10 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         li.className = "incorrect-answer";
       }
+      
+      // Add tooltip for answer text
+      addTooltipEvents(li, answer);
+      
       answerList.appendChild(li);
     });
 
