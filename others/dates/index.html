@@ -2,53 +2,31 @@
 <html>
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>تواريخ</title>
     <link rel="stylesheet" href="../tables.css" />
+    <link rel="stylesheet" href="../global.css" />
     <script defer src="../sortable-table.js"></script>
+    <style>
+      /* if .tag is not last one add break line before it */
+      .tag:not(:last-child):before {
+        content: "";
+        display: block;
+      }
+    </style>
   </head>
   <body>
     <div id="content"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script>
-      document.getElementById("content").innerHTML =
-        marked.parse(`### 🗓️ **Cheat Sheet – Datoer og årstal i Indfødsretsprøver**
-
-| Årstal / Dato nævnt i spørgsmål | Eksamen (måned/år) | Info på dansk                                                                | الترجمة بالعربية                                                          |
-| ------------------------------- | ------------------ | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| **965**                         | 06/2022, 11/2024   | **Harald Blåtand** rejste **Jellingstenen** og gjorde danerne **kristne**    | الملك **هارالد بلاتاند** أقام **حجر يللينغ** وجعل الدنماركيين **مسيحيين** |
-| **1397**                        | 12/2020            | **Kalmarunionen** blev dannet af **Margrethe 1.**                            | تأسس **اتحاد كالمار** على يد **الملكة مارغريت الأولى**                    |
-| **1536**                        | 11/2021            | **Reformationen** – Danmark blev **protestantisk**                           | **الإصلاح الديني** – أصبحت الدنمارك **بروتستانتية**                       |
-| **1660**                        | 06/2021            | Indførelsen af **enevælde** i Danmark                                        | بداية **الملكية المطلقة** في الدنمارك                                     |
-| **1729**                        | 11/2020            | **Ludvig Holberg** blev født                                                 | وُلد الكاتب **لودفيغ هولبرغ**                                             |
-| **1754**                        | 11/2022            | **Frederik 5.** grundlagde **Det Kongelige Danske Kunstakademi**             | أسس **فريدريك الخامس** **الأكاديمية الملكية للفنون**                      |
-| **1805**                        | 06/2021            | **H.C. Andersen** blev født                                                  | وُلد الكاتب **هانس كريستيان أندرسن**                                      |
-| **1819**                        | 11/2020            | **Grundtvig** skrev sin første **salme**                                     | كتب **غروندتفيغ** أول **ترنيمة** له                                       |
-| **1820**                        | 06/2022, 11/2023   | **H.C. Ørsted** opdagede **elektromagnetismen**                              | اكتشف **هانس كريستيان أورستد** **الكهرومغناطيسية**                        |
-| **1849**                        | 06/2018, 11/2021   | **Grundloven** blev underskrevet af **Frederik 7.**                          | تم توقيع **الدستور** من قبل **الملك فريدريك السابع**                      |
-| **1864**                        | 11/2020            | Danmark tabte **krigen mod Preussen** – mistede **Slesvig-Holsten**          | خسرت الدنمارك **الحرب ضد بروسيا** وفقدت **شليسفيغ هولشتاين**              |
-| **1914–1918**                   | 11/2021            | **Første Verdenskrig** – Danmark var **neutral**                             | **الحرب العالمية الأولى** – الدنمارك كانت **محايدة**                      |
-| **1915**                        | 06/2023            | Kvinder fik **stemmeret** i Danmark                                          | حصلت النساء على **حق التصويت** في الدنمارك                                |
-| **1917**                        | 11/2020            | **Henrik Pontoppidan** fik **Nobelprisen i litteratur**                      | حصل **هنريك بونتوبيدان** على **نوبل في الأدب**                            |
-| **1920**                        | 11/2021            | **Genforeningen** med **Sønderjylland**                                      | **إعادة توحيد** الدنمارك مع **جنوب يوتلاند**                              |
-| **1922**                        | 06/2021, 11/2024   | **Niels Bohr** fik **Nobelprisen i fysik**                                   | حصل **نيلس بوهر** على **جائزة نوبل في الفيزياء**                          |
-| **1933**                        | 06/2021            | **Socialreformen** – begyndelsen på **velfærdsstaten**                       | **إصلاح اجتماعي** أسس **دولة الرفاهية**                                   |
-| **1936**                        | 06/2023            | **Inge Lehmann** opdagede Jordens **indre kerne**                            | اكتشفت **إنغه ليمان** **اللب الداخلي للأرض**                              |
-| **1940–1945**                   | 11/2021, 06/2023   | **Besættelsen** – Danmark under **tysk kontrol**                             | **الاحتلال الألماني** بين 1940 و1945                                      |
-| **1945**                        | 11/2023            | **Danmark blev befriet** den 5. maj 1945.<br>Danmark blev medlem af **FN (Forenede Nationer)** | تم **تحرير الدنمارك** في **5 مايو 1945**.<br>انضمت الدنمارك إلى **الأمم المتحدة** |
-| **1947**                        | 11/2024            | **Margrethe 2.** blev født                                                   | وُلدت **الملكة مارغريت الثانية**                                          |
-| **1949**                        | 11/2019            | Danmark blev medlem af **NATO**                                              | انضمت الدنمارك إلى **حلف الناتو**                                         |
-| **1953**                        | 06/2022            | Ny **Grundlov** – **arveretten** ændret så kvinder kan arve tronen           | **دستور جديد** غيّر **حق الوراثة** ليشمل النساء                           |
-| **1973**                        | 11/2023            | Danmark blev medlem af **EF (EU)**<br>**Oliekrisen** ramte Danmark                                                 | انضمت الدنمارك إلى **الاتحاد الأوروبي**.<br>أصابت **أزمة النفط** الدنمارك                                             |
-| **1979**                        | 11/2022            | **Grønland** fik **hjemmestyre**                                             | حصلت **غرينلاند** على **حكم ذاتي**                                        |
-| **1992**                        | 06/2022            | **Danmark** stemte nej til **Maastrichttraktaten**                           | رفضت الدنمارك **معاهدة ماستريخت**                                         |
-| **1993**                        | 06/2021            | **Poul Schlüter** gik af som **statsminister**                               | استقال **بول شلويتر** من **رئاسة الوزراء**                                |
-| **2000**                        | 11/2018            | Danmark sagde nej til **euroen**                                             | الدنمارك رفضت اعتماد **اليورو**                                           |
-| **2001**                        | 11/2019            | **Anders Fogh Rasmussen** blev **statsminister**                             | أصبح **أندرس فوغ راسموسن** **رئيس الوزراء**                               |
-| **2011**                        | 06/2023            | **Helle Thorning-Schmidt** blev **Danmarks første kvindelige statsminister** | أصبحت **هيله تورنينغ شميت** أول **رئيسة وزراء**                           |
-| **2019**                        | 11/2023, 11/2024   | **Mette Frederiksen** blev **statsminister**                                 | أصبحت **ميتّه فريدريكسن** **رئيسة الوزراء**                               |
-| **2024**                        | 11/2024            | **Margrethe 2. abdicerede** – **Frederik 10.** blev konge                    | **تنازلت مارغريت الثانية** وأصبح **فريدريك العاشر** ملكًا                 |
-`);
+    <script type="module">
+      const text = await fetch("./dates.md").then(response => response.text());
+      const html = marked.parse(text);
+      const linkedHtml = html.replace(/<code>(.*?)<\/code>/g, (match, codeSegment) => {
+        const query = encodeURIComponent(codeSegment);
+        return `<a target="_blank" class="tag" href="https://zuhairtaha.github.io/testing-pages/others/search/index.html?q=${query}">${codeSegment}</a>`;
+      });
+      document.getElementById("content").innerHTML = linkedHtml;
     </script>
   </body>
 </html>

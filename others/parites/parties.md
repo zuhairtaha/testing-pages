@@ -1,4 +1,4 @@
-| الشعار | الحزب | الموقف من الهجرة | كلمات مفتاحية عن أهم ما تم السؤال عنه بخصوص الحزب في الامتحانات السابقة | رئيس الحزب | سنة التأسيس | عدد الأعضاء | المقاعد | رئاسة الحكومة |
+| الشعار | الحزب | الموقف من الهجرة | كلمات مفتاحية | رئيس الحزب | سنة التأسيس | عدد الأعضاء | المقاعد | رئاسة الحكومة |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | ![A](https://placehold.co/100x50/F6433F/FFFFFF?text=A) | **Socialdemokratiet** | ❌ | `arbejderbevægelsen` (الحركة العمالية)<br>`Thorvald Stauning` (أول رئيس وزراء)<br>`Helle Thorning-Schmidt` (أول رئيسة وزراء)<br>`Poul Nyrup Rasmussen`<br>`regeringsparti` (حزب حاكم)<br>`største parti` (الحزب الأكبر) | Mette Frederiksen | 1871 | 41,500 | 50 | 10<br>5 منفرد<br>5 تحالف |
 | ![V](https://placehold.co/100x50/004470/FFFFFF?text=V) | **Venstre** | ❌ | `landmænd` / `bønder` (المزارعون)<br>`borgmestre` (رؤساء البلديات)<br>`Lars Løkke Rasmussen`<br>`Inger Støjberg` (عضو سابق)<br>`Jakob Ellemann-Jensen`<br>`regeringsparti` (حزب حاكم) | Troels Lund Poulsen | 1870 | 28,000 | 23 | 9<br>6 منفرد<br>3 تحالف |

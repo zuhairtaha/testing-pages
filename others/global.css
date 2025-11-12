@@ -1,0 +1,171 @@
+/* CSS Reset and Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+body {
+  font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  background-color: #fafafa;
+  color: #212121;
+  margin: 0;
+  padding: 16px;
+  min-height: 100vh;
+}
+
+/* Container with Material Design principles */
+#content {
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  padding: 24px;
+  line-height: 1.6;
+}
+
+/* Typography following Material Design */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 500;
+  margin: 24px 0 16px 0;
+  color: #1976d2;
+}
+
+h1 {
+  font-size: 2.125rem;
+  font-weight: 400;
+  margin-bottom: 24px;
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin-top: 32px;
+}
+
+h3 {
+  font-size: 1.25rem;
+}
+
+p {
+  margin-bottom: 16px;
+  color: #424242;
+}
+
+ul,
+ol {
+  margin: 16px 0;
+  padding-right: 24px;
+}
+
+li {
+  margin-bottom: 8px;
+  color: #424242;
+}
+
+/* Enhanced tag styles with Material Design */
+.tag {
+  display: inline-block;
+  background-color: #e3f2fd;
+  color: #1565c0;
+  padding: 6px 12px;
+  margin: 4px;
+  border-radius: 16px;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: 1px solid #bbdefb;
+}
+
+.tag:hover {
+  background-color: #bbdefb;
+  color: #0d47a1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.tag:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive design for mobile devices */
+@media (max-width: 768px) {
+  body {
+    padding: 8px;
+  }
+
+  #content {
+    padding: 16px;
+    border-radius: 4px;
+    margin: 0;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+
+  .tag {
+    padding: 4px 8px;
+    margin: 2px;
+    font-size: 0.8125rem;
+  }
+
+  ul,
+  ol {
+    padding-right: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  #content {
+    padding: 12px;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  body {
+    padding: 4px;
+  }
+}
+
+/* Focus styles for accessibility */
+.tag:focus {
+  outline: 2px solid #1976d2;
+  outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+  body {
+    background-color: white;
+    padding: 0;
+  }
+
+  #content {
+    box-shadow: none;
+    border-radius: 0;
+  }
+
+  .tag {
+    border: 1px solid #333;
+    background-color: transparent;
+  }
+}

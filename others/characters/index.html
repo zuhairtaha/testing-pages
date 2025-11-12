@@ -5,69 +5,16 @@
     <title>شخصيات</title>
     <link rel="stylesheet" href="../tables.css" />
     <script defer src="../sortable-table.js"></script>
+    <link rel="stylesheet" href="../global.css" />
   </head>
   <body>
     <div id="content"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script>
-      document.getElementById("content").innerHTML = marked.parse(`
-| Kategori                          | Navn                                             | Info på dansk                                                     | المعلومة بالعربية                                           | Født–Død              |
-| --------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------- | ----------------------------------------------------------- | --------------------- |
-| **Konge**                         | **Gorm den Gamle**<br>غورم العجوز                | Den første kendte **konge af Danmark**                            | أول **ملك معروف في تاريخ الدنمارك**                         | ca. 900–958           |
-| **Konge**                         | **Harald Blåtand**<br>هارالد بلاتان              | Kongen der **indførte kristendommen** og rejste **Jellingstenen** | الملك الذي **أدخل المسيحية** وأقام **حجر يللينغ**           | ca. 958–987           |
-| **Konge**                         | **Svend Tveskæg**<br>سفين ذو اللحية المشقوقة     | Erobrede **England** og blev konge af både Danmark og England     | **فتح إنجلترا** وأصبح ملكًا على الدنمارك وإنجلترا معًا      | ca. 960–1014          |
-| **Konge**                         | **Christian 4.**<br>كريستيان الرابع              | Kendt for **byggeri**, bl.a. **Rundetårn** og **Rosenborg Slot**  | معروف بـ **العمارة** مثل **برج روندتورن** و**قصر روزنبورغ** | 1577–1648             |
-| **Konge**                         | **Frederik 5.**<br>فريدريك الخامس                | Grundlagde **Det Kongelige Danske Kunstakademi**                  | أسّس **الأكاديمية الملكية للفنون**                          | 1723–1766             |
-| **Konge**                         | **Frederik 7.**<br>فريدريك السابع                | Underskrev **Grundloven** i 1849                                  | **وقّع الدستور** عام 1849                                   | 1808–1863             |
-| **Konge**                         | **Frederik 9.**<br>فريدريك التاسع                | Kendt for sin **folkelighed**, far til Margrethe 2.               | معروف بـ **شعبيّته**، والد **مارغريت الثانية**              | 1899–1972             |
-| **Konge (nuværende)**             | **Frederik 10.**<br>فريدريك العاشر               | **Nuværende konge** siden 2024                                    | **الملك الحالي** منذ عام 2024                               | 1968–                 |
-| **Dronning**                      | **Margrethe 1.**<br>مارغريت الأولى               | Første kvindelige **regent**, samlede Norden i **Kalmarunionen**  | أول **ملكة حاكمة**، جمعت **دول الشمال** في **اتحاد كالمار** | 1353–1412             |
-| **Dronning**                      | **Margrethe 2.**<br>مارغريت الثانية              | **Abdicerede** i 2024 efter 52 år på tronen                       | **تنازلت عن العرش** عام 2024 بعد 52 عامًا من الحكم          | 1940–                 |
-| **Forfatter**                     | **H.C. Andersen**<br>هانس كريستيان أندرسن        | Skrev **eventyr** som *Den grimme ælling*                         | كتب **قصصًا خيالية** مثل *البطة القبيحة*                    | 1805–1875             |
-| **Digter**                        | **N.F.S. Grundtvig**<br>ن.ف.س. غروُندفيغ         | Grundlagde **folkehøjskoler** og skrev **salmer**                 | أسس **المدارس الشعبية** وكتب **الترانيم**                   | 1783–1872             |
-| **Forfatter (Nobelprismodtager)** | **Johannes V. Jensen**<br>يوهانس ف. ينسن         | Skrev *Kongens Fald*, fik **Nobelprisen i litteratur**            | كتب *سقوط الملك* ونال **نوبل في الأدب**                     | 1873–1950             |
-| **Forfatter (Nobelprismodtager)** | **Henrik Pontoppidan**<br>هنريك بونتوبيدان       | Skrev *Lykke-Per*, fik **Nobelprisen** 1917                       | كتب *لكه-بير* ونال **نوبل** 1917                            | 1857–1943             |
-| **Forfatter**                     | **Karen Blixen**<br>كارين بليكسن                 | Skrev *Den Afrikanske Farm* om **Kenya**                          | كتبت *مزرعتي في أفريقيا* عن حياتها في **كينيا**             | 1885–1962             |
-| **Forfatter**                     | **Martin Andersen Nexø**<br>مارتن أندرسن نكسو    | Skrev *Pelle Erobreren*                                           | كتب *بيليه الغازي*                                          | 1869–1954             |
-| **Forfatter**                     | **Emma Gad**<br>إيما غاد                         | Skrev *Takt og Tone* om **etikette**                              | كتبت *اللباقة والسلوك* عن **آداب التعامل**                  | 1852–1921             |
-| **Forfatter**                     | **Leonora Christina**<br>ليونورا كريستينا        | Skrev *Jammers Minde* om sit **fængselsophold**                   | كتبت *ذكريات العذاب* عن **سجنها**                           | 1621–1698             |
-| **Digter**                        | **Tove Ditlevsen**<br>توفه ديتليفزن              | Skrev om **kvinders liv** på **Vesterbro**                        | كتبت عن **حياة النساء** في **فيستربرو**                     | 1917–1976             |
-| **Digter**                        | **Yahya Hassan**<br>يحيى حسن                     | Skrev om **indvandreres liv** og **samfundet**                    | كتب عن **المهاجرين والمجتمع**                               | 1995–2020             |
-| **Fysiker (Videnskabsmand)**      | **H.C. Ørsted**<br>هانس كريستيان أورستد          | Opdagede **elektromagnetismen**                                   | اكتشف **الكهرومغناطيسية**                                   | 1777–1851             |
-| **Fysiker (Nobelprismodtager)**   | **Niels Bohr**<br>نيلس بوهر                      | Fik **Nobelprisen i fysik** 1922 for **atommodel**                | حصل على **نوبل في الفيزياء** عن **نموذج الذرة**             | 1885–1962             |
-| **Astronom**                      | **Tycho Brahe**<br>تايكو براهي                   | Lavede **stjerneobservationer**, opdagede **nova**                | رصد **النجوم** واكتشف **نجمة جديدة**                        | 1546–1601             |
-| **Geolog og anatom**              | **Niels Steensen (Steno)**<br>نيلس ستينسن        | Grundlagde **geologien**, opdagede **Stenos lov**                 | أسس **علم الجيولوجيا**                                      | 1638–1686             |
-| **Astronom**                      | **Ole Rømer**<br>أولي رومر                       | Målte **lysets hastighed** for første gang                        | أول من **قاس سرعة الضوء**                                   | 1644–1710             |
-| **Seismolog**                     | **Inge Lehmann**<br>إنغه ليمان                   | Opdagede Jordens **indre kerne**                                  | اكتشفت **اللب الداخلي للأرض**                               | 1888–1993             |
-| **Komponist**                     | **Carl Nielsen**<br>كارل نيلسن                   | Skrev **symfonier** og **sange** som “Den danske sang”            | كتب **سمفونيات وأغاني وطنية**                               | 1865–1931             |
-| **Billedhugger**                  | **Bertel Thorvaldsen**<br>بيرتل تورفالدسن        | Lavede **Kristusstatuer** og klassiske værker                     | صنع **تماثيل المسيح** وأعمالًا كلاسيكية                     | 1770–1844             |
-| **Maler**                         | **Anna og Michael Ancher**<br>آنا وميخائيل أنكَر | **Skagensmalere**, viste **lys og hverdagsliv**                   | من **رسامي سكاين**، رسما **الضوء والحياة اليومية**          | 1859–1935 / 1849–1927 |
-| **Maler**                         | **P.S. Krøyer**<br>كرُويَر                       | Kendt for **sommerbilleder og lys**                               | اشتهر بـ **المناظر الصيفية والضوء**                         | 1851–1909             |
-| **Arkitekt/designer**             | **Arne Jacobsen**<br>آرنه ياكوبسن                | Skabte **Ægget-stolen** og **SAS Royal Hotel**                    | صمم **كرسي البيضة** و**فندق SAS**                           | 1902–1971             |
-| **Designer**                      | **Poul Henningsen (PH)**<br>بول هينينغسن         | Designede **PH-lamper** med blændfrit lys                         | صمم **مصابيح PH** ذات الضوء اللطيف                          | 1894–1967             |
-| **Møbeldesigner**                 | **Børge Mogensen**<br>بورغه موغنسن               | Kendt for **funktionelt dansk design**                            | معروف بـ **تصميم الأثاث الوظيفي**                           | 1914–1972             |
-| **Musiker**                       | **Kim Larsen**<br>كيم لارسن                      | Skrev *Midt om natten*, medlem af **Gasolin’**                    | كتب *منتصف الليل* وغنى مع **غازولين**                       | 1945–2018             |
-| **Musiker**                       | **Sebastian**<br>سيباستيان                       | Skrev musik til *Skatteøen*                                       | كتب موسيقى *جزيرة الكنز*                                    | 1949–                 |
-| **Musiker og komiker**            | **Victor Borge**<br>فيكتور بورغه                 | **Pianist og entertainer**, berømt i **USA**                      | **عازف وممثل كوميدي** مشهور في **الولايات المتحدة**         | 1909–2000             |
-| **Politiker (Statsminister)**     | **Thorvald Stauning**<br>ثورفالد ستاونينغ        | Skabte **velfærdsstaten**, statsminister 1924–1942                | أسّس **دولة الرفاهية**                                      | 1873–1942             |
-| **Politiker (Statsminister)**     | **Anker Jørgensen**<br>أنكر يورغنسن              | Repræsenterede **Socialdemokratiet** i 1970’erne                  | من حزب **الاشتراكيين الديمقراطيين**                         | 1922–2016             |
-| **Politiker (Statsminister)**     | **Anders Fogh Rasmussen**<br>أندرس فوغ راسموسن   | Statsminister og senere **NATO-generalsekretær**                  | رئيس الوزراء الأسبق ثم **الأمين العام لحلف الناتو**         | 1953–                 |
-| **Politiker (Statsminister)**     | **Poul Schlüter**<br>بول شلويتر                  | Første **konservative** statsminister (1982–1993)                 | أول رئيس وزراء من **الحزب المحافظ**                         | 1929–2021             |
-| **Politiker (Statsminister)**     | **Helle Thorning-Schmidt**<br>هيله تورنينغ شميت  | Første kvindelige **statsminister** (2011–2015)                   | أول **رئيسة وزراء دنماركية**                                | 1966–                 |
-| **Politiker (Statsminister)**     | **Mette Frederiksen**<br>ميتّه فريدريكسن         | **Statsminister siden 2019**                                      | **رئيسة الوزراء منذ عام 2019**                              | 1977–                 |
-| **Politiker (Udenrigsminister)**  | **Lars Løkke Rasmussen**<br>لارس لوكه راسموسن    | Tidligere **statsminister**, nu **udenrigsminister**              | **رئيس وزراء سابق** ووزير خارجية حاليًا                     | 1964–                 |
-| **Politiker**                     | **Margrethe Vestager**<br>مارغريت فيستاغر        | **EU-kommissær** for konkurrence                                  | **مفوضة الاتحاد الأوروبي للمنافسة**                         | 1968–                 |
-| **Politiker**                     | **D.G. Monrad**<br>دي. جي. مونراد                | En af **Grundlovens fædre** (1849)                                | أحد **آباء الدستور**                                        | 1811–1887             |
-| **Forsker og digter**             | **Piet Hein**<br>بيت هاين                        | **Matematiker og digter**, opfandt **superellipsen**              | **شاعر وعالم رياضيات** اخترع **البيضة الفائقة**             | 1905–1996             |
-| **Sport**                         | **Michael Laudrup**<br>مايكل لاودروب             | Berømt **fodboldspiller og træner**                               | لاعب كرة قدم ومدرب دنماركي شهير                             | 1964–                 |
-| **Sport**                         | **Caroline Wozniacki**<br>كارولاين فوزنياكي      | Tidligere **verdensetter i tennis**                               | **لاعبة تنس** دانماركية كانت الأولى عالميًا                 | 1990–                 |
-| **Sport**                         | **Holger Rune**<br>هولغر رونه                    | Unge dansk **tennisspiller**                                      | **لاعب تنس دنماركي شاب**                                    | 2003–                 |
-| **Skuespiller/komiker**           | **Dirch Passer**<br>ديرخ بَسَر                   | Kendt **komiker** og **skuespiller**                              | ممثل كوميدي شهير                                            | 1926–1980             |
-| **Kunstner (film)**               | **Carl Th. Dreyer**<br>كارل دراير                | Stor **filminstruktør**, lavede *Ordet*                           | مخرج كبير، صنع فيلم *الكلمة*                                | 1889–1968             |
-| **Kunstner (CoBrA)**              | **Asger Jorn**<br>أسغير يورن                     | En af **CoBrA-kunstnerne**, kendt for **abstrakt kunst**          | أحد فناني **كوبره**، معروف بـ **الفن التجريدي**             | 1914–1973             |
-| **Forfatter/Dramatiker**          | **Ludvig Holberg**<br>لودفيغ هولبيرغ             | **"Nordens Molière"**, skrev komedier som *Jeppe på Bjerget*, Erasmus Montanus      | **"موليير الشمال"**، كتب كوميديات مثل *يبه على الجبل*          | 1684–1754             |
-`);
+    <script type="module">
+      const text = await fetch("./characters.md").then(response => response.text());
+      const html = marked.parse(text);
+      document.getElementById("content").innerHTML = html;
     </script>
   </body>
 </html>

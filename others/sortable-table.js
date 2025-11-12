@@ -1,5 +1,10 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+  for (let i = 0; i < 3; i++) {
+    await new Promise(resolve => window.requestAnimationFrame(resolve));
+  }
+
   document.querySelectorAll("th").forEach(th => {
+    th.style.cursor = "pointer";
     th.addEventListener("click", () => {
       const table = th.closest("table");
       const tbody = table.querySelector("tbody");
