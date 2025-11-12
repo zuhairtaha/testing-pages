@@ -970,7 +970,7 @@ export const lastYearsQuestions = {
     {
       question: "Hvem består Europa-Parlamentet af?",
       answers: [
-        "Politikere direkte valgt af EUs befolkninger",
+        "Politikere direkte valgt af EU's befolkninger",
         "Embedsmænd udpeget af EU-Kommissionen",
         "Ministre fra medlemsstaternes regeringer"
       ],
@@ -1084,7 +1084,7 @@ export const lastYearsQuestions = {
     {
       question: "Hvem består Rådet for Den Europæiske Union af?",
       answers: [
-        "Politikere direkte valgt af EUs befolkninger",
+        "Politikere direkte valgt af EU's befolkninger",
         "Ministre fra medlemsstaternes regeringer",
         "Embedsmænd udpeget af EU-Kommissionen"
       ],
@@ -1195,7 +1195,7 @@ export const lastYearsQuestions = {
     },
     {
       question: "Hvilken politisk bevægelse var rødstrømpebevægelsen en del af?",
-      answers: ["Kvindebevægelsen i 1970erne", "Arbejderbevægelsen i 1930erne", "Miljøbevægelsen i 1990erne"],
+      answers: ["Kvindebevægelsen i 1970'erne", "Arbejderbevægelsen i 1930'erne", "Miljøbevægelsen i 1990'erne"],
       correctIndex: 0
     },
     {
@@ -1932,7 +1932,7 @@ export const lastYearsQuestions = {
     },
     {
       question: "I hvilket årti åbnede Danmarks første jernbanestrækning?",
-      answers: ["1840Z'erne", "1780erne", "1910'erne"],
+      answers: ["1840Z'erne", "1780'erne", "1910'erne"],
       correctIndex: 0
     },
     {
@@ -2030,7 +2030,7 @@ export const lastYearsQuestions = {
     {
       question:
         "Hvornår gjorde en større gruppe af unge oprør mod samfundets traditionelle normer, så det fx blev mere accepteret at få børn uden at være gift?",
-      answers: ["I slutningen af 1920erne", "I slutningen af 1940erne", "I slutningen af 1960erne"],
+      answers: ["I slutningen af 1920'erne", "I slutningen af 1940'erne", "I slutningen af 1960'erne"],
       correctIndex: 2
     },
     {
@@ -2891,7 +2891,7 @@ export const lastYearsQuestions = {
       correctIndex: 2
     },
     {
-      question: "Hvad var ét af de store politiske emner i 1970erne?",
+      question: "Hvad var ét af de store politiske emner i 1970'erne?",
       answers: [
         "Medlemskab af verdenshandelsorganisationen WTO",
         "Fælles europæisk asylpolitik",
@@ -3056,7 +3056,7 @@ export const lastYearsQuestions = {
       correctIndex: 1
     },
     {
-      question: "Fra hvilket af følgende lande kom der flest indvandrere til Danmark i 1960erne?",
+      question: "Fra hvilket af følgende lande kom der flest indvandrere til Danmark i 1960'erne?",
       answers: ["Polen", "Tyrkiet", "Marokko"],
       correctIndex: 1
     },
@@ -3195,7 +3195,7 @@ export const lastYearsQuestions = {
       correctIndex: 2
     },
     {
-      question: "Hvad var en markant mærkesag for græsrodsbevægelser i 1970erne?",
+      question: "Hvad var en markant mærkesag for græsrodsbevægelser i 1970'erne?",
       answers: [
         "Modstand mod atomkraft",
         "Modstand mod arbejdskraftens fri bevægelighed i Europa",
@@ -3229,7 +3229,7 @@ export const lastYearsQuestions = {
       correctIndex: 2
     },
     {
-      question: "Fra hvilken af følgende dele af verden modtog Danmark i 1990erne flest flygtninge?",
+      question: "Fra hvilken af følgende dele af verden modtog Danmark i 1990'erne flest flygtninge?",
       answers: ["Balkan", "Mellemamerika", "Nordafrika"],
       correctIndex: 0
     },
@@ -4301,7 +4301,7 @@ export const lastYearsQuestions = {
     {
       question: "Hvilken rolle har Rådet for Den Europæiske Union?",
       answers: [
-        "Rådet udøver sammen Europa-Parlamentet EUs lovgivende funktion.",
+        "Rådet udøver sammen Europa-Parlamentet EU's lovgivende funktion.",
         "Rådet sikrer, at EU-lovgivningen bliver overholdt.",
         "Rådet er den EU-institution, der kommer med forslag til ny lovgivning."
       ],
@@ -5465,7 +5465,7 @@ export const lastYearsQuestions = {
       correctIndex: 0
     },
     {
-      question: "Hvilket politisk parti opstod i 1870erne som en del af arbejderbevægelsen?",
+      question: "Hvilket politisk parti opstod i 1870'erne som en del af arbejderbevægelsen?",
       answers: ["Det Radikale Venstre", "VS - Venstresocialisterne", "Socialdemokratiet"],
       correctIndex: 2
     },
@@ -5510,7 +5510,7 @@ export const lastYearsQuestions = {
     },
     {
       question:
-        "I 1970erne opstod den græsrodsbevægelse, der blev kaldt Rødstrømpebevægelsen.Hvad arbejdede den blandt andet for?",
+        "I 1970'erne opstod den græsrodsbevægelse, der blev kaldt Rødstrømpebevægelsen.Hvad arbejdede den blandt andet for?",
       answers: ["Ligestilling mellem mænd og kvinder", "At kvindernes plads skulle være i hjemmet", "Forbud mod abort"],
       correctIndex: 0
     },
@@ -5570,7 +5570,7 @@ export const lastYearsQuestions = {
       correctIndex: 2
     },
     {
-      question: "I foråret 2013 åbnede Den Blå Planet på Amager. Hvad er Den Blå Planet?",
+      question: "I foråret 2013 åbnede 'Den Blå Planet' på Amager. Hvad er 'Den Blå Planet'?",
       answers: ["Et akvarium", "Et kunstmuseum", "Et planetarium"],
       correctIndex: 0
     },
@@ -5645,7 +5645,7 @@ export const lastYearsQuestions = {
       correctIndex: 1
     },
     {
-      question: "I 1970erne opstod en række græsrodsbevægelser med forskellige mål. En af de markante mærkesager var",
+      question: "I 1970'erne opstod en række græsrodsbevægelser med forskellige mål. En af de markante mærkesager var",
       answers: ["modstand mod atomkraft", "flere kolonihaver i storbyerne", "indførelse af et fælleseuropæisk militær"],
       correctIndex: 0
     },
@@ -5664,7 +5664,7 @@ export const lastYearsQuestions = {
       correctIndex: 0
     },
     {
-      question: "Hvilket politisk parti opstod i 1870erne som en del af arbejderbevægelsen?",
+      question: "Hvilket politisk parti opstod i 1870'erne som en del af arbejderbevægelsen?",
       answers: ["Socialdemokratiet", "Venstresocialisterne (VS)", "Det Radikale Venstre"],
       correctIndex: 0
     },
@@ -5852,7 +5852,7 @@ export const lastYearsQuestions = {
     },
     {
       question: "Hvornår fik kvinder i Danmark adgang til fri abort?",
-      answers: ["I 1950erne", "I 1970erne", "I 1990erne"],
+      answers: ["I 1950'erne", "I 1970'erne", "I 1990'erne"],
       correctIndex: 1
     },
     {
@@ -5923,7 +5923,7 @@ export const lastYearsQuestions = {
     {
       question:
         "I hvilket årti startede indvandringen af mennesker fra især Tyrkiet, Pakistan og det tidligere Jugoslavien til Danmark?",
-      answers: ["I 1940erne", "I 1960erne", "I 1920erne"],
+      answers: ["I 1940'erne", "I 1960'erne", "I 1920'erne"],
       correctIndex: 1
     },
     {
@@ -6002,7 +6002,7 @@ export const lastYearsQuestions = {
       correctIndex: 0
     },
     {
-      question: "Hvilket politisk parti opstod i 1870erne som en del af arbejderbevægelsen?",
+      question: "Hvilket politisk parti opstod i 1870'erne som en del af arbejderbevægelsen?",
       answers: ["Socialdemokratiet", "Venstre", "Det Radikale Venstre"],
       correctIndex: 0
     },
@@ -7162,7 +7162,7 @@ export const lastYearsQuestions = {
     },
     {
       question:
-        "I oktober 2009 besøgte USAs præsident, Barack Obama, Danmark i forbindelse med en større begivenhed. Hvilken?",
+        "I oktober 2009 besøgte USA's præsident, Barack Obama, Danmark i forbindelse med en større begivenhed. Hvilken?",
       answers: [
         "Udnævnelsen af Anders Fogh Rasmussen til NATO's generalsekretær",
         "IOC-kongressen, den 13. olympiske kongres",
@@ -7482,7 +7482,7 @@ export const lastYearsQuestions = {
     },
     {
       question: "Hvilken ny, stor kulturbygning blev åbnet i København i januar 2009?",
-      answers: ["DRs koncerthus i Ørestad", "Operaen på Holmen", "Skuespilhuset ved havnefronten"],
+      answers: ["DR's koncerthus i Ørestad", "Operaen på Holmen", "Skuespilhuset ved havnefronten"],
       correctIndex: 0
     },
     {
