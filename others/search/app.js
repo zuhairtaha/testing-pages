@@ -9,6 +9,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Translation cache to avoid repeated API calls
   const translationCache = new Map();
+  // Element-specific translation cache for quick tooltip access
+  const elementTranslationCache = new WeakMap();
+  // Queue for background translation processing
+  const translationQueue = new Set();
+  // Flag to prevent multiple simultaneous translation processes
+  let isProcessingTranslations = false;
 
   // Translation function
   async function translateDanishToArabic(text) {
@@ -32,6 +38,73 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Background translation processor
+  const processTranslationQueue = async () => {
+    if (isProcessingTranslations || translationQueue.size === 0) {
+      return;
+    }
+
+    isProcessingTranslations = true;
+    const elementsToProcess = Array.from(translationQueue);
+    translationQueue.clear();
+
+    // Process in batches to avoid overwhelming the API
+    const batchSize = 3;
+    for (let i = 0; i < elementsToProcess.length; i += batchSize) {
+      const batch = elementsToProcess.slice(i, i + batchSize);
+      
+      await Promise.all(batch.map(async (element) => {
+        const text = element.dataset.originalText;
+        if (text && !elementTranslationCache.has(element)) {
+          try {
+            const translation = await translateDanishToArabic(text);
+            elementTranslationCache.set(element, translation);
+          } catch (error) {
+            elementTranslationCache.set(element, 'خطأ في الترجمة');
+          }
+        }
+      }));
+
+      // Small delay between batches to be respectful to the API
+      if (i + batchSize < elementsToProcess.length) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+    }
+
+    isProcessingTranslations = false;
+
+    // Check if more items were added while processing
+    if (translationQueue.size > 0) {
+      setTimeout(processTranslationQueue, 200);
+    }
+  };
+
+  // Intersection Observer for viewport translation
+  const createViewportObserver = () => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const element = entry.target;
+          if (element.dataset.originalText && !elementTranslationCache.has(element)) {
+            translationQueue.add(element);
+          }
+        }
+      });
+
+      // Process translation queue
+      if (translationQueue.size > 0) {
+        setTimeout(processTranslationQueue, 100);
+      }
+    }, {
+      rootMargin: '100px', // Start translating 100px before element enters viewport
+      threshold: 0.1
+    });
+
+    return observer;
+  };
+
+  const viewportObserver = createViewportObserver();
+
   // Tooltip functions
   const createTooltip = () => {
     let tooltip = document.getElementById('translation-tooltip');
@@ -46,23 +119,43 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const showTooltip = async (element, text) => {
     const tooltip = createTooltip();
-    tooltip.textContent = 'جاري الترجمة...';
+    
+    // Check if we have a pre-cached translation for this element
+    const cachedTranslation = elementTranslationCache.get(element);
+    
+    if (cachedTranslation) {
+      tooltip.textContent = cachedTranslation;
+    } else {
+      tooltip.textContent = 'جاري الترجمة...';
+    }
+    
     tooltip.style.display = 'block';
     
     const rect = element.getBoundingClientRect();
     tooltip.style.left = rect.left + (rect.width / 2) + 'px';
     tooltip.style.top = (rect.top - tooltip.offsetHeight - 10) + 'px';
 
-    try {
-      const translation = await translateDanishToArabic(text);
-      tooltip.textContent = translation;
-      
-      // Reposition after content change
+    // If not cached, translate and update
+    if (!cachedTranslation) {
+      try {
+        const translation = await translateDanishToArabic(text);
+        elementTranslationCache.set(element, translation);
+        tooltip.textContent = translation;
+        
+        // Reposition after content change
+        const newRect = element.getBoundingClientRect();
+        tooltip.style.left = newRect.left + (newRect.width / 2) - (tooltip.offsetWidth / 2) + 'px';
+        tooltip.style.top = (newRect.top - tooltip.offsetHeight - 10) + 'px';
+      } catch (error) {
+        const errorMsg = 'خطأ في الترجمة';
+        elementTranslationCache.set(element, errorMsg);
+        tooltip.textContent = errorMsg;
+      }
+    } else {
+      // Reposition with cached content
       const newRect = element.getBoundingClientRect();
       tooltip.style.left = newRect.left + (newRect.width / 2) - (tooltip.offsetWidth / 2) + 'px';
       tooltip.style.top = (newRect.top - tooltip.offsetHeight - 10) + 'px';
-    } catch (error) {
-      tooltip.textContent = 'خطأ في الترجمة';
     }
   };
 
@@ -75,6 +168,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const addTooltipEvents = (element, text) => {
     let hoverTimeout;
+    
+    // Store original text for background translation
+    element.dataset.originalText = text;
+    
+    // Observe element for viewport translation
+    viewportObserver.observe(element);
     
     element.addEventListener('mouseenter', () => {
       hoverTimeout = setTimeout(() => {
