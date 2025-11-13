@@ -6,7 +6,7 @@
 | ✝️ biskop | (~1128-1201) | Absalon | `biskop, grundlagde København`<br>أسقف، أسس كوبنهاغن |
 | ✍️ Forfatter | (~1200) | Saxo Grammaticus | `Skrev Gesta Danorum (Danmarks historie)`<br>كتب "أعمال الدنماركيين" (تاريخ الدنمارك) |
 | 👑 Kongelig | (1397) | Margrete den 1. | `Samlede Danmark, Norge og Sverige i Kalmarunionen`<br>وحّدت الدنمارك والنرويج والسويد في اتحاد كالمار |
-| 🔭 Videnskabsmand | (1546-1601) | Tycho Brahe | `Han var astronom`<br>كان عالم فلك |
+| 🔭 Videnskabsmand | (1546-1601) | Tycho Brahe | `Han var astronom, opdagede Cassiopeia`<br>كان عالم فلك، اكتشف نجم كاسيوبيا |
 | 👑 Kongelig | (1588-1648) | Christian 4. | `Opførelsen af Rundetårn og Rosenborg Slot`<br>قام ببناء البرج المستدير وقلعة روزنبورغ |
 | 🔭 Videnskabsmand | (1676) | Ole Rømer | `Måle lysets hastighed`<br>قام بقياس سرعة الضوء |
 | 🧭 Opdagelsesrejsende | (1681-1741) | Vitus Bering | `Han var opdagelsesrejsende`<br>كان مستكشفاً |
