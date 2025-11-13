@@ -806,7 +806,7 @@ export const lastYearsQuestions = {
     },
     {
       question:
-        "Hvem er kendt for at have beskrevet, hvordan man skal opføre sig i 'Takt og Tone  Hvordan Vi Omgås' fra 1918?",
+        "Hvem er kendt for at have beskrevet, hvordan man skal opføre sig i 'Takt og Tone - Hvordan Vi Omgås' fra 1918?",
       answers: ["Emma Gad", "Herman Bang", "Karen Blixen"],
       correctIndex: 0
     },
