@@ -6,15 +6,191 @@
     <link rel="stylesheet" href="../tables.css" />
     <script defer src="../sortable-table.js"></script>
     <link rel="stylesheet" href="../global.css" />
+    <style>
+      /* Era styling with distinct colors and left borders */
+      :root {
+        --viking-color: #4285f4;
+        --medieval-color: #34a853;
+        --reformation-color: #fbbc05;
+        --absolutism-color: #ea4335;
+        --democracy-color: #ff00c8;
+        --wartime-color: #ff6d01;
+        --welfare-color: #1a73e8;
+      }
+
+      .era-viking {
+        border-left: 6px solid var(--viking-color);
+        background: linear-gradient(90deg, rgba(139, 69, 19, 0.08) 0%, transparent 100%);
+      }
+
+      .era-medieval {
+        border-left: 6px solid var(--medieval-color);
+        background: linear-gradient(90deg, rgba(74, 85, 104, 0.08) 0%, transparent 100%);
+      }
+
+      .era-reformation {
+        border-left: 6px solid var(--reformation-color);
+        background: linear-gradient(90deg, rgba(45, 80, 22, 0.08) 0%, transparent 100%);
+      }
+
+      .era-absolutism {
+        border-left: 6px solid var(--absolutism-color);
+        background: linear-gradient(90deg, rgba(124, 45, 18, 0.08) 0%, transparent 100%);
+      }
+
+      .era-democracy {
+        border-left: 6px solid var(--democracy-color);
+        background: linear-gradient(90deg, rgba(30, 64, 175, 0.08) 0%, transparent 100%);
+      }
+
+      .era-wartime {
+        border-left: 6px solid var(--wartime-color);
+        background: linear-gradient(90deg, rgba(153, 27, 27, 0.08) 0%, transparent 100%);
+      }
+
+      .era-welfare {
+        border-left: 6px solid var(--welfare-color);
+        background: linear-gradient(90deg, rgba(5, 150, 105, 0.08) 0%, transparent 100%);
+      }
+
+      /* Add era legend */
+      .era-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin: 20px 0;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        font-size: 0.9em;
+        direction: rtl;
+      }
+
+      .era-legend-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .era-legend-color {
+        width: 20px;
+        height: 4px;
+        border-radius: 2px;
+      }
+    </style>
   </head>
   <body>
-    <div id="content"></div>
+    
+    
+    <div id="content">
+      <div class="era-legend">
+      <div class="era-legend-item">
+        <div class="era-legend-color" style="background: var(--viking-color);"></div>
+        <span>🛡️ عصر الفايكنغ (750-1050)</span>
+      </div>
+      <div class="era-legend-item">
+        <div class="era-legend-color" style="background: var(--medieval-color);"></div>
+        <span>🏰 العصور الوسطى (1050-1500)</span>
+      </div>
+      <div class="era-legend-item">
+        <div class="era-legend-color" style="background: var(--reformation-color);"></div>
+        <span>⛪ عصر الإصلاح (1536-1660)</span>
+      </div>
+      <div class="era-legend-item">
+        <div class="era-legend-color" style="background: var(--absolutism-color);"></div>
+        <span>👑 الحكم المطلق (1660-1849)</span>
+      </div>
+      <div class="era-legend-item">
+        <div class="era-legend-color" style="background: var(--democracy-color);"></div>
+        <span>🗳️ الديمقراطية والتصنيع (1849-1914)</span>
+      </div>
+      <div class="era-legend-item">
+        <div class="era-legend-color" style="background: var(--wartime-color);"></div>
+        <span>⚔️ الحروب وإعادة البناء (1914-1945)</span>
+      </div>
+      <div class="era-legend-item">
+        <div class="era-legend-color" style="background: var(--welfare-color);"></div>
+        <span>🏛️ دولة الرفاه (1945-اليوم)</span>
+      </div>
+    </div>
+
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script type="module">
       const text = await fetch("./characters.md").then(response => response.text());
       const html = marked.parse(text);
-      document.getElementById("content").innerHTML = html;
+      
+      // Function to determine era based on character's time period
+      function getEraClass(timeText) {
+        const text = timeText.toLowerCase();
+        
+        // Extract years from text for better matching
+        const yearMatches = text.match(/(\d{3,4})/g);
+        const years = yearMatches ? yearMatches.map(y => parseInt(y)) : [];
+        
+        // Check for explicit era keywords first
+        if (text.includes('vikingetiden') || text.includes('viking')) {
+          return 'era-viking';
+        }
+        if (text.includes('middelalderen')) {
+          return 'era-medieval';
+        }
+        if (text.includes('guldalderen')) {
+          return 'era-absolutism';
+        }
+        
+        // Then check by year ranges - use the earliest year found
+        if (years.length > 0) {
+          const earliestYear = Math.min(...years);
+          
+          if (earliestYear >= 750 && earliestYear <= 1050) {
+            return 'era-viking';
+          }
+          if (earliestYear >= 1051 && earliestYear <= 1500) {
+            return 'era-medieval';
+          }
+          if (earliestYear >= 1536 && earliestYear <= 1660) {
+            return 'era-reformation';
+          }
+          if (earliestYear >= 1661 && earliestYear <= 1849) {
+            return 'era-absolutism';
+          }
+          if (earliestYear >= 1850 && earliestYear <= 1914) {
+            return 'era-democracy';
+          }
+          if (earliestYear >= 1915 && earliestYear <= 1945) {
+            return 'era-wartime';
+          }
+          if (earliestYear >= 1946) {
+            return 'era-welfare';
+          }
+        }
+        
+        // Default fallback
+        return 'era-welfare';
+      }
+      
+      // Parse the HTML and add era classes to table rows
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = html;
+      
+      const table = tempDiv.querySelector('table');
+      if (table) {
+        const rows = table.querySelectorAll('tbody tr');
+        rows.forEach(row => {
+          const cells = row.querySelectorAll('td');
+          if (cells.length >= 2) {
+            // The date is in the second column (index 1)
+            const dateCell = cells[1];
+            const timeText = dateCell.textContent;
+            const eraClass = getEraClass(timeText);
+            row.classList.add(eraClass);
+          }
+        });
+      }
+      
+      document.getElementById("content").innerHTML += tempDiv.innerHTML;
     </script>
   </body>
 </html>
