@@ -3,6 +3,7 @@
 | 🏛️ Mytologisk | (Vikingetiden) | Freja og Thor | `Guder i vikingetidens religion 'asatroen'`<br>آلهة في الديانة الوثنية الإسكنافية "أساترو" |
 | 👑 Kongelig | (~965) | Harald Blåtand | `Gjorde danerne kristne (Jellingstenene)`<br>جعل الدنماركيين مسيحيين (أحجار جيلينغ) |
 | 👑 Kongelig | (1000-tallet) | Svend Tveskæg | `Erobrede England`<br>غزا إنجلترا |
+| ✝️ biskop | (~1128-1201) | Absalon | `biskop, grundlagde København`<br>أسقف، أسس كوبنهاغن |
 | ✍️ Forfatter | (~1200) | Saxo Grammaticus | `Skrev Gesta Danorum (Danmarks historie)`<br>كتب "أعمال الدنماركيين" (تاريخ الدنمارك) |
 | 👑 Kongelig | (1397) | Margrete den 1. | `Samlede Danmark, Norge og Sverige i Kalmarunionen`<br>وحّدت الدنمارك والنرويج والسويد في اتحاد كالمار |
 | 🔭 Videnskabsmand | (1546-1601) | Tycho Brahe | `Han var astronom`<br>كان عالم فلك |
