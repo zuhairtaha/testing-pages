@@ -50,6 +50,7 @@
 | 🎬 Instruktør | (f. 1956) | Lars von Trier | `Instruktør ('Idioterne' og 'Dancer in the Dark')`<br>مخرج ("الأغبياء" و "راقصة في الظلام") |
 | 🎬 Instruktør | (f. 1960) | Susanne Bier | `Kendt filminstruktør (vandt Oscar for 'Hævnen')`<br>مخرجة أفلام معروفة (فازت بأوسكار عن "في عالم أفضل") |
 | ✍️ Forfatter | (f. 1963) | Naja Marie Aidt | `Kendt forfatter`<br>كاتبة معروفة |
+| 🎨 Kunstner | 1967 | Olafur Eliasson | ARoS rainbow |
 | 🏛️ Politiker | (1971-2024) | Søren Pape Poulsen | `Formand for Det Konservative Folkeparti (død marts 2024)`<br>رئيس حزب الشعب المحافظ (توفي مارس 2024) |
 | 👑 Kongelig | (1972) | Margrethe den 2. | `Blev dronning af Danmark i 1972`<br>أصبحت ملكة الدنمارك عام 1972 |
 | 🏛️ Politiker | (1982-1993) | Poul Schlüter | `Statsminister (Det Konservative Folkeparti)`<br>رئيس وزراء (حزب الشعب المحافظ) |
