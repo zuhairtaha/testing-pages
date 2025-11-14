@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>أحزاب 2</title>
+    <link rel="stylesheet" href="../tables.css" />
+    <script defer src="../sortable-table.js"></script>
+    <link rel="stylesheet" href="../global.css" />
+
+    <style>
+      .tag {
+        display: inline-block;
+        background-color: #e0e0e0;
+        color: #333;
+        padding: 2px 6px;
+        margin: 2px;
+        border-radius: 4px;
+        text-decoration: none;
+      }
+
+      .tag:hover {
+        background-color: #c0c0c0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="content"></div>
+    <br>
+    <div id="content" style="direction: rtl">
+      <h3>أحزاب أخرى مذكورة (سياق تاريخي)</h3>
+
+      <ul>
+        <li>
+          <strong>أحزاب "انتخابات الانهيار الأرضي" (Jordskredsvalget 1973):</strong>
+          <ul>
+            <li>يُذكر هذا الانتخاب لأنه شهد دخول 3 أحزاب جديدة إلى البرلمان وتغييراً كبيراً في تصويت الناخبين.</li>
+            <li>
+              الأحزاب الجديدة التي ذُكرت هي: <strong>Fremskridtspartiet</strong>، و
+              <strong>Kristeligt Folkeparti</strong>، و <strong>Centrumdemokraterne</strong>.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <strong>Danmarks Kommunistiske Parti (DKP)</strong>:
+          <ul>
+            <li>ذُكر فقط كالحزب الذي انشق عنه <strong>Socialistisk Folkeparti (SF)</strong> عام 1959.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="./timeline.js"></script>
+    <script type="module">
+      const text = await fetch("./parties.md").then(response => response.text());
+      const html = marked.parse(text);
+      // replace <code>xxx</code> with <a href="https://zuhairtaha.github.io/testing-pages/others/search/index.html?q=xxx">xxx</a>
+      const linkedHtml = html.replace(/<code>(.*?)<\/code>/g, (match, codeSegment) => {
+        const query = encodeURIComponent(codeSegment);
+        return `<a target="_blank" class="tag" href="https://zuhairtaha.github.io/testing-pages/others/search/index.html?q=${query}">${codeSegment}</a>`;
+      });
+      document.getElementById("content").innerHTML = linkedHtml;
+    </script>
+  </body>
+</html>
