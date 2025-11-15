@@ -47,22 +47,29 @@
   <body>
     <div class="container">
       <h1>Read Aloud Editor</h1>
-      <p>Select any text inside the box below to see the "Read" toolbar.</p>
+      <p>
+        Select any text inside the box below to see the "Read" toolbar.
+      </p>
       <!-- This is the contenteditable div -->
       <div id="editor" contenteditable="true">
         <p>This is a <strong>contenteditable</strong> area. You can edit this text.</p>
         <p>
-          Try selecting a portion of this sentence. The toolbar now appears in a
-          minimal state. Click the "..." icon to expand it and see the Language,
-          Voice, and Speed options.
+          Try selecting a portion of this sentence. The toolbar now appears.
+          Instead of a "..." button, you can now resize the toolbar.
         </p>
         <p>
-          The toolbar's expanded/collapsed state is now saved. If you expand it,
-          it will stay expanded the next time you select text.
+          Hover over the right edge of the toolbar. A resize handle will appear.
+          Drag it to the right to reveal the Language, Voice, and Speed
+          options. The toolbar will "snap" to show or hide buttons cleanly.
         </p>
         <p>
-          The Language list is now populated directly from your browser's
-          available speech engines.
+          The Language list is now written in native language names (e.g., Dansk,
+          العربية). When you open it, press a key like 'E' to jump to
+          "English".
+        </p>
+        <p>
+          A badge on the Language icon (e.g., "EN") shows the currently selected
+          language.
         </p>
         <ul>
           <li>Select this list item.</li>
@@ -72,6 +79,29 @@
     </div>
     <!-- Read Aloud Script (Updated) -->
     <script>
+      /**
+       * Read Aloud Toolbar Features:
+       *
+       * 1. Core Functionality: Automatically displays a floating, contextual toolbar
+       * when text is selected in a contenteditable area or anywhere in the document.
+       * 2. Read/Stop Control: Allows starting and stopping speech synthesis for the
+       * selected text. Shows a loading spinner while the voice is preparing.
+       * 3. Real-Time Highlighting: Highlights the currently spoken word or phrase
+       * using a transparent overlay that follows the text across line breaks.
+       * 4. Resizable Toolbar: Users can drag a handle on the right edge to resize
+       * the toolbar horizontally.
+       * 5. Snap-to-Width Logic: The toolbar snaps to predefined widths to cleanly
+       * reveal or hide optional controls (Language, Voice, Speed).
+       * 6. Language Selection: A list of available languages (using native names, e.g., 'Español')
+       * from the Web Speech API is provided. Supports quick-jumping by typing keys in the menu.
+       * 7. Language Badge: Displays a two-letter code (e.g., "EN") on the language button
+       * indicating the current setting.
+       * 8. Voice Selection: Allows choosing a specific voice for the selected language.
+       * The preferred voice is saved per language.
+       * 9. Speed Control: Offers predefined rate multipliers (0.5x, 0.75x, 1.0x, 1.25x, 1.5x, 2.0x).
+       * 10. Persistent Preferences: Language, voice, and rate settings are saved
+       * to localStorage for use across sessions.
+       */
       (() => {
         const Z = 2147483647;
         const synth = window.speechSynthesis;
@@ -82,11 +112,12 @@
           readBtn: "rs-read-btn",
           langBtn: "rs-lang-btn",
           voiceBtn: "rs-voice-btn",
-          rateBtn: "rs-rate-btn", // Added
-          moreBtn: "rs-more-btn",
+          rateBtn: "rs-rate-btn",
+          resizeHandle: "rs-resize-handle", 
+          langBadge: "rs-lang-badge", 
           langMenu: "rs-lang-menu",
           voiceMenu: "rs-voice-menu",
-          rateMenu: "rs-rate-menu", // Added
+          rateMenu: "rs-rate-menu",
         };
         const pref = {
           lang:
@@ -95,9 +126,9 @@
             navigator.language ||
             "en-US",
           voiceURI: localStorage.getItem("RS_VOICE_URI") || "",
-          rate: parseFloat(localStorage.getItem("RS_RATE") || "1.0"), // Added
+          rate: parseFloat(localStorage.getItem("RS_RATE") || "1.0"),
         };
-        const EXPAND_KEY = "RS_TOOLBAR_EXPANDED";
+        const WIDTH_KEY = "RS_TOOLBAR_WIDTH"; 
         const VOICE_MAP_KEY = "RS_VOICE_BY_LANG";
         let baseRange = null;
         let lastText = "";
@@ -107,19 +138,29 @@
         let lastAnimatedTokenStart = -1;
         let isReading = !1;
         let allowToolbar = !0;
+        let isResizing = !1; 
+        let snapWidths = []; 
+        let minToolbarWidth = 0; 
+        let maxToolbarWidth = 0; 
+
         injectStyles();
         const toolbar = ensureToolbar();
         const layer = ensureLayer();
         const langMenu = ensureMenu(IDS.langMenu);
         const voiceMenu = ensureMenu(IDS.voiceMenu);
-        const rateMenu = ensureMenu(IDS.rateMenu); // Added
+        const rateMenu = ensureMenu(IDS.rateMenu);
+
+        // Calculate snap widths once buttons are in the DOM
+        calculateSnapWidths();
+
         toolbar.addEventListener("pointerdown", (e) => {
           e.preventDefault();
           e.stopPropagation();
         });
         langMenu.addEventListener("pointerdown", (e) => e.stopPropagation());
         voiceMenu.addEventListener("pointerdown", (e) => e.stopPropagation());
-        rateMenu.addEventListener("pointerdown", (e) => e.stopPropagation()); // Added
+        rateMenu.addEventListener("pointerdown", (e) => e.stopPropagation());
+
         if (synth && typeof synth.addEventListener === "function") {
           synth.addEventListener("voiceschanged", () => {
             voicesCache = synth.getVoices();
@@ -132,43 +173,49 @@
         populateLangs();
         ensureVoiceForCurrentLang();
         populateVoices();
-        populateRates(); // Added
+        populateRates();
+
         document.addEventListener("pointerdown", (e) => {
           const t = e.target;
           const isToolbarClick = t.closest(`#${IDS.toolbar}`);
           const isMenuClick =
             t.closest(`.${IDS.langMenu}`) ||
             t.closest(`.${IDS.voiceMenu}`) ||
-            t.closest(`.${IDS.rateMenu}`); // Modified
+            t.closest(`.${IDS.rateMenu}`);
           if (isToolbarClick || isMenuClick) return;
           if (isReading) {
             synth.cancel();
           }
           hide(langMenu);
           hide(voiceMenu);
-          hide(rateMenu); // Added
+          hide(rateMenu);
           if (!isReading) {
             allowToolbar = !1;
           }
         });
         document.addEventListener("pointerup", () => {
-          if (!isReading) {
+          if (!isReading && !isResizing) {
             allowToolbar = !0;
           }
-          onSelectionUpdate();
+          if (!isResizing) {
+            onSelectionUpdate();
+          }
         });
         document.addEventListener("mouseup", onSelectionUpdate);
         document.addEventListener("keyup", onSelectionUpdate);
         document.addEventListener("selectionchange", onSelectionUpdate);
         document.addEventListener("scroll", repaintHighlight, !0);
         document.addEventListener("click", onDocClick, !0);
+
+        // Init Resize Handle
+        initResize();
+
         [
           IDS.readBtn,
           IDS.langBtn,
           IDS.voiceBtn,
           IDS.rateBtn,
-          IDS.moreBtn,
-        ].forEach((id) => { // Modified
+        ].forEach((id) => {
           const el = byId(id);
           if (!el) return;
           el.addEventListener("pointerdown", (e) => {
@@ -179,36 +226,32 @@
         byId(IDS.readBtn)?.addEventListener("click", () => {
           onReadClicked();
         });
-        byId(IDS.moreBtn)?.addEventListener("click", (e) => {
-          e.stopPropagation();
-          const isExpanded = toolbar.dataset.expanded === "true";
-          const newState = isExpanded ? "false" : "true";
-          toolbar.dataset.expanded = newState;
-          localStorage.setItem(EXPAND_KEY, newState);
-          if (isExpanded) {
-            hide(langMenu);
-            hide(voiceMenu);
-            hide(rateMenu); // Added
-          }
-        });
+        
         byId(IDS.langBtn)?.addEventListener("click", (e) => {
           e.stopPropagation();
           hide(voiceMenu);
-          hide(rateMenu); // Added
+          hide(rateMenu);
+          // Re-populate to ensure current selection is correct before toggling
+          populateLangs(); 
           toggleMenu(langMenu, byId(IDS.langBtn));
         });
         byId(IDS.voiceBtn)?.addEventListener("click", (e) => {
           e.stopPropagation();
           hide(langMenu);
-          hide(rateMenu); // Added
+          hide(rateMenu);
+          // Re-populate to ensure current selection is correct before toggling
+          populateVoices();
           toggleMenu(voiceMenu, byId(IDS.voiceBtn));
         });
-        byId(IDS.rateBtn)?.addEventListener("click", (e) => { // Added
+        byId(IDS.rateBtn)?.addEventListener("click", (e) => {
           e.stopPropagation();
           hide(langMenu);
           hide(voiceMenu);
+          // Re-populate to ensure current selection is correct before toggling
+          populateRates();
           toggleMenu(rateMenu, byId(IDS.rateBtn));
         });
+
         window.removeReadSelectedTools =
           function removeReadSelectedTools() {
             document.removeEventListener("mouseup", onSelectionUpdate);
@@ -223,7 +266,7 @@
               IDS.style,
               IDS.langMenu,
               IDS.voiceMenu,
-              IDS.rateMenu, // Modified
+              IDS.rateMenu,
             ].forEach((id) => byId(id)?.remove());
             synth && synth.cancel();
           };
@@ -280,14 +323,47 @@
                         box-shadow: 0 4px 8px -2px var(--rs-shadow), 0 0 1px 0 var(--rs-shadow);
                         font: 13px/1.1 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
                         backdrop-filter: saturate(120%) blur(6px);
-                        /* UPDATED: Removed 'width' from transition */
-                        transition: opacity .15s ease, transform .15s ease;
+                        transition: opacity .15s ease, transform .15s ease, width .2s cubic-bezier(0.4, 0, 0.2, 1);
                         overflow: hidden; /* Needed for width animation */
                         white-space: nowrap; /* Prevent wrapping during animation */
+                        box-sizing: border-box; /* Ensure padding is included in width */
                       }
+
+                      /* NEW: Resize Handle */
+                      #${IDS.resizeHandle} {
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                        bottom: 0;
+                        width: 16px;
+                        cursor: ew-resize;
+                        z-index: 10;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                      }
+                      #${IDS.resizeHandle}::before {
+                        content: '';
+                        display: block;
+                        width: 2px;
+                        height: 16px;
+                        border-radius: 1px;
+                        background: var(--rs-outline);
+                        opacity: 0;
+                        transition: opacity .15s ease;
+                      }
+                      #${IDS.toolbar}:hover #${IDS.resizeHandle}::before {
+                        opacity: 1;
+                      }
+                      #${IDS.toolbar}[data-resizing="true"] #${IDS.resizeHandle}::before {
+                        background: var(--rs-primary);
+                        opacity: 1;
+                      }
+
 
                       /* Icon Button */
                       .rs-icon-btn {
+                        position: relative; /* For badge */
                         width: 36px; height: 36px;
                         padding: 0;
                         display: inline-flex;
@@ -301,6 +377,7 @@
                         cursor: pointer;
                         user-select: none;
                         transition: background-color .15s ease, transform .2s ease;
+                        box-sizing: border-box;
                       }
                       .rs-icon-btn:hover {
                         background: var(--rs-hover);
@@ -315,11 +392,32 @@
                       #${IDS.readBtn} {
                         color: var(--rs-primary);
                       }
+
+                      /* Language Badge */
+                      #${IDS.langBadge} {
+                        position: absolute;
+                        top: 2px;
+                        right: 2px;
+                        min-width: 14px;
+                        height: 14px;
+                        padding: 0 3px;
+                        display: none; /* Hidden by default */
+                        background: var(--rs-primary);
+                        color: var(--rs-surface);
+                        border-radius: 7px;
+                        font-size: 9px;
+                        font-weight: 600;
+                        line-height: 14px;
+                        text-align: center;
+                        box-sizing: border-box;
+                        user-select: none;
+                        pointer-events: none;
+                      }
                       
                       /* Read/Stop Icon Toggle */
                       #${IDS.readBtn} .rs-play-icon { display: inline-flex; }
                       #${IDS.readBtn} .rs-stop-icon { display: none; }
-                      #${IDS.readBtn} .rs-spinner-icon { display: none; } /* Added */
+                      #${IDS.readBtn} .rs-spinner-icon { display: none; } 
 
                       #${IDS.toolbar}[data-reading="true"] #${IDS.readBtn} .rs-play-icon { display: none; }
                       #${IDS.toolbar}[data-reading="true"] #${IDS.readBtn} .rs-stop-icon { display: inline-flex; }
@@ -330,35 +428,7 @@
                         display: inline-flex; 
                         animation: rsSpin 1s linear infinite;
                       }
-
-                      .rs-divider { 
-                        width: 1px; 
-                        height: 24px; 
-                        background: var(--rs-outline); 
-                        margin: 0 2px;
-                        flex-shrink: 0;
-                      }
                       
-                      /* Collapsible Toolbar Styles */
-                      #${IDS.langBtn}, #${IDS.voiceBtn}, #${IDS.rateBtn}, #${IDS.toolbar} .rs-divider { /* Modified */
-                        display: none; /* Hide by default */
-                      }
-                      #${IDS.toolbar}[data-expanded="true"] #${IDS.langBtn},
-                      #${IDS.toolbar}[data-expanded="true"] #${IDS.voiceBtn},
-                      #${IDS.toolbar}[data-expanded="true"] #${IDS.rateBtn}, /* Modified */
-                      #${IDS.toolbar}[data-expanded="true"] .rs-divider {
-                        display: inline-flex; /* Show when expanded */
-                      }
-                      
-                      /* More button rotation */
-                      #${IDS.toolbar}[data-expanded="true"] #${IDS.moreBtn} {
-                        transform: rotate(90deg);
-                      }
-                      #${IDS.toolbar}[data-expanded="false"] #${IDS.moreBtn} {
-                        transform: rotate(0deg);
-                      }
-
-
                       /* Custom Menu */
                       .${IDS.langMenu}, .${IDS.voiceMenu}, .${IDS.rateMenu} { /* Modified */
                         position: absolute;
@@ -373,6 +443,7 @@
                         max-height: 250px;
                         overflow-x: hidden;
                         overflow-y: auto;
+                        outline: none; /* For focus */
                       }
                       
                       /* Menu Item */
@@ -387,8 +458,9 @@
                         user-select: none;
                         white-space: nowrap;
                       }
-                      .rs-menu-item:hover {
+                      .rs-menu-item:hover, .rs-menu-item:focus {
                         background: var(--rs-hover);
+                        outline: none;
                       }
                       .rs-menu-item .rs-check-icon {
                         width: 18px; height: 18px;
@@ -405,7 +477,7 @@
 
                       /* Use a light grey selection instead of transparent */
                       .rs-reading ::selection { 
-                        background: rgba(0, 0, 0, 0.1); /* Light grey selection */
+                        background: rgba(0, 0, 0, 0.05); /* Light grey selection */
                         color: inherit; 
                       }
                       @media (prefers-color-scheme: dark) {
@@ -433,8 +505,14 @@
                       .rs-chunk {
                         position: absolute;
                         border-radius: 6px; /* Slightly larger radius */
-                        background: linear-gradient(180deg, var(--rs-word-bg-1), var(--rs-word-bg-2));
-                        outline: 1px solid var(--rs-word-outline);
+                        background-image: linear-gradient(
+                180deg, 
+                rgba(255, 165, 0, 0.25) 5%,      /* Orange Top */
+                transparent 20%,                 
+                transparent 80%,
+                rgba(255, 165, 0, 0.35) 100%     /* Bright Orange Bottom */
+            );
+                        outline: 1px solid rgba(255, 140, 0, 0.9); /* Darker orange outline */
                         box-shadow: 0 4px 10px var(--rs-shadow), inset 0 0 0 1px rgba(255,255,255,.06);
                         transform-origin: left center;
                       }
@@ -448,22 +526,30 @@
           el = document.createElement("div");
           el.id = IDS.toolbar;
           const read = iconButton(
-            svgPlay() + svgStop() + svgSpinner(), // Modified
+            svgPlay() + svgStop() + svgSpinner(),
             "Read",
             "rs-icon-btn"
           );
           read.id = IDS.readBtn;
-          const moreBtn = iconButton(svgMore(), "More options", "rs-icon-btn");
-          moreBtn.id = IDS.moreBtn;
+
           const langBtn = iconButton(svgLang(), "Language", "rs-icon-btn");
           langBtn.id = IDS.langBtn;
+          
+          const langBadge = document.createElement("span");
+          langBadge.id = IDS.langBadge;
+          langBtn.appendChild(langBadge);
+
           const voiceBtn = iconButton(svgVoice(), "Voice", "rs-icon-btn");
           voiceBtn.id = IDS.voiceBtn;
-          const rateBtn = iconButton(svgRate(), "Reading Speed", "rs-icon-btn"); // Added
-          rateBtn.id = IDS.rateBtn; // Added
-          const divider = document.createElement("div");
-          divider.className = "rs-divider";
-          el.append(read, moreBtn, divider, langBtn, voiceBtn, rateBtn); // Modified
+          const rateBtn = iconButton(svgRate(), "Reading Speed", "rs-icon-btn");
+          rateBtn.id = IDS.rateBtn;
+          // REMOVED: divider element
+
+          // Append elements (without the divider)
+          const resizeHandle = document.createElement("div");
+          resizeHandle.id = IDS.resizeHandle;
+
+          el.append(read, langBtn, voiceBtn, rateBtn, resizeHandle);
           document.body.appendChild(el);
           return el;
         }
@@ -498,6 +584,14 @@
           } else {
             const btnRect = button.getBoundingClientRect();
             menu.style.display = "block";
+            
+            // Set focus and scroll selected item into view
+            menu.focus(); 
+            const selected = menu.querySelector('.rs-menu-item[data-selected="true"]');
+            if (selected) {
+              selected.scrollIntoView({ block: 'nearest' });
+            }
+            
             menu.style.left = `${window.scrollX + btnRect.left}px`;
             menu.style.top = `${window.scrollY + btnRect.bottom + 8}px`;
           }
@@ -508,6 +602,125 @@
         function hide(el) {
           if (el) el.style.display = "none";
         }
+        
+        // **FIX 1: Updated logic to correctly calculate snap widths**
+        function calculateSnapWidths() {
+            const tb = byId(IDS.toolbar);
+            if (!tb) return;
+
+            // Temporarily show toolbar to measure
+            const originalDisplay = tb.style.display;
+            tb.style.visibility = 'hidden';
+            tb.style.display = 'inline-flex';
+            tb.style.width = 'auto'; // Let it size naturally
+
+            const readBtn = byId(IDS.readBtn);
+            const langBtn = byId(IDS.langBtn);
+            const voiceBtn = byId(IDS.voiceBtn);
+            const rateBtn = byId(IDS.rateBtn);
+            
+            if (!readBtn || !langBtn || !voiceBtn || !rateBtn) {
+                tb.style.display = originalDisplay;
+                tb.style.visibility = 'visible';
+                return;
+            }
+
+            const gap = 4; // From CSS
+            const padding = 6; // Single side padding from CSS
+            
+            const readWidth = readBtn.offsetWidth;
+            const langWidth = langBtn.offsetWidth;
+            const voiceWidth = voiceBtn.offsetWidth;
+            const rateWidth = rateBtn.offsetWidth;
+
+            // Snap Widths based on the visible buttons (Formula: 2*padding + sum(button_widths) + sum(gaps))
+            snapWidths = [
+                // 1. Read (1 button, 0 gaps)
+                (padding * 2) + readWidth, // 6 + 36 + 6 = 48px
+                // 2. Read + Lang (2 buttons, 1 gap)
+                (padding * 2) + readWidth + gap + langWidth, // 48 + 4 + 36 = 88px
+                // 3. Read + Lang + Voice (3 buttons, 2 gaps)
+                (padding * 2) + readWidth + (gap * 2) + langWidth + voiceWidth, // 88 + 4 + 36 = 128px
+                // 4. Read + All (4 buttons, 3 gaps)
+                (padding * 2) + readWidth + (gap * 3) + langWidth + voiceWidth + rateWidth, // 128 + 4 + 36 = 168px
+            ];
+            
+            minToolbarWidth = snapWidths[0];
+            maxToolbarWidth = snapWidths[snapWidths.length - 1];
+
+            // Restore original style
+            tb.style.display = originalDisplay;
+            tb.style.visibility = 'visible';
+            tb.style.width = ''; // Clear inline width
+        }
+        
+        // Resize logic
+        function initResize() {
+          const handle = byId(IDS.resizeHandle);
+          const toolbar = byId(IDS.toolbar);
+          if (!handle || !toolbar) return;
+
+          let startX = 0;
+          let startWidth = 0;
+
+          const onPointerDown = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            isResizing = true;
+            startX = e.clientX;
+            startWidth = toolbar.offsetWidth;
+            toolbar.dataset.resizing = "true";
+            toolbar.style.transition = 'none'; // Disable animation while dragging
+            document.addEventListener('pointermove', onPointerMove);
+            document.addEventListener('pointerup', onPointerUp);
+            document.addEventListener('pointercancel', onPointerUp);
+            handle.setPointerCapture(e.pointerId);
+          };
+
+          const onPointerMove = (e) => {
+            if (!isResizing) return;
+            const dx = e.clientX - startX;
+            let newWidth = startWidth + dx;
+            // Clamp width, allowing small overdrag buffer
+            newWidth = Math.max(minToolbarWidth - 5, Math.min(newWidth, maxToolbarWidth + 5)); 
+            toolbar.style.width = `${newWidth}px`;
+          };
+
+          const onPointerUp = (e) => {
+            if (!isResizing) return;
+            isResizing = false;
+            toolbar.dataset.resizing = "false";
+            toolbar.style.transition = ''; // Re-enable animation
+            document.removeEventListener('pointermove', onPointerMove);
+            document.removeEventListener('pointerup', onPointerUp);
+            document.removeEventListener('pointercancel', onPointerUp);
+            handle.releasePointerCapture(e.pointerId);
+            
+            // Find the closest snap width
+            let targetSnap = snapWidths[0];
+            let minDiff = Infinity;
+
+            snapWidths.forEach(snapWidth => {
+                const diff = Math.abs(toolbar.offsetWidth - snapWidth);
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    targetSnap = snapWidth;
+                }
+            });
+            
+            toolbar.style.width = `${targetSnap}px`;
+            localStorage.setItem(WIDTH_KEY, targetSnap);
+            
+            // Allow selection again
+            setTimeout(() => {
+              allowToolbar = true;
+            }, 10);
+          };
+
+          handle.addEventListener('pointerdown', onPointerDown);
+        }
+
+        // Fix 3: Logic added to populateLangs and voice/rate is correct.
         function populateLangs() {
           const langSet = new Set();
           (voicesCache || []).forEach((v) => langSet.add(v.lang));
@@ -517,6 +730,29 @@
           const menu = byId(IDS.langMenu);
           if (!menu) return;
           menu.replaceChildren();
+          
+          menu.tabIndex = -1; // Make it focusable
+          menu.addEventListener('keydown', (e) => {
+              if (e.key.length === 1 && e.key.match(/[a-z0-9]/i)) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  const key = e.key.toLowerCase();
+                  const items = Array.from(menu.querySelectorAll('.rs-menu-item'));
+                  const currentIdx = items.findIndex(item => item === document.activeElement);
+                  // Start search from next item
+                  const searchPool = [...items.slice(currentIdx + 1), ...items.slice(0, currentIdx + 1)];
+                  
+                  const found = searchPool.find(item => 
+                    (item.textContent || '').trim().toLowerCase().startsWith(key)
+                  );
+                  
+                  if (found) {
+                      found.focus();
+                      found.scrollIntoView({ block: 'nearest' });
+                  }
+              }
+          });
+
           const checkIcon = svgCheck();
           if (pref.lang && !langs.includes(pref.lang)) {
             langs.unshift(pref.lang);
@@ -526,27 +762,58 @@
             const item = document.createElement("div");
             item.className = "rs-menu-item";
             item.dataset.value = code;
-            item.innerHTML = `<span class="rs-check-icon">${checkIcon}</span><span>${langDisplayName(
-              code
-            )}</span>`;
+            item.tabIndex = 0; // Make item focusable
+            
+            const nativeName = langDisplayName(code);
+            item.innerHTML = `<span class="rs-check-icon">${checkIcon}</span><span>${nativeName}</span>`;
+            
+            // Fix 3: Ensure initial selection is correct
             if (code.toLowerCase() === (pref.lang || "").toLowerCase()) {
               item.dataset.selected = "true";
             }
-            item.addEventListener("click", () => {
+            
+            const onItemClick = () => {
               pref.lang = code;
               localStorage.setItem("RS_LANG", pref.lang);
               if (isReading) synth.cancel();
+              
+              // Fix 3: Update DOM selection
               menu
                 .querySelectorAll(".rs-menu-item")
                 .forEach((el) => (el.dataset.selected = "false"));
               item.dataset.selected = "true";
+              
               ensureVoiceForCurrentLang();
               populateVoices();
+              updateLangBadge(); // Fix 2: Update badge here
               hide(menu);
+            };
+            
+            item.addEventListener("click", onItemClick);
+            item.addEventListener("keydown", (e) => {
+                 if (e.key === 'Enter' || e.key === ' ') {
+                     e.preventDefault();
+                     onItemClick();
+                 }
             });
             menu.appendChild(item);
           }
+          updateLangBadge(); // Fix 2: Update badge on initial load/re-render
         }
+        
+        // Fix 2: Update language badge
+        function updateLangBadge() {
+            const badge = byId(IDS.langBadge);
+            if (!badge) return;
+            const code = (pref.lang || '').split(/[-_]/)[0].toUpperCase();
+            if (code) {
+                badge.textContent = code;
+                badge.style.display = 'flex';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
         function ensureVoiceForCurrentLang() {
           const map = getVoiceMap();
           const saved = map[pref.lang];
@@ -563,22 +830,45 @@
             setVoiceMap(map);
           }
         }
+
         function langDisplayName(code) {
           try {
-            const [lang, region] = code.split(/[-_]/);
-            const dn = hasIntlDisplayNames()
-              ? new Intl.DisplayNames([pref.lang || navigator.language || "en"], {
+            // Get the primary language code (e.g., "en" from "en-US")
+            const lang = code.split(/[-_]/)[0];
+            if (!lang) return code;
+            
+            let dn;
+            if (hasIntlDisplayNames()) {
+                // Get the language name IN ITS OWN LANGUAGE
+                dn = new Intl.DisplayNames([lang], {
                   type: "language",
-                }).of(lang)
-              : fallbackLangName(lang);
-            const dr =
-              region && hasIntlDisplayNames()
-                ? new Intl.DisplayNames([pref.lang || navigator.language || "en"], {
+                }).of(lang);
+            } else {
+                dn = fallbackLangName(lang);
+            }
+            
+            // Capitalize
+            dn = capitalize(dn);
+
+            // Try to get region name (e.g., "US" from "en-US")
+            const regionMatch = code.match(/[-_]([a-zA-Z]{2,3}|\d{3})$/);
+            const region = regionMatch ? regionMatch[1] : null;
+
+            if (region && hasIntlDisplayNames()) {
+              let dr;
+              try {
+                // Get region name in the current browser language
+                 dr = new Intl.DisplayNames([navigator.language || "en"], {
                     type: "region",
-                  }).of(region.toUpperCase())
-                : region;
-            return dr ? `${capitalize(dn)} (${dr})` : capitalize(dn);
-          } catch {
+                  }).of(region.toUpperCase());
+                 return `${dn} (${dr})`;
+              } catch (regionError) {
+                 // Fallback if region code is invalid (e.g., 'es-419')
+                 return `${dn} (${region.toUpperCase()})`;
+              }
+            }
+            return dn;
+          } catch (e) {
             return code;
           }
         }
@@ -588,15 +878,17 @@
         function fallbackLangName(lang) {
           const map = {
             en: "English",
-            es: "Spanish",
-            fr: "French",
-            de: "German",
-            it: "Italian",
-            pt: "Portuguese",
-            hi: "Hindi",
-            ja: "Japanese",
-            ko: "Korean",
-            zh: "Chinese",
+            es: "Español",
+            fr: "Français",
+            de: "Deutsch",
+            it: "Italiano",
+            pt: "Português",
+            hi: "हिन्दी",
+            ja: "日本語",
+            ko: "한국어",
+            zh: "中文",
+            ar: "العربية",
+            da: "Dansk",
           };
           return map[lang?.toLowerCase()] || lang || "Unknown";
         }
@@ -614,6 +906,8 @@
           const menu = byId(IDS.voiceMenu);
           if (!menu) return;
           menu.replaceChildren();
+          menu.tabIndex = -1; // Make focusable
+
           const checkIcon = svgCheck();
           if (!filtered.length) {
             const item = document.createElement("div");
@@ -630,26 +924,41 @@
               const item = document.createElement("div");
               item.className = "rs-menu-item";
               item.dataset.value = v.voiceURI;
+              item.tabIndex = 0; // Make item focusable
               item.innerHTML = `<span class="rs-check-icon">${checkIcon}</span><span>${
                 v.name
               } (${v.lang})${v.default ? " - Default" : ""}</span>`;
+              
+              // Fix 3: Ensure initial selection is correct
               if (v.voiceURI === pref.voiceURI) {
                 item.dataset.selected = "true";
                 currentVoiceInList = !0;
               }
-              item.addEventListener("click", () => {
+              
+              const onItemClick = () => {
                 pref.voiceURI = v.voiceURI;
                 localStorage.setItem("RS_VOICE_URI", pref.voiceURI);
                 if (isReading) synth.cancel();
                 const map = getVoiceMap();
                 map[pref.lang] = v.voiceURI;
                 setVoiceMap(map);
+                
+                // Fix 3: Update DOM selection
                 menu
                   .querySelectorAll(".rs-menu-item")
                   .forEach((el) => (el.dataset.selected = "false"));
                 item.dataset.selected = "true";
+                
                 hide(menu);
-              });
+              };
+              
+              item.addEventListener("click", onItemClick);
+              item.addEventListener("keydown", (e) => {
+                 if (e.key === 'Enter' || e.key === ' ') {
+                     e.preventDefault();
+                     onItemClick();
+                 }
+            });
               menu.appendChild(item);
             });
             if (!currentVoiceInList && menu.children.length > 0) {
@@ -679,10 +988,10 @@
           } catch {}
         }
         function onSelectionUpdate() {
-          if (isReading || !allowToolbar) return;
+          if (isReading || !allowToolbar || isResizing) return;
           hide(langMenu);
           hide(voiceMenu);
-          hide(rateMenu); // Added
+          hide(rateMenu);
           const info = getSelectionInfo();
           const tb = byId(IDS.toolbar);
           if (!tb) return;
@@ -691,7 +1000,11 @@
             return;
           }
           tb.style.display = "inline-flex";
-          tb.dataset.expanded = localStorage.getItem(EXPAND_KEY) || "false";
+          
+          if (snapWidths.length === 0) calculateSnapWidths(); 
+          const savedWidth = localStorage.getItem(WIDTH_KEY);
+          tb.style.width = savedWidth ? `${savedWidth}px` : `${minToolbarWidth}px`;
+          
           requestAnimationFrame(() => {
             const tbHeight = tb.offsetHeight;
             const tbWidth = tb.offsetWidth;
@@ -713,13 +1026,13 @@
           });
         }
         function onDocClick(e) {
-          if (isReading) return;
+          if (isReading || isResizing) return; 
           const t = e.target;
           if (
             t.closest(`#${IDS.toolbar}`) ||
             t.closest(`.${IDS.langMenu}`) ||
             t.closest(`.${IDS.voiceMenu}`) ||
-            t.closest(`.${IDS.rateMenu}`) // Added
+            t.closest(`.${IDS.rateMenu}`)
           )
             return;
           const sel = window.getSelection();
@@ -727,7 +1040,7 @@
             hide(byId(IDS.toolbar));
             hide(langMenu);
             hide(voiceMenu);
-            hide(rateMenu); // Added
+            hide(rateMenu);
           }
         }
         function getSelectionInfo() {
@@ -858,7 +1171,6 @@
           return { start: s, length: Math.max(0, e - s) };
         }
         function onReadClicked() {
-          // Modified check to include loading state
           if (isReading || toolbar.dataset.reading === "loading") {
             synth.cancel();
             return;
@@ -870,20 +1182,20 @@
           }
           hide(langMenu);
           hide(voiceMenu);
-          hide(rateMenu); // Added
+          hide(rateMenu);
           allowToolbar = !1;
           synth.cancel();
           byId(IDS.layer)?.replaceChildren();
           document.body.classList.add("rs-reading");
           
-          toolbar.dataset.reading = "loading"; // Set to loading
+          toolbar.dataset.reading = "loading"; 
           
           baseRange = info.range;
           const built = buildSliceMap(baseRange);
           lastText = built.text;
           lastAnimatedTokenStart = -1;
           utter = new SpeechSynthesisUtterance(built.text);
-          utter.rate = pref.rate; // Modified
+          utter.rate = pref.rate;
           utter.pitch = 1;
           utter.volume = 1;
           if (pref.lang) utter.lang = pref.lang;
@@ -897,9 +1209,8 @@
             );
           if (chosenVoice) utter.voice = chosenVoice;
 
-          // NEW: onstart handler
           utter.onstart = () => {
-            isReading = !0; // Set isReading to true only when speech actually starts
+            isReading = !0; 
             toolbar.dataset.reading = "true";
           };
 
@@ -907,12 +1218,12 @@
             lastSlice = null;
             byId(IDS.layer)?.replaceChildren();
             document.body.classList.remove("rs-reading");
-            isReading = !1; // Reset isReading
-            toolbar.dataset.reading = "false"; // Reset to play icon
+            isReading = !1; 
+            toolbar.dataset.reading = "false"; 
             allowToolbar = !0;
             onSelectionUpdate();
           };
-          utter.onboundary = (e) => { // Modified
+          utter.onboundary = (e) => {
             const idx = typeof e.charIndex === "number" ? e.charIndex : null;
             if (idx == null) return;
             const tok = getTokenAt(lastText, idx);
@@ -924,56 +1235,59 @@
             lastSlice = { start: tok.start, length: len };
             const sub = makeSubRangeFromSlice(baseRange, tok.start, len);
             if (sub) drawRange(sub, isNewToken);
-            if (isNewToken && tok.length > 0) { // Added console log
-              const word = lastText.substring(tok.start, tok.start + tok.length);
-              console.log("Reading:", word);
-            }
           };
           synth.speak(utter);
         }
-        function unique(list) {
-          const seen = new Set();
-          return list.filter((v) => {
-            const k = String(v || "").toLowerCase();
-            if (seen.has(k) || !k) return !1;
-            seen.add(k);
-            return !0;
-          });
-        }
-        // Added function
         function populateRates() {
           const rates = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0];
           const menu = byId(IDS.rateMenu);
           if (!menu) return;
           menu.replaceChildren();
+          menu.tabIndex = -1; 
+          
           const checkIcon = svgCheck();
           for (const rate of rates) {
             const item = document.createElement("div");
             item.className = "rs-menu-item";
             item.dataset.value = rate;
+            item.tabIndex = 0; 
+
             item.innerHTML = `<span class="rs-check-icon">${checkIcon}</span><span>${rate.toFixed(
               2
             )}x</span>`;
+            
+            // Fix 3: Ensure initial selection is correct
             if (rate === pref.rate) {
               item.dataset.selected = "true";
             }
-            item.addEventListener("click", () => {
+            
+            const onItemClick = () => {
               pref.rate = rate;
               localStorage.setItem("RS_RATE", pref.rate);
               if (isReading) {
                 synth.cancel();
                 onReadClicked();
-              } // Restart reading with new rate
+              } 
+              
+              // Fix 3: Update DOM selection
               menu
                 .querySelectorAll(".rs-menu-item")
                 .forEach((el) => (el.dataset.selected = "false"));
               item.dataset.selected = "true";
+              
               hide(menu);
+            };
+            
+            item.addEventListener("click", onItemClick);
+            item.addEventListener("keydown", (e) => {
+                 if (e.key === 'Enter' || e.key === ' ') {
+                     e.preventDefault();
+                     onItemClick();
+                 }
             });
             menu.appendChild(item);
           }
         }
-        // Added function
         function svgRate() {
           return `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>`;
         }
@@ -992,10 +1306,6 @@
         function svgCheck() {
           return `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>`;
         }
-        function svgMore() {
-          return `<svg class="rs-more-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></svg>`;
-        }
-        // Added function
         function svgSpinner() {
           return `<svg class="rs-spinner-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <line x1="12" y1="2" x2="12" y2="6"></line>
