@@ -146,6 +146,7 @@ window.removeReadSelectedTools = function removeReadSelectedTools() {
   [IDS.toolbar, IDS.layer, IDS.style, IDS.langMenu, IDS.voiceMenu, IDS.rateMenu].forEach(id => byId(id)?.remove());
   synth && synth.cancel();
 };
+
 function injectStyles() {
   if (byId(IDS.style)) return;
   const s = document.createElement("style");
@@ -412,6 +413,7 @@ outline: 1px solid rgba(40, 150, 220, 0.9);
                     `;
   document.head.appendChild(s);
 }
+
 function ensureToolbar() {
   let el = byId(IDS.toolbar);
   if (el) return el;
@@ -441,6 +443,7 @@ function ensureToolbar() {
   document.body.appendChild(el);
   return el;
 }
+
 function ensureMenu(id) {
   let el = byId(id);
   if (el) return el;
@@ -450,6 +453,7 @@ function ensureMenu(id) {
   document.body.appendChild(el);
   return el;
 }
+
 function ensureLayer() {
   let el = byId(IDS.layer);
   if (el) return el;
@@ -458,6 +462,7 @@ function ensureLayer() {
   document.body.appendChild(el);
   return el;
 }
+
 function iconButton(iconSvg, title, cls) {
   const b = document.createElement("button");
   b.className = cls;
@@ -465,6 +470,7 @@ function iconButton(iconSvg, title, cls) {
   b.innerHTML = iconSvg;
   return b;
 }
+
 function toggleMenu(menu, button) {
   if (!menu || !button) return;
   if (menu.style.display === "block") {
@@ -484,14 +490,17 @@ function toggleMenu(menu, button) {
     menu.style.top = `${window.scrollY + btnRect.bottom + 8}px`;
   }
 }
+
 function byId(id) {
   return document.getElementById(id);
 }
+
 function hide(el) {
   if (el) el.style.display = "none";
 }
 
 // **FIX 1: Updated logic to correctly calculate snap widths**
+
 function calculateSnapWidths() {
   const tb = byId(IDS.toolbar);
   if (!tb) return;
@@ -543,6 +552,7 @@ function calculateSnapWidths() {
 }
 
 // Resize logic
+
 function initResize() {
   const handle = byId(IDS.resizeHandle);
   const toolbar = byId(IDS.toolbar);
@@ -609,6 +619,7 @@ function initResize() {
 }
 
 // Fix 3: Logic added to populateLangs and voice/rate is correct.
+
 function populateLangs() {
   const langSet = new Set();
   (voicesCache || []).forEach(v => langSet.add(v.lang));
@@ -686,6 +697,7 @@ function populateLangs() {
 }
 
 // Fix 2: Update language badge
+
 function updateLangBadge() {
   const badge = byId(IDS.langBadge);
   if (!badge) return;
@@ -753,9 +765,11 @@ function langDisplayName(code) {
     return code;
   }
 }
+
 function hasIntlDisplayNames() {
   return typeof Intl !== "undefined" && typeof Intl.DisplayNames === "function";
 }
+
 function fallbackLangName(lang) {
   const map = {
     en: "English",
@@ -773,9 +787,11 @@ function fallbackLangName(lang) {
   };
   return map[lang?.toLowerCase()] || lang || "Unknown";
 }
+
 function capitalize(s) {
   return (s || "").slice(0, 1).toUpperCase() + (s || "").slice(1);
 }
+
 function populateVoices() {
   const filtered = (voicesCache || [])
     .filter(v => !pref.lang || (v.lang && v.lang.toLowerCase().startsWith(pref.lang.toLowerCase())))
@@ -850,6 +866,7 @@ function populateVoices() {
     }
   }
 }
+
 function getVoiceMap() {
   try {
     return JSON.parse(localStorage.getItem(VOICE_MAP_KEY) || "{}") || {};
@@ -857,11 +874,13 @@ function getVoiceMap() {
     return {};
   }
 }
+
 function setVoiceMap(obj) {
   try {
     localStorage.setItem(VOICE_MAP_KEY, JSON.stringify(obj));
   } catch {}
 }
+
 function onSelectionUpdate() {
   if (isReading || !allowToolbar || isResizing) return;
   hide(langMenu);
@@ -896,6 +915,7 @@ function onSelectionUpdate() {
     tb.style.top = `${top}px`;
   });
 }
+
 function onDocClick(e) {
   if (isReading || isResizing) return;
   const t = e.target;
@@ -914,6 +934,7 @@ function onDocClick(e) {
     hide(rateMenu);
   }
 }
+
 function getSelectionInfo() {
   const sel = window.getSelection();
   if (!sel || sel.isCollapsed) return null;
@@ -931,6 +952,7 @@ function getSelectionInfo() {
     return null;
   }
 }
+
 function textNodesInRange(range) {
   const nodes = [];
   const tw = document.createTreeWalker(range.commonAncestorContainer, NodeFilter.SHOW_TEXT, {
@@ -954,6 +976,7 @@ function textNodesInRange(range) {
   }
   return nodes;
 }
+
 function buildSliceMap(base) {
   const parts = textNodesInRange(base);
   const map = [];
@@ -972,6 +995,7 @@ function buildSliceMap(base) {
   const text = map.map(m => m.node.nodeValue.slice(m.start, m.end)).join("");
   return { map, total, text };
 }
+
 function makeSubRangeFromSlice(base, sliceStart, sliceLen) {
   const { map, total } = buildSliceMap(base);
   const clampedStart = Math.max(0, Math.min(sliceStart, total));
@@ -992,11 +1016,13 @@ function makeSubRangeFromSlice(base, sliceStart, sliceLen) {
   sub.setEnd(mEnd.node, endOffsetInNode);
   return sub;
 }
+
 function repaintHighlight() {
   if (!baseRange || !lastSlice) return;
   const sub = makeSubRangeFromSlice(baseRange, lastSlice.start, lastSlice.length);
   if (sub) drawRange(sub, !1);
 }
+
 function drawRange(r, animate) {
   const host = byId(IDS.layer);
   if (!host) return;
@@ -1016,6 +1042,7 @@ function drawRange(r, animate) {
     host.appendChild(d);
   });
 }
+
 function getTokenAt(text, index) {
   if (!text) return { start: 0, length: 0 };
   let s = index,
@@ -1024,6 +1051,7 @@ function getTokenAt(text, index) {
   while (e < text.length && /\S/.test(text[e])) e++;
   return { start: s, length: Math.max(0, e - s) };
 }
+
 function onReadClicked() {
   if (isReading || toolbar.dataset.reading === "loading") {
     synth.cancel();
@@ -1063,7 +1091,8 @@ function onReadClicked() {
     toolbar.dataset.reading = "true";
   };
 
-  utter.onend = utter.onerror = () => {
+  utter.onend = utter.onerror = error => {
+    console.log("Speech synthesis ended with error:", error);
     lastSlice = null;
     byId(IDS.layer)?.replaceChildren();
     document.body.classList.remove("rs-reading");
@@ -1072,6 +1101,7 @@ function onReadClicked() {
     allowToolbar = !0;
     onSelectionUpdate();
   };
+
   utter.onboundary = e => {
     const idx = typeof e.charIndex === "number" ? e.charIndex : null;
     if (idx == null) return;
@@ -1087,6 +1117,7 @@ function onReadClicked() {
   };
   synth.speak(utter);
 }
+
 function populateRates() {
   const rates = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0];
   const menu = byId(IDS.rateMenu);
@@ -1133,24 +1164,31 @@ function populateRates() {
     menu.appendChild(item);
   }
 }
+
 function svgRate() {
   return `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>`;
 }
+
 function svgPlay() {
   return `<svg class="rs-play-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7-11-7z"/></svg>`;
 }
+
 function svgStop() {
   return `<svg class="rs-stop-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 6h12v12H6z"/></svg>`;
 }
+
 function svgLang() {
   return `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v2h11.17c-.7 2.36-1.95 4.5-3.71 6.53l-.03.03-2.54 2.51L1 18.07l2.12 2.12 6.4-6.4 2.54-2.51 6.4 6.4L23 18.07l-3.72-3.72-2.54 2.51zM10 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>`;
 }
+
 function svgVoice() {
   return `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1.2-9.1c0-.66.54-1.2 1.2-1.2s1.2.54 1.2 1.2l-.01 6.2c0 .66-.53 1.2-1.19 1.2s-1.2-.54-1.2-1.2V4.9zm6.5 6.1c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>`;
 }
+
 function svgCheck() {
   return `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>`;
 }
+
 function svgSpinner() {
   return `<svg class="rs-spinner-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
             <path d="M12 2 A10 10 0 0 1 22 12 A10 10 0 0 1 12 22 A10 10 0 0 1 2 12"></path>
