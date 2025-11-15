@@ -101,6 +101,12 @@
        * 9. Speed Control: Offers predefined rate multipliers (0.5x, 0.75x, 1.0x, 1.25x, 1.5x, 2.0x).
        * 10. Persistent Preferences: Language, voice, and rate settings are saved
        * to localStorage for use across sessions.
+       * 
+       * TODO:
+       * - When page reloads, stop reading if it was in progress.
+       * - Change loading spinner icon to something better match google material design.
+       * - Don't close menus with keyup if they were open.
+       * - Replace items in reading speed menu with slider for finer control.
        */
       (() => {
         const Z = 2147483647;
