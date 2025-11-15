@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Content Editable Read Aloud</title>
-    <!-- Basic page styles for the demo -->
     <style>
       body {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
@@ -50,7 +49,6 @@
       <p>
         Select any text inside the box below to see the "Read" toolbar.
       </p>
-      <!-- This is the contenteditable div -->
       <div id="editor" contenteditable="true">
         <p>This is a <strong>contenteditable</strong> area. You can edit this text.</p>
         <p>
@@ -77,7 +75,6 @@
         </ul>
       </div>
     </div>
-    <!-- Read Aloud Script (Updated) -->
     <script>
       /**
        * Read Aloud Toolbar Features:
@@ -101,8 +98,7 @@
        * 9. Speed Control: Offers predefined rate multipliers (0.5x, 0.75x, 1.0x, 1.25x, 1.5x, 2.0x).
        * 10. Persistent Preferences: Language, voice, and rate settings are saved
        * to localStorage for use across sessions.
-       * 
-       * TODO:
+       * * TODO:
        * - When page reloads, stop reading if it was in progress.
        * - Change loading spinner icon to something better match google material design.
        * - Don't close menus with keyup if they were open.
@@ -329,41 +325,61 @@
                         box-shadow: 0 4px 8px -2px var(--rs-shadow), 0 0 1px 0 var(--rs-shadow);
                         font: 13px/1.1 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
                         backdrop-filter: saturate(120%) blur(6px);
-                        transition: opacity .15s ease, transform .15s ease, width .2s cubic-bezier(0.4, 0, 0.2, 1);
+                        /* MODIFIED: Added border-color to transition */
+                        transition: opacity .15s ease, transform .15s ease, width .2s cubic-bezier(0.4, 0, 0.2, 1), border-color .15s ease;
                         overflow: hidden; /* Needed for width animation */
                         white-space: nowrap; /* Prevent wrapping during animation */
                         box-sizing: border-box; /* Ensure padding is included in width */
                       }
 
-                      /* NEW: Resize Handle */
+                      /* MODIFIED: Resize Handle */
                       #${IDS.resizeHandle} {
                         position: absolute;
-                        top: 0;
+                        top: 50%;
                         right: 0;
-                        bottom: 0;
-                        width: 16px;
-                        cursor: ew-resize;
-                        z-index: 10;
+                        transform: translateY(-50%);
+                        width: 16px; /* This is the hover/drag target area */
+                        height: 30px; /* Make it a bit shorter than toolbar */
                         display: flex;
                         align-items: center;
                         justify-content: center;
+                        cursor: ew-resize;
+                        z-index: 10;
+                        color: var(--rs-on-surface-variant);
+                        font-size: 16px;
+                        line-height: 1;
+                        opacity: 0; /* Hidden by default */
+                        transition: all 0.2s ease;
+                        border-radius: 4px;
+                        user-select: none;
                       }
+                      
+                      /* Add the grip content */
                       #${IDS.resizeHandle}::before {
-                        content: '';
-                        display: block;
-                        width: 2px;
-                        height: 16px;
-                        border-radius: 1px;
-                        background: var(--rs-outline);
-                        opacity: 0;
-                        transition: opacity .15s ease;
+                        content: '⋮';
                       }
-                      #${IDS.toolbar}:hover #${IDS.resizeHandle}::before {
-                        opacity: 1;
+
+                      /* Show handle on toolbar hover */
+                      #${IDS.toolbar}:hover #${IDS.resizeHandle} {
+                        opacity: 0.6;
                       }
-                      #${IDS.toolbar}[data-resizing="true"] #${IDS.resizeHandle}::before {
-                        background: var(--rs-primary);
+                      
+                      #${IDS.resizeHandle}:hover {
+                         opacity: 1 !important; /* Use important to override parent hover */
+                         background: var(--rs-hover);
+                      }
+
+                      /* UPDATED: Remove border change, add handle background change */
+                      /*
+                      #${IDS.toolbar}[data-resizing="true"] {
+                        border-right-color: var(--rs-primary); 
+                      }
+                      */
+
+                      #${IDS.toolbar}[data-resizing="true"] #${IDS.resizeHandle} {
                         opacity: 1;
+                        /* Darker 'active' state, consistent with button active state */
+                        background: color-mix(in srgb, var(--rs-hover) 80%, var(--rs-scrim));
                       }
 
 
@@ -1307,15 +1323,8 @@ outline: 1px solid rgba(40, 150, 220, 0.9);
           return `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>`;
         }
         function svgSpinner() {
-          return `<svg class="rs-spinner-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <line x1="12" y1="2" x2="12" y2="6"></line>
-            <line x1="12" y1="18" x2="12" y2="22"></line>
-            <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
-            <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
-            <line x1="2" y1="12" x2="6" y2="12"></line>
-            <line x1="18" y1="12" x2="22" y2="12"></line>
-            <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
-            <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
+          return `<svg class="rs-spinner-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+            <path d="M12 2 A10 10 0 0 1 22 12 A10 10 0 0 1 12 22 A10 10 0 0 1 2 12"></path>
           </svg>`;
         }
       })();
