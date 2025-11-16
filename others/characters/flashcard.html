@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>بطاقات تعليمية - شخصيات دنماركية</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .header {
+        text-align: center;
+        color: white;
+        margin-bottom: 20px;
+      }
+
+      .header h1 {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+      }
+
+      .shuffle-btn {
+        background: white;
+        color: #667eea;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s;
+      }
+
+      .shuffle-btn:active {
+        transform: scale(0.95);
+      }
+
+      .card-container {
+        width: 100%;
+        max-width: 400px;
+        perspective: 1000px;
+        margin-bottom: 20px;
+      }
+
+      .card {
+        width: 100%;
+        height: 500px;
+        position: relative;
+        transform-style: preserve-3d;
+        transition: transform 0.6s;
+        cursor: pointer;
+      }
+
+      .card.flipped {
+        transform: rotateY(180deg);
+      }
+
+      .card-face {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 30px;
+      }
+
+      .card-front {
+        background: white;
+      }
+
+      .card-back {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        transform: rotateY(180deg);
+        text-align: center;
+        overflow-y: auto;
+      }
+
+      .card-front h2 {
+        font-size: 2rem;
+        color: #333;
+        text-align: center;
+        direction: ltr;
+      }
+
+      .card-back .info {
+        margin: 10px 0;
+        line-height: 1.8;
+      }
+
+      .card-back .info strong {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 1.1rem;
+      }
+
+      .navigation {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+      }
+
+      .nav-btn {
+        background: white;
+        color: #667eea;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 25px;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s;
+      }
+
+      .nav-btn:active {
+        transform: scale(0.95);
+      }
+
+      .counter {
+        color: white;
+        font-size: 1.2rem;
+        margin-top: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card-container">
+      <div class="card" onclick="flipCard()">
+        <div class="card-face card-front">
+          <h2 id="characterName"></h2>
+        </div>
+        <div class="card-face card-back">
+          <div id="characterInfo"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="navigation">
+      <button class="nav-btn" onclick="previousCard()">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="feather feather-arrow-right"
+        >
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </button>
+      <button class="nav-btn" onclick="nextCard()">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="feather feather-arrow-left"
+        >
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+      </button>
+    </div>
+
+    <div class="counter" id="counter"></div>
+
+    <script>
+      const characters = [
+        {
+          name: "Freja og Thor",
+          type: "🏛️ Mytologisk",
+          date: "(Vikingetiden)",
+          keywords: "Guder i vikingetidens religion 'asatroen'\nآلهة في الديانة الوثنية الإسكنافية \"أساترو\""
+        },
+        {
+          name: "Harald Blåtand",
+          type: "👑 Kongelig",
+          date: "(~965)",
+          keywords: "Gjorde danerne kristne (Jellingstenene)\nجعل الدنماركيين مسيحيين (أحجار جيلينغ)"
+        },
+        {
+          name: "Svend Tveskæg",
+          type: "👑 Kongelig",
+          date: "(1000-tallet)",
+          keywords: "Erobrede England\nغزا إنجلترا"
+        },
+        {
+          name: "Absalon",
+          type: "✝️ biskop",
+          date: "(~1128-1201)",
+          keywords: "biskop, grundlagde København\nأسقف، أسس كوبنهاغن"
+        },
+        {
+          name: "Saxo Grammaticus",
+          type: "✍️ Forfatter",
+          date: "(~1200)",
+          keywords: 'Skrev Gesta Danorum (Danmarks historie)\nكتب "أعمال الدنماركيين" (تاريخ الدنمارك)'
+        },
+        {
+          name: "Margrete den 1.",
+          type: "👑 Kongelig",
+          date: "(1397)",
+          keywords: "Samlede Danmark, Norge og Sverige i Kalmarunionen\nوحّدت الدنمارك والنرويج والسويد في اتحاد كالمار"
+        },
+        {
+          name: "Tycho Brahe",
+          type: "🔭 Videnskabsmand",
+          date: "(1546-1601)",
+          keywords: "Han var astronom, opdagede Cassiopeia\nكان عالم فلك، اكتشف نجم كاسيوبيا"
+        },
+        {
+          name: "Christian 4.",
+          type: "👑 Kongelig",
+          date: "(1588-1648)",
+          keywords: "Opførelsen af Rundetårn og Rosenborg Slot\nقام ببناء البرج المستدير وقلعة روزنبورغ"
+        },
+        {
+          name: "Ole Rømer",
+          type: "🔭 Videnskabsmand",
+          date: "(1676)",
+          keywords: "Måle lysets hastighed\nقام بقياس سرعة الضوء"
+        },
+        {
+          name: "Vitus Bering",
+          type: "🧭 Opdagelsesrejsende",
+          date: "(1681-1741)",
+          keywords: "Han var opdagelsesrejsende\nكان مستكشفاً"
+        },
+        {
+          name: "Ludvig Holberg",
+          type: "✍️ Forfatter",
+          date: "(1722)",
+          keywords:
+            "Skrev komedien 'Jeppe på Bjerget'\nكتب مسرحية \"يبي فوق الجبل\"\nRepræsentant for Oplysningstiden\nممثل لعصر التنوير"
+        },
+        {
+          name: "J.F. Struensee",
+          type: "🏛️ Politiker",
+          date: "(~1770)",
+          keywords: "Kongens læge, opnåede stor politisk magt\nطبيب الملك، نال سلطة سياسية كبيرة"
+        },
+        {
+          name: "Bertel Thorvaldsen",
+          type: "🎨 Kunstner",
+          date: "(1770-1844)",
+          keywords: "Kendt for sine skulpturer (billedhugger)\nمعروف بمنحوتاته (نحّات)"
+        },
+        {
+          name: "H.C. Ørsted",
+          type: "🔭 Videnskabsmand",
+          date: "(1777-1851)",
+          keywords: "Opdagelsen af elektromagnetismen\nاكتشف الكهرومغناطيسية"
+        },
+        {
+          name: "C.W. Eckersberg",
+          type: "🎨 Kunstner",
+          date: "(1783-1853)",
+          keywords: "Kendt for kunstmaler (Guldalderen)\nمعروف كرسام (العصر الذهبي)"
+        },
+        {
+          name: "N.F.S. Grundtvig",
+          type: "💡 Kulturperson",
+          date: "(1783-1872)",
+          keywords: "folkehøjskoler, salmerne ترانيم"
+        },
+        {
+          name: "August Bournonville",
+          type: "🎨 Kunstner",
+          date: "(1805-1879)",
+          keywords: "Kendt balletkoreograf fra 1800-tallet\nمصمم رقصات باليه معروف من القرن التاسع عشر"
+        },
+        {
+          name: "Søren Kierkegaard",
+          type: "💡 Filosof",
+          date: "(1813-1855)",
+          keywords: "Filosof (levede i 1800-tallet)\nفيلسوف (عاش في القرن التاسع عشر)"
+        },
+        {
+          name: "Adam Oehlenschläger",
+          type: "✍️ Forfatter",
+          date: "(1819)",
+          keywords:
+            "Skrev 'Der er et yndigt land' (Danmarks nationalsang)\nكتب \"هناك بلد جميل\" (النشيد الوطني الدنماركي)"
+        },
+        {
+          name: "Frederik 7.",
+          type: "👑 Kongelig",
+          date: "(1849)",
+          keywords: "Underskrev Danmarks Riges Grundlov\nوقّع على الدستور الدنماركي"
+        },
+        {
+          name: "P.S. Krøyer",
+          type: "🎨 Kunstner",
+          date: "(1851-1909)",
+          keywords: "Kendt kunstmaler (Skagensmalerne)\nرسام معروف (من رسامي سكاغن)"
+        },
+        {
+          name: "Anna Ancher og Michael Ancher",
+          type: "🎨 Kunstnere",
+          date: "(Slut 1800-tallet)",
+          keywords: "Kunstmalere (malede ved Skagen)\nرسامان (رسما في سكاغن)"
+        },
+        {
+          name: "Vilhelm Hammershøi",
+          type: "🎨 Kunstner",
+          date: "(1864-1916)",
+          keywords: "Kendt for kunstmaler\nمعروف كرسام"
+        },
+        {
+          name: "Carl Nielsen",
+          type: "🎨 Komponist",
+          date: "(1865-1931)",
+          keywords: "Kendt komponist (operaer)\nملحن معروف (أوبرات)"
+        },
+        {
+          name: "Martin Andersen Nexø",
+          type: "✍️ Forfatter",
+          date: "(1869-1954)",
+          keywords: "Skrev 'Pelle Erobreren' og 'Ditte Menneskebarn'\nكتب \"بيله الفاتح\" و \"ديتي طفلة إنسان\""
+        },
+        {
+          name: "Knud Rasmussen",
+          type: "🧭 Opdagelsesrejsende",
+          date: "(1879-1933)",
+          keywords: "Kendt polarforsker\nمستكشف قطبي معروف"
+        },
+        {
+          name: "Karen Blixen",
+          type: "✍️ Forfatter",
+          date: "(1885-1962)",
+          keywords: "Kendt forfatter (skrev 'Den Afrikanske Farm')\nكاتبة معروفة (كتبت \"المزرعة الأفريقية\")"
+        },
+        {
+          name: "Henrik Pontoppidan",
+          type: "✍️ Forfatter",
+          date: "(~1900)",
+          keywords: "Skrev romanen 'Lykke-Per'\nكتب رواية \"بير المحظوظ\""
+        },
+        {
+          name: "Arne Jacobsen",
+          type: "🎨 Arkitekt",
+          date: "(1902-1971)",
+          keywords: "Kendt arkitekt (Danmarks Nationalbank)\nمهندس معماري معروف (بنك الدنمارك الوطني)"
+        },
+        {
+          name: "Lise Nørgaard",
+          type: "✍️ Forfatter",
+          date: "(1917-2023)",
+          keywords: 'Forfatter til tv-serien Matador\nمؤلفة مسلسل "ماتادور"'
+        },
+        {
+          name: "Emma Gad",
+          type: "✍️ Forfatter",
+          date: "(1918)",
+          keywords: "Kendt for 'Takt og Tone – Hvordan Vi Omgås'\nمعروفة بكتاب \"آداب السلوك\""
+        },
+        {
+          name: "Jørn Utzon",
+          type: "🎨 Arkitekt",
+          date: "(1918-2008)",
+          keywords: "Kendt arkitekt (tegnede operahuset i Sydney)\nمهندس معماري معروف (صمم دار الأوبرا في سيدني)"
+        },
+        {
+          name: "Gabriel Axel",
+          type: "🎬 Instruktør",
+          date: "(1918-2014)",
+          keywords: "Vandt en Oscar i 1988 ('Babettes gæstebud')\nفاز بجائزة الأوسكار عام 1988 (عن \"عيد بابيت\")"
+        },
+        {
+          name: "Niels Bohr",
+          type: "🔭 Videnskabsmand",
+          date: "(1922)",
+          keywords:
+            "Fik Nobelprisen i fysik (model over atomers opbygning)\nحصل على جائزة نوبل في الفيزياء (نموذج لتركيب الذرات)"
+        },
+        {
+          name: "Anker Jørgensen",
+          type: "🏛️ Politiker",
+          date: "(1922-2016)",
+          keywords: "Tidligere dansk statsminister (døde i marts 2016)\nرئيس وزراء دنماركي سابق (توفي في مارس 2016)"
+        },
+        {
+          name: "Nina Bang",
+          type: "🏛️ Politiker",
+          date: "(1924)",
+          keywords: "Danmarks første kvindelige minister\nأول وزيرة في الدنمارك"
+        },
+        {
+          name: "Thorvald Stauning",
+          type: "🏛️ Politiker",
+          date: "(1924 / 1930'erne)",
+          keywords: "Danmarks første socialdemokratiske statsminister\nأول رئيس وزراء اشتراكي ديمقراطي للدنمارك"
+        },
+        {
+          name: "Erik Balling",
+          type: "🎬 Instruktør",
+          date: "(1924-2005)",
+          keywords: "Instruktør (Olsenbanden og Matador)\nمخرج (أولسن باندن وماتادور)"
+        },
+        {
+          name: "Inger Christensen",
+          type: "✍️ Forfatter",
+          date: "(1935-2009)",
+          keywords: "Særlig kendt for at være digter\nمعروفة بشكل خاص كشاعرة"
+        },
+        {
+          name: "Ulf Pilgaard",
+          type: "🎭 Skuespiller",
+          date: "(1940-2024)",
+          keywords: "Skuespiller og komiker, døde i oktober 2024\nممثل وكوميدي، توفي في أكتوبر 2024"
+        },
+        {
+          name: "Tove Ditlevsen",
+          type: "✍️ Forfatter",
+          date: "(1943)",
+          keywords: "Skrev romanen 'Barndommens Gade'\nكتبت رواية \"شارع الطفولة\""
+        },
+        {
+          name: "Johannes V. Jensen",
+          type: "✍️ Forfatter",
+          date: "(1944)",
+          keywords:
+            "Fik Nobelprisen i litteratur (skrev 'Kongens Fald')\nحصل على جائزة نوبل في الأدب (كتب \"سقوط الملك\")"
+        },
+        { name: "Suzanne Brøgger", type: "✍️ Forfatter", date: "(f. 1944)", keywords: "Kendt forfatter\nكاتبة معروفة" },
+        {
+          name: "Kim Larsen",
+          type: "🎤 Musiker",
+          date: "(1945-2018)",
+          keywords:
+            "Forsangeren i bandet Gasolin (døde i september 2018)\nالمغني الرئيسي في فرقة جازولين (توفي في سبتمبر 2018)"
+        },
+        {
+          name: "Bille August",
+          type: "🎬 Instruktør",
+          date: "(f. 1948)",
+          keywords: "Vandt en Oscar for 'Pelle Erobreren'\nفاز بجائزة الأوسكار عن فيلم \"بيله الفاتح\""
+        },
+        {
+          name: "Asger Jorn",
+          type: "🎨 Kunstner",
+          date: "(1948-1951)",
+          keywords: "Kendt billedkunstner (Cobra-gruppen)\nفنان تشكيلي معروف (مجموعة كوبرا)"
+        },
+        {
+          name: "Klaus Rifbjerg",
+          type: "✍️ Forfatter",
+          date: "(1950'erne)",
+          keywords: "Skrev romanen 'Den kroniske uskyld'\nكتب رواية \"البراءة المزمنة\""
+        },
+        {
+          name: "Lars von Trier",
+          type: "🎬 Instruktør",
+          date: "(f. 1956)",
+          keywords: "Instruktør ('Idioterne' og 'Dancer in the Dark')\nمخرج (\"الأغبياء\" و \"راقصة في الظلام\")"
+        },
+        {
+          name: "Susanne Bier",
+          type: "🎬 Instruktør",
+          date: "(f. 1960)",
+          keywords:
+            "Kendt filminstruktør (vandt Oscar for 'Hævnen')\nمخرجة أفلام معروفة (فازت بأوسكار عن \"في عالم أفضل\")"
+        },
+        { name: "Naja Marie Aidt", type: "✍️ Forfatter", date: "(f. 1963)", keywords: "Kendt forfatter\nكاتبة معروفة" },
+        { name: "Olafur Eliasson", type: "🎨 Kunstner", date: "1967", keywords: "ARoS rainbow" },
+        {
+          name: "Søren Pape Poulsen",
+          type: "🏛️ Politiker",
+          date: "(1971-2024)",
+          keywords: "Formand for Det Konservative Folkeparti (død marts 2024)\nرئيس حزب الشعب المحافظ (توفي مارس 2024)"
+        },
+        {
+          name: "Margrethe den 2.",
+          type: "👑 Kongelig",
+          date: "(1972)",
+          keywords: "Blev dronning af Danmark i 1972\nأصبحت ملكة الدنمارك عام 1972"
+        },
+        {
+          name: "Poul Schlüter",
+          type: "🏛️ Politiker",
+          date: "(1982-1993)",
+          keywords: "Statsminister (Det Konservative Folkeparti)\nرئيس وزراء (حزب الشعب المحافظ)"
+        },
+        {
+          name: "Poul Nyrup Rasmussen",
+          type: "🏛️ Politiker",
+          date: "(1993-2001)",
+          keywords: "Statsminister (Socialdemokratiet)\nرئيس وزراء (الحزب الاشتراكي الديمقراطي)"
+        },
+        {
+          name: "Pia Kjærsgaard",
+          type: "🏛️ Politiker",
+          date: "(1995)",
+          keywords:
+            "Med til at stifte Dansk Folkeparti (1995)\nشاركت في تأسيس حزب الشعب الدنماركي (1995)\nMeddelte (sept 2024) at hun ikke genopstiller\nأعلنت (سبتمبر 2024) أنها لن تترشح مرة أخرى"
+        },
+        {
+          name: "Yahya Hassan",
+          type: "✍️ Forfatter",
+          date: "(1995-2020)",
+          keywords: "Særlig kendt for at være digter\nمعروف بشكل خاص كشاعر"
+        },
+        {
+          name: "Anders Fogh Rasmussen",
+          type: "🏛️ Politiker",
+          date: "(2009)",
+          keywords: "Blev generalsekretær for NATO i 2009\nأصبح الأمين العام لحلف الناتو عام 2009"
+        },
+        {
+          name: "Lars Løkke Rasmussen",
+          type: "🏛️ Politiker",
+          date: "(2009-11 / 2015-19)",
+          keywords: "Statsminister (Venstre)\nرئيس وزراء (حزب فينسترا)"
+        },
+        {
+          name: "Helle Thorning-Schmidt",
+          type: "🏛️ Politiker",
+          date: "(2011-2015)",
+          keywords: "Danmarks første kvindelige statsminister\nأول رئيسة وزراء للدنمارك"
+        },
+        {
+          name: "Margrethe Vestager",
+          type: "🏛️ Politiker",
+          date: "(2014-2024)",
+          keywords: "Danmarks EU-kommissær\nمفوضة الدنمارك في الاتحاد الأوروبي"
+        },
+        {
+          name: "Christian Eriksen",
+          type: "⚽ Sportsudøver",
+          date: "(2022)",
+          keywords: "Spillede for landsholdet efter hjertestop\nلعب للمنتخب الوطني بعد توقف قلبي"
+        },
+        {
+          name: "Morten Messerschmidt",
+          type: "🏛️ Politiker",
+          date: "(2022)",
+          keywords: "Ny formand for Dansk Folkeparti (jan 2022)\nرئيس جديد لحزب الشعب الدنماركي (يناير 2022)"
+        },
+        {
+          name: "Inger Støjberg",
+          type: "🏛️ Politiker",
+          date: "(2022)",
+          keywords:
+            "Stiftede partiet Danmarksdemokraterne (juni 2022)\nأسست حزب ديمقراطيي الدنمارك (يونيو 2022)\nDømt i Rigsretten\nأدينت في المحكمة الخاصة (Rigsretten)"
+        },
+        {
+          name: "Jonas Vingegaard",
+          type: "🚴 Sportsudøver",
+          date: "(2022)",
+          keywords: "Vandt Tour de France i 2022\nفاز بسباق فرنسا للدراجات عام 2022"
+        },
+        {
+          name: "Prins Christian",
+          type: "👑 Kongelig",
+          date: "(2023)",
+          keywords: "Fejrede 18 års fødselsdag (okt 2023)\nاحتفل بعيد ميلاده الـ 18 (أكتوبر 2023)"
+        },
+        {
+          name: "Frederik den 10.",
+          type: "👑 Kongelig",
+          date: "(2024)",
+          keywords: "Blev Danmarks nye konge (jan 2024)\nأصبح ملك الدنمارك الجديد (يناير 2024)"
+        },
+        {
+          name: "Dronning Mary",
+          type: "👑 Kongelig",
+          date: "(2024)",
+          keywords: "Kommer oprindeligt fra Australien\nتنحدر في الأصل من أستراليا"
+        },
+        {
+          name: "Mikkel Hansen",
+          type: "🤾 Sportsudøver",
+          date: "(2024)",
+          keywords: "Stopper som professionel håndboldspiller\nيعتزل كلاعب كرة يد محترف"
+        },
+        {
+          name: "Dan Jørgensen",
+          type: "🏛️ Politiker",
+          date: "(2024)",
+          keywords:
+            "Indstillet til Danmarks EU-kommissær (aug 2024)\nتم ترشيحه ليكون مفوض الدنمارك في الاتحاد الأوروبي (أغسطس 2024)"
+        },
+        {
+          name: "Mathias Gidsel",
+          type: "🤾 Sportsudøver",
+          date: "(2025)",
+          keywords:
+            "Valgt til verdens bedste mandlige håndboldspiller (marts 2025)\nاختير كأفضل لاعب كرة يد في العالم (مارس 2025)"
+        },
+        {
+          name: "Prinsesse Isabella",
+          type: "👑 Kongelig",
+          date: "(2025)",
+          keywords: "Fejrede 18 års fødselsdag (april 2025)\nاحتفلت بعيد ميلادها الـ 18 (أبريل 2025)"
+        },
+        {
+          name: "Pia Olsen Dyhr",
+          type: "🏛️ Politiker",
+          date: "(Nutid)",
+          keywords: "Formanden for SF (Socialistisk Folkeparti)\nرئيسة حزب الشعب الاشتراكي (SF)"
+        }
+      ];
+
+      let currentIndex = 0;
+
+      function displayCard() {
+        const card = document.querySelector(".card");
+        card.classList.remove("flipped");
+
+        document.getElementById("characterName").textContent = characters[currentIndex].name;
+        document.getElementById("characterInfo").innerHTML = `
+        <div class="info">${characters[currentIndex].type}</div>
+        <div class="info">${characters[currentIndex].date}</div>
+        <div class="info">${characters[currentIndex].keywords.replace(
+          /\n/g,
+          "<br>"
+        )}</div>
+      `;
+
+        document.getElementById("counter").textContent = `${currentIndex + 1} / ${characters.length}`;
+      }
+
+      function flipCard() {
+        document.querySelector(".card").classList.toggle("flipped");
+      }
+
+      function nextCard() {
+        currentIndex = (currentIndex + 1) % characters.length;
+        displayCard();
+      }
+
+      function previousCard() {
+        currentIndex = (currentIndex - 1 + characters.length) % characters.length;
+        displayCard();
+      }
+
+      function shuffleCards() {
+        for (let i = characters.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [characters[i], characters[j]] = [characters[j], characters[i]];
+        }
+        currentIndex = 0;
+        displayCard();
+      }
+
+      displayCard();
+    </script>
+  </body>
+</html>

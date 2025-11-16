@@ -80,106 +80,103 @@
     </style>
   </head>
   <body>
-    
-    
     <div id="content">
       <div class="era-legend">
-      <div class="era-legend-item">
-        <div class="era-legend-color" style="background: var(--viking-color);"></div>
-        <span>🛡️ عصر الفايكنغ (750-1050)</span>
+        <div class="era-legend-item">
+          <div class="era-legend-color" style="background: var(--viking-color)"></div>
+          <span>🛡️ عصر الفايكنغ (750-1050)</span>
+        </div>
+        <div class="era-legend-item">
+          <div class="era-legend-color" style="background: var(--medieval-color)"></div>
+          <span>🏰 العصور الوسطى (1050-1500)</span>
+        </div>
+        <div class="era-legend-item">
+          <div class="era-legend-color" style="background: var(--reformation-color)"></div>
+          <span>⛪ عصر الإصلاح (1536-1660)</span>
+        </div>
+        <div class="era-legend-item">
+          <div class="era-legend-color" style="background: var(--absolutism-color)"></div>
+          <span>👑 الحكم المطلق (1660-1849)</span>
+        </div>
+        <div class="era-legend-item">
+          <div class="era-legend-color" style="background: var(--democracy-color)"></div>
+          <span>🗳️ الديمقراطية والتصنيع (1849-1914)</span>
+        </div>
+        <div class="era-legend-item">
+          <div class="era-legend-color" style="background: var(--wartime-color)"></div>
+          <span>⚔️ الحروب وإعادة البناء (1914-1945)</span>
+        </div>
+        <div class="era-legend-item">
+          <div class="era-legend-color" style="background: var(--welfare-color)"></div>
+          <span>🏛️ دولة الرفاه (1945-اليوم)</span>
+        </div>
       </div>
-      <div class="era-legend-item">
-        <div class="era-legend-color" style="background: var(--medieval-color);"></div>
-        <span>🏰 العصور الوسطى (1050-1500)</span>
-      </div>
-      <div class="era-legend-item">
-        <div class="era-legend-color" style="background: var(--reformation-color);"></div>
-        <span>⛪ عصر الإصلاح (1536-1660)</span>
-      </div>
-      <div class="era-legend-item">
-        <div class="era-legend-color" style="background: var(--absolutism-color);"></div>
-        <span>👑 الحكم المطلق (1660-1849)</span>
-      </div>
-      <div class="era-legend-item">
-        <div class="era-legend-color" style="background: var(--democracy-color);"></div>
-        <span>🗳️ الديمقراطية والتصنيع (1849-1914)</span>
-      </div>
-      <div class="era-legend-item">
-        <div class="era-legend-color" style="background: var(--wartime-color);"></div>
-        <span>⚔️ الحروب وإعادة البناء (1914-1945)</span>
-      </div>
-      <div class="era-legend-item">
-        <div class="era-legend-color" style="background: var(--welfare-color);"></div>
-        <span>🏛️ دولة الرفاه (1945-اليوم)</span>
-      </div>
-    </div>
-
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script type="module">
       const text = await fetch("./characters.md").then(response => response.text());
       const html = marked.parse(text);
-      
+
       // Function to determine era based on character's time period
       function getEraClass(timeText) {
         const text = timeText.toLowerCase();
-        
+
         // Extract years from text for better matching
         const yearMatches = text.match(/(\d{3,4})/g);
         const years = yearMatches ? yearMatches.map(y => parseInt(y)) : [];
-        
+
         // Check for explicit era keywords first
-        if (text.includes('vikingetiden') || text.includes('viking')) {
-          return 'era-viking';
+        if (text.includes("vikingetiden") || text.includes("viking")) {
+          return "era-viking";
         }
-        if (text.includes('middelalderen')) {
-          return 'era-medieval';
+        if (text.includes("middelalderen")) {
+          return "era-medieval";
         }
-        if (text.includes('guldalderen')) {
-          return 'era-absolutism';
+        if (text.includes("guldalderen")) {
+          return "era-absolutism";
         }
-        
+
         // Then check by year ranges - use the earliest year found
         if (years.length > 0) {
           const earliestYear = Math.min(...years);
-          
+
           if (earliestYear >= 750 && earliestYear <= 1050) {
-            return 'era-viking';
+            return "era-viking";
           }
           if (earliestYear >= 1051 && earliestYear <= 1500) {
-            return 'era-medieval';
+            return "era-medieval";
           }
           if (earliestYear >= 1536 && earliestYear <= 1660) {
-            return 'era-reformation';
+            return "era-reformation";
           }
           if (earliestYear >= 1661 && earliestYear <= 1849) {
-            return 'era-absolutism';
+            return "era-absolutism";
           }
           if (earliestYear >= 1850 && earliestYear <= 1914) {
-            return 'era-democracy';
+            return "era-democracy";
           }
           if (earliestYear >= 1915 && earliestYear <= 1945) {
-            return 'era-wartime';
+            return "era-wartime";
           }
           if (earliestYear >= 1946) {
-            return 'era-welfare';
+            return "era-welfare";
           }
         }
-        
+
         // Default fallback
-        return 'era-welfare';
+        return "era-welfare";
       }
-      
+
       // Parse the HTML and add era classes to table rows
-      const tempDiv = document.createElement('div');
+      const tempDiv = document.createElement("div");
       tempDiv.innerHTML = html;
-      
-      const table = tempDiv.querySelector('table');
+
+      const table = tempDiv.querySelector("table");
       if (table) {
-        const rows = table.querySelectorAll('tbody tr');
+        const rows = table.querySelectorAll("tbody tr");
         rows.forEach(row => {
-          const cells = row.querySelectorAll('td');
+          const cells = row.querySelectorAll("td");
           if (cells.length >= 2) {
             // The date is in the second column (index 1)
             const dateCell = cells[1];
@@ -189,8 +186,9 @@
           }
         });
       }
-      
-      document.getElementById("content").innerHTML += tempDiv.innerHTML;
+
+      document.getElementById("content").innerHTML +=
+        tempDiv.innerHTML + `<br /><a href='./flashcard.html'>Flashcards</a>`;
     </script>
   </body>
 </html>
