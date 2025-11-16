@@ -1932,7 +1932,7 @@ export const lastYearsQuestions = {
     },
     {
       question: "I hvilket årti åbnede Danmarks første jernbanestrækning?",
-      answers: ["1840Z'erne", "1780'erne", "1910'erne"],
+      answers: ["1840'erne", "1780'erne", "1910'erne"],
       correctIndex: 0
     },
     {
