@@ -15,7 +15,7 @@
 | 🎨 Kunstner | (1770-1844) | Bertel Thorvaldsen | `Kendt for sine skulpturer (billedhugger)`<br>معروف بمنحوتاته (نحّات) |
 | 🔭 Videnskabsmand | (1777-1851) | H.C. Ørsted | `Opdagelsen af elektromagnetismen`<br>اكتشف الكهرومغناطيسية |
 | 🎨 Kunstner | (1783-1853) | C.W. Eckersberg | `Kendt for kunstmaler (Guldalderen)`<br>معروف كرسام (العصر الذهبي) |
-| 💡 Kulturperson | (1783-1872) | N.F.S. Grundtvig | `Inspiration til oprettelsen af folkehøjskoler`<br>ألهم إنشاء المدارس الثانوية الشعبية |
+| 💡 Kulturperson | (1783-1872) | N.F.S. Grundtvig | folkehøjskoler, salmerne ترانيم |
 | 🎨 Kunstner | (1805-1879) | August Bournonville | `Kendt balletkoreograf fra 1800-tallet`<br>مصمم رقصات باليه معروف من القرن التاسع عشر |
 | 💡 Filosof | (1813-1855) | Søren Kierkegaard | `Filosof (levede i 1800-tallet)`<br>فيلسوف (عاش في القرن التاسع عشر) |
 | ✍️ Forfatter | (1819) | Adam Oehlenschläger | `Skrev 'Der er et yndigt land' (Danmarks nationalsang)`<br>كتب "هناك بلد جميل" (النشيد الوطني الدنماركي) |
