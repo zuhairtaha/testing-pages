@@ -1135,6 +1135,8 @@ function onSelectionUpdate() {
 function onDocClick(e) {
   if (isReading || isResizing) return;
   const t = e.target;
+  if (!(t instanceof Element)) return;
+
   if (
     t.closest(`#${IDS.toolbar}`) ||
     t.closest(`.${IDS.langMenu}`) ||
