@@ -122,18 +122,7 @@
             return (
                 <div className="min-h-screen bg-slate-50 text-slate-800 font-sans p-4 md:p-8 flex flex-col items-center" dir="rtl">
                 
-                {/* Header */}
-                <header className="max-w-3xl w-full mb-6 text-center">
-                    <h1 className="text-3xl font-bold text-red-700 mb-2 flex items-center justify-center gap-2">
-                    <MapIcon />
-                    خريطة الدنمارك التاريخية
-                    </h1>
-                    <p className="text-slate-600 text-lg">
-                    تخيل التغيرات الإقليمية استعداداً لاختبار الجنسية (Indfødsretsprøve).
-                    </p>
-                </header>
-
-                <div className="bg-white rounded-xl shadow-xl p-4 max-w-6xl w-full grid md:grid-cols-2 gap-8 border border-slate-200">
+                <div className="bg-white rounded-xl shadow-xl p-4 max-w-7xl w-full grid md:grid-cols-2 gap-8 border border-slate-200">
                     
                     {/* Left Column (Visual): The Map */}
                     <div className="relative w-full aspect-[3/4] bg-blue-50 rounded-lg overflow-hidden border-2 border-blue-100 md:order-last">
