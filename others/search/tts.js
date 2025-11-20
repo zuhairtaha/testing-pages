@@ -1,5 +1,10 @@
+/** @type {number} */
 const Z = 2147483647;
+
+/** @type {SpeechSynthesis} */
 const synth = window.speechSynthesis;
+
+/** @type {Object.<string, string>} */
 const IDS = {
   style: "__rs_styles",
   layer: "rs-highlight-layer",
@@ -14,32 +19,72 @@ const IDS = {
   voiceMenu: "rs-voice-menu",
   rateMenu: "rs-rate-menu"
 };
+
+/** @type {{lang: string, voiceURI: string, rate: number}} */
 const pref = {
   lang:
     localStorage.getItem("RS_LANG") || (navigator.languages && navigator.languages[0]) || navigator.language || "en-US",
   voiceURI: localStorage.getItem("RS_VOICE_URI") || "",
   rate: parseFloat(localStorage.getItem("RS_RATE") || "1.0")
 };
+
+/** @type {string} */
 const WIDTH_KEY = "RS_TOOLBAR_WIDTH";
+
+/** @type {string} */
 const VOICE_MAP_KEY = "RS_VOICE_BY_LANG";
+
+/** @type {Range|null} */
 let baseRange = null;
+
+/** @type {string} */
 let lastText = "";
+
+/** @type {{start: number, length: number}|null} */
 let lastSlice = null;
+
+/** @type {SpeechSynthesisUtterance|null} */
 let utter = null;
+
+/** @type {SpeechSynthesisVoice[]} */
 let voicesCache = [];
+
+/** @type {number} */
 let lastAnimatedTokenStart = -1;
-let isReading = !1;
-let allowToolbar = !0;
-let isResizing = !1;
+
+/** @type {boolean} */
+let isReading = false;
+
+/** @type {boolean} */
+let allowToolbar = true;
+
+/** @type {boolean} */
+let isResizing = false;
+
+/** @type {number[]} */
 let snapWidths = [];
+
+/** @type {number} */
 let minToolbarWidth = 0;
+
+/** @type {number} */
 let maxToolbarWidth = 0;
 
 injectStyles();
+
+/** @type {HTMLElement} */
 const toolbar = ensureToolbar();
+
+/** @type {HTMLElement} */
 const layer = ensureLayer();
+
+/** @type {HTMLElement} */
 const langMenu = ensureMenu(IDS.langMenu);
+
+/** @type {HTMLElement} */
 const voiceMenu = ensureMenu(IDS.voiceMenu);
+
+/** @type {HTMLElement} */
 const rateMenu = ensureMenu(IDS.rateMenu);
 
 // Calculate snap widths once buttons are in the DOM
@@ -79,12 +124,12 @@ document.addEventListener("pointerdown", e => {
   hide(voiceMenu);
   hide(rateMenu);
   if (!isReading) {
-    allowToolbar = !1;
+    allowToolbar = false;
   }
 });
 document.addEventListener("pointerup", () => {
   if (!isReading && !isResizing) {
-    allowToolbar = !0;
+    allowToolbar = true;
   }
   if (!isResizing) {
     onSelectionUpdate();
@@ -93,8 +138,8 @@ document.addEventListener("pointerup", () => {
 document.addEventListener("mouseup", onSelectionUpdate);
 document.addEventListener("keyup", onSelectionUpdate);
 document.addEventListener("selectionchange", onSelectionUpdate);
-document.addEventListener("scroll", repaintHighlight, !0);
-document.addEventListener("click", onDocClick, !0);
+document.addEventListener("scroll", repaintHighlight, true);
+document.addEventListener("click", onDocClick, true);
 
 // Init Resize Handle
 initResize();
@@ -136,17 +181,23 @@ byId(IDS.rateBtn)?.addEventListener("click", e => {
   toggleMenu(rateMenu, byId(IDS.rateBtn));
 });
 
+/**
+ * @returns {void}
+ */
 window.removeReadSelectedTools = function removeReadSelectedTools() {
   document.removeEventListener("mouseup", onSelectionUpdate);
   document.removeEventListener("keyup", onSelectionUpdate);
   document.removeEventListener("selectionchange", onSelectionUpdate);
-  document.removeEventListener("scroll", repaintHighlight, !0);
-  document.removeEventListener("click", onDocClick, !0);
+  document.removeEventListener("scroll", repaintHighlight, true);
+  document.removeEventListener("click", onDocClick, true);
   document.body.classList.remove("rs-reading");
   [IDS.toolbar, IDS.layer, IDS.style, IDS.langMenu, IDS.voiceMenu, IDS.rateMenu].forEach(id => byId(id)?.remove());
   synth && synth.cancel();
 };
 
+/**
+ * @returns {void}
+ */
 function injectStyles() {
   if (byId(IDS.style)) return;
   const s = document.createElement("style");
@@ -414,6 +465,9 @@ outline: 1px solid rgba(40, 150, 220, 0.9);
   document.head.appendChild(s);
 }
 
+/**
+ * @returns {HTMLElement}
+ */
 function ensureToolbar() {
   let el = byId(IDS.toolbar);
   if (el) return el;
@@ -444,6 +498,10 @@ function ensureToolbar() {
   return el;
 }
 
+/**
+ * @param {string} id
+ * @returns {HTMLElement}
+ */
 function ensureMenu(id) {
   let el = byId(id);
   if (el) return el;
@@ -454,6 +512,9 @@ function ensureMenu(id) {
   return el;
 }
 
+/**
+ * @returns {HTMLElement}
+ */
 function ensureLayer() {
   let el = byId(IDS.layer);
   if (el) return el;
@@ -463,6 +524,12 @@ function ensureLayer() {
   return el;
 }
 
+/**
+ * @param {string} iconSvg
+ * @param {string} title
+ * @param {string} cls
+ * @returns {HTMLButtonElement}
+ */
 function iconButton(iconSvg, title, cls) {
   const b = document.createElement("button");
   b.className = cls;
@@ -471,6 +538,11 @@ function iconButton(iconSvg, title, cls) {
   return b;
 }
 
+/**
+ * @param {HTMLElement} menu
+ * @param {HTMLElement} button
+ * @returns {void}
+ */
 function toggleMenu(menu, button) {
   if (!menu || !button) return;
   if (menu.style.display === "block") {
@@ -491,16 +563,25 @@ function toggleMenu(menu, button) {
   }
 }
 
+/**
+ * @param {string} id
+ * @returns {HTMLElement|null}
+ */
 function byId(id) {
   return document.getElementById(id);
 }
 
+/**
+ * @param {HTMLElement} el
+ * @returns {void}
+ */
 function hide(el) {
   if (el) el.style.display = "none";
 }
 
-// **FIX 1: Updated logic to correctly calculate snap widths**
-
+/**
+ * @returns {void}
+ */
 function calculateSnapWidths() {
   const tb = byId(IDS.toolbar);
   if (!tb) return;
@@ -551,8 +632,9 @@ function calculateSnapWidths() {
   tb.style.width = ""; // Clear inline width
 }
 
-// Resize logic
-
+/**
+ * @returns {void}
+ */
 function initResize() {
   const handle = byId(IDS.resizeHandle);
   const toolbar = byId(IDS.toolbar);
@@ -561,6 +643,10 @@ function initResize() {
   let startX = 0;
   let startWidth = 0;
 
+  /**
+   * @param {PointerEvent} e
+   * @returns {void}
+   */
   const onPointerDown = e => {
     e.preventDefault();
     e.stopPropagation();
@@ -575,6 +661,10 @@ function initResize() {
     handle.setPointerCapture(e.pointerId);
   };
 
+  /**
+   * @param {PointerEvent} e
+   * @returns {void}
+   */
   const onPointerMove = e => {
     if (!isResizing) return;
     const dx = e.clientX - startX;
@@ -584,6 +674,10 @@ function initResize() {
     toolbar.style.width = `${newWidth}px`;
   };
 
+  /**
+   * @param {PointerEvent} e
+   * @returns {void}
+   */
   const onPointerUp = e => {
     if (!isResizing) return;
     isResizing = false;
@@ -618,8 +712,9 @@ function initResize() {
   handle.addEventListener("pointerdown", onPointerDown);
 }
 
-// Fix 3: Logic added to populateLangs and voice/rate is correct.
-
+/**
+ * @returns {void}
+ */
 function populateLangs() {
   const langSet = new Set();
   (voicesCache || []).forEach(v => langSet.add(v.lang));
@@ -680,7 +775,7 @@ function populateLangs() {
 
       ensureVoiceForCurrentLang();
       populateVoices();
-      updateLangBadge(); // Fix 2: Update badge here
+      updateLangBadge();
       hide(menu);
     };
 
@@ -693,11 +788,12 @@ function populateLangs() {
     });
     menu.appendChild(item);
   }
-  updateLangBadge(); // Fix 2: Update badge on initial load/re-render
+  updateLangBadge();
 }
 
-// Fix 2: Update language badge
-
+/**
+ * @returns {void}
+ */
 function updateLangBadge() {
   const badge = byId(IDS.langBadge);
   if (!badge) return;
@@ -710,6 +806,9 @@ function updateLangBadge() {
   }
 }
 
+/**
+ * @returns {void}
+ */
 function ensureVoiceForCurrentLang() {
   const map = getVoiceMap();
   const saved = map[pref.lang];
@@ -724,6 +823,10 @@ function ensureVoiceForCurrentLang() {
   }
 }
 
+/**
+ * @param {string} code
+ * @returns {string}
+ */
 function langDisplayName(code) {
   try {
     // Get the primary language code (e.g., "en" from "en-US")
@@ -766,10 +869,17 @@ function langDisplayName(code) {
   }
 }
 
+/**
+ * @returns {boolean}
+ */
 function hasIntlDisplayNames() {
   return typeof Intl !== "undefined" && typeof Intl.DisplayNames === "function";
 }
 
+/**
+ * @param {string} lang
+ * @returns {string}
+ */
 function fallbackLangName(lang) {
   const map = {
     en: "English",
@@ -788,10 +898,17 @@ function fallbackLangName(lang) {
   return map[lang?.toLowerCase()] || lang || "Unknown";
 }
 
+/**
+ * @param {string} s
+ * @returns {string}
+ */
 function capitalize(s) {
   return (s || "").slice(0, 1).toUpperCase() + (s || "").slice(1);
 }
 
+/**
+ * @returns {void}
+ */
 function populateVoices() {
   const filtered = (voicesCache || [])
     .filter(v => !pref.lang || (v.lang && v.lang.toLowerCase().startsWith(pref.lang.toLowerCase())))
@@ -812,7 +929,7 @@ function populateVoices() {
     pref.voiceURI = "";
     localStorage.setItem("RS_VOICE_URI", pref.voiceURI);
   } else {
-    let currentVoiceInList = !1;
+    let currentVoiceInList = false;
     filtered.forEach(v => {
       const item = document.createElement("div");
       item.className = "rs-menu-item";
@@ -825,7 +942,7 @@ function populateVoices() {
       // Fix 3: Ensure initial selection is correct
       if (v.voiceURI === pref.voiceURI) {
         item.dataset.selected = "true";
-        currentVoiceInList = !0;
+        currentVoiceInList = true;
       }
 
       const onItemClick = () => {
@@ -867,6 +984,9 @@ function populateVoices() {
   }
 }
 
+/**
+ * @returns {Object.<string, string>}
+ */
 function getVoiceMap() {
   try {
     return JSON.parse(localStorage.getItem(VOICE_MAP_KEY) || "{}") || {};
@@ -875,12 +995,19 @@ function getVoiceMap() {
   }
 }
 
+/**
+ * @param {Object.<string, string>} obj
+ * @returns {void}
+ */
 function setVoiceMap(obj) {
   try {
     localStorage.setItem(VOICE_MAP_KEY, JSON.stringify(obj));
   } catch {}
 }
 
+/**
+ * @returns {void}
+ */
 function onSelectionUpdate() {
   if (isReading || !allowToolbar || isResizing) return;
   hide(langMenu);
@@ -916,6 +1043,10 @@ function onSelectionUpdate() {
   });
 }
 
+/**
+ * @param {MouseEvent} e
+ * @returns {void}
+ */
 function onDocClick(e) {
   if (isReading || isResizing) return;
   const t = e.target;
@@ -935,6 +1066,9 @@ function onDocClick(e) {
   }
 }
 
+/**
+ * @returns {{text: string, rect: DOMRect, range: Range}|null}
+ */
 function getSelectionInfo() {
   const sel = window.getSelection();
   if (!sel || sel.isCollapsed) return null;
@@ -953,7 +1087,22 @@ function getSelectionInfo() {
   }
 }
 
+/**
+ * @param {Range} range
+ * @returns {Array<{node: Node, start: number, end: number, len: number}>}
+ */
 function textNodesInRange(range) {
+  if (range.commonAncestorContainer.nodeType === Node.TEXT_NODE) {
+    return [
+      {
+        node: range.commonAncestorContainer,
+        start: range.startOffset,
+        end: range.endOffset,
+        len: range.endOffset - range.startOffset
+      }
+    ];
+  }
+
   const nodes = [];
   const tw = document.createTreeWalker(range.commonAncestorContainer, NodeFilter.SHOW_TEXT, {
     acceptNode: n => {
@@ -977,6 +1126,10 @@ function textNodesInRange(range) {
   return nodes;
 }
 
+/**
+ * @param {Range} base
+ * @returns {{map: Array<{node: Node, start: number, end: number, len: number, accStart: number}>, total: number, text: string}}
+ */
 function buildSliceMap(base) {
   const parts = textNodesInRange(base);
   const map = [];
@@ -996,6 +1149,12 @@ function buildSliceMap(base) {
   return { map, total, text };
 }
 
+/**
+ * @param {Range} base
+ * @param {number} sliceStart
+ * @param {number} sliceLen
+ * @returns {Range|null}
+ */
 function makeSubRangeFromSlice(base, sliceStart, sliceLen) {
   const { map, total } = buildSliceMap(base);
   const clampedStart = Math.max(0, Math.min(sliceStart, total));
@@ -1017,12 +1176,20 @@ function makeSubRangeFromSlice(base, sliceStart, sliceLen) {
   return sub;
 }
 
+/**
+ * @returns {void}
+ */
 function repaintHighlight() {
   if (!baseRange || !lastSlice) return;
   const sub = makeSubRangeFromSlice(baseRange, lastSlice.start, lastSlice.length);
-  if (sub) drawRange(sub, !1);
+  if (sub) drawRange(sub, false);
 }
 
+/**
+ * @param {Range} r
+ * @param {boolean} animate
+ * @returns {void}
+ */
 function drawRange(r, animate) {
   const host = byId(IDS.layer);
   if (!host) return;
@@ -1043,6 +1210,11 @@ function drawRange(r, animate) {
   });
 }
 
+/**
+ * @param {string} text
+ * @param {number} index
+ * @returns {{start: number, length: number}}
+ */
 function getTokenAt(text, index) {
   if (!text) return { start: 0, length: 0 };
   let s = index,
@@ -1052,6 +1224,9 @@ function getTokenAt(text, index) {
   return { start: s, length: Math.max(0, e - s) };
 }
 
+/**
+ * @returns {void}
+ */
 function onReadClicked() {
   if (isReading || toolbar.dataset.reading === "loading") {
     synth.cancel();
@@ -1059,13 +1234,14 @@ function onReadClicked() {
   }
   const info = getSelectionInfo();
   if (!info) return;
-  if (!synth) {
-    return;
-  }
+  if (!synth) return;
+
+  console.log("reading", info);
+
   hide(langMenu);
   hide(voiceMenu);
   hide(rateMenu);
-  allowToolbar = !1;
+  allowToolbar = false;
   synth.cancel();
   byId(IDS.layer)?.replaceChildren();
   document.body.classList.add("rs-reading");
@@ -1087,7 +1263,7 @@ function onReadClicked() {
   if (chosenVoice) utter.voice = chosenVoice;
 
   utter.onstart = () => {
-    isReading = !0;
+    isReading = true;
     toolbar.dataset.reading = "true";
   };
 
@@ -1096,9 +1272,9 @@ function onReadClicked() {
     lastSlice = null;
     byId(IDS.layer)?.replaceChildren();
     document.body.classList.remove("rs-reading");
-    isReading = !1;
+    isReading = false;
     toolbar.dataset.reading = "false";
-    allowToolbar = !0;
+    allowToolbar = true;
     onSelectionUpdate();
   };
 
@@ -1115,9 +1291,13 @@ function onReadClicked() {
     const sub = makeSubRangeFromSlice(baseRange, tok.start, len);
     if (sub) drawRange(sub, isNewToken);
   };
+
   synth.speak(utter);
 }
 
+/**
+ * @returns {void}
+ */
 function populateRates() {
   const rates = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0];
   const menu = byId(IDS.rateMenu);
@@ -1165,30 +1345,51 @@ function populateRates() {
   }
 }
 
+/**
+ * @returns {string}
+ */
 function svgRate() {
   return `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>`;
 }
 
+/**
+ * @returns {string}
+ */
 function svgPlay() {
   return `<svg class="rs-play-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7-11-7z"/></svg>`;
 }
 
+/**
+ * @returns {string}
+ */
 function svgStop() {
   return `<svg class="rs-stop-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 6h12v12H6z"/></svg>`;
 }
 
+/**
+ * @returns {string}
+ */
 function svgLang() {
   return `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v2h11.17c-.7 2.36-1.95 4.5-3.71 6.53l-.03.03-2.54 2.51L1 18.07l2.12 2.12 6.4-6.4 2.54-2.51 6.4 6.4L23 18.07l-3.72-3.72-2.54 2.51zM10 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>`;
 }
 
+/**
+ * @returns {string}
+ */
 function svgVoice() {
   return `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1.2-9.1c0-.66.54-1.2 1.2-1.2s1.2.54 1.2 1.2l-.01 6.2c0 .66-.53 1.2-1.19 1.2s-1.2-.54-1.2-1.2V4.9zm6.5 6.1c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>`;
 }
 
+/**
+ * @returns {string}
+ */
 function svgCheck() {
   return `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>`;
 }
 
+/**
+ * @returns {string}
+ */
 function svgSpinner() {
   return `<svg class="rs-spinner-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
             <path d="M12 2 A10 10 0 0 1 22 12 A10 10 0 0 1 12 22 A10 10 0 0 1 2 12"></path>
