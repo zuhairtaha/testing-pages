@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Content Editable Read Aloud</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        line-height: 1.6;
+        background-color: #f8f9fa; /* Lighter page background */
+        color: #202124;
+        padding: 20px;
+        margin: 0;
+      }
+      .container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 30px;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      }
+      h1 {
+        color: #111;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 10px;
+      }
+      /* Style for the contenteditable div */
+      #editor {
+        border: 1px solid #ddd;
+        padding: 15px;
+        min-height: 200px;
+        border-radius: 8px;
+        background-color: #ffffff;
+        outline: none;
+        transition: box-shadow 0.2s ease;
+      }
+      #editor:focus {
+        border-color: #1a73e8;
+        box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.15);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Read Aloud Editor</h1>
+      <p>Select any text inside the box below to see the "Read" toolbar.</p>
+      <div id="editor" contenteditable="true">
+        <p>This is a <strong>contenteditable</strong> area. You can edit this text.</p>
+        <p>
+          Try selecting a portion of this sentence. The toolbar now appears. Instead of a "..." button, you can now
+          resize the toolbar.
+        </p>
+        <p>
+          Hover over the right edge of the toolbar. A resize handle will appear. Drag it to the right to reveal the
+          Language, Voice, and Speed options. The toolbar will "snap" to show or hide buttons cleanly.
+        </p>
+        <p>
+          The Language list is now written in native language names (e.g., Dansk, العربية). When you open it, press a
+          key like 'E' to jump to "English".
+        </p>
+        <p>A badge on the Language icon (e.g., "EN") shows the currently selected language.</p>
+        <ul>
+          <li>Select this list item.</li>
+          <li>Or this one.</li>
+        </ul>
+      </div>
+    </div>
+    <script>
+      /**
+       * Read Aloud Toolbar Features:
+       *
+       * 1. Core Functionality: Automatically displays a floating, contextual toolbar
+       * when text is selected in a contenteditable area or anywhere in the document.
+       * 2. Read/Stop Control: Allows starting and stopping speech synthesis for the
+       * selected text. Shows a loading spinner while the voice is preparing.
+       * 3. Real-Time Highlighting: Highlights the currently spoken word or phrase
+       * using a transparent overlay that follows the text across line breaks.
+       * 4. Resizable Toolbar: Users can drag a handle on the right edge to resize
+       * the toolbar horizontally.
+       * 5. Snap-to-Width Logic: The toolbar snaps to predefined widths to cleanly
+       * reveal or hide optional controls (Language, Voice, Speed).
+       * 6. Language Selection: A list of available languages (using native names, e.g., 'Español')
+       * from the Web Speech API is provided. Supports quick-jumping by typing keys in the menu.
+       * 7. Language Badge: Displays a two-letter code (e.g., "EN") on the language button
+       * indicating the current setting.
+       * 8. Voice Selection: Allows choosing a specific voice for the selected language.
+       * The preferred voice is saved per language.
+       * 9. Speed Control: Offers predefined rate multipliers (0.5x, 0.75x, 1.0x, 1.25x, 1.5x, 2.0x).
+       * 10. Persistent Preferences: Language, voice, and rate settings are saved
+       * to localStorage for use across sessions.
+       * * TODO:
+       * - When page reloads, stop reading if it was in progress.
+       * - Change loading spinner icon to something better match google material design.
+       * - Don't close menus with keyup if they were open.
+       * - Replace items in reading speed menu with slider for finer control.
+       */
+    </script>
+    <script defer src="./tts.js"></script>
+  </body>
+</html>
