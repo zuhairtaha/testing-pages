@@ -1,13 +1,11 @@
-<!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8" />
     <title>شخصيات</title>
     <link rel="stylesheet" href="../tables.css" />
-    <script defer src="../sortable-table.js"></script>
+    <script defer="" src="../sortable-table.js"></script>
     <link rel="stylesheet" href="../global.css" />
     <style>
-      /* Era styling with distinct colors and left borders */
       :root {
         --viking-color: #4285f4;
         --medieval-color: #34a853;
@@ -17,43 +15,34 @@
         --wartime-color: #ff6d01;
         --welfare-color: #1a73e8;
       }
-
       .era-viking {
         border-left: 6px solid var(--viking-color);
-        background: linear-gradient(90deg, rgba(139, 69, 19, 0.08) 0%, transparent 100%);
+        background: linear-gradient(90deg, rgba(139, 69, 19, 0.08) 0, transparent 100%);
       }
-
       .era-medieval {
         border-left: 6px solid var(--medieval-color);
-        background: linear-gradient(90deg, rgba(74, 85, 104, 0.08) 0%, transparent 100%);
+        background: linear-gradient(90deg, rgba(74, 85, 104, 0.08) 0, transparent 100%);
       }
-
       .era-reformation {
         border-left: 6px solid var(--reformation-color);
-        background: linear-gradient(90deg, rgba(45, 80, 22, 0.08) 0%, transparent 100%);
+        background: linear-gradient(90deg, rgba(45, 80, 22, 0.08) 0, transparent 100%);
       }
-
       .era-absolutism {
         border-left: 6px solid var(--absolutism-color);
-        background: linear-gradient(90deg, rgba(124, 45, 18, 0.08) 0%, transparent 100%);
+        background: linear-gradient(90deg, rgba(124, 45, 18, 0.08) 0, transparent 100%);
       }
-
       .era-democracy {
         border-left: 6px solid var(--democracy-color);
-        background: linear-gradient(90deg, rgba(30, 64, 175, 0.08) 0%, transparent 100%);
+        background: linear-gradient(90deg, rgba(30, 64, 175, 0.08) 0, transparent 100%);
       }
-
       .era-wartime {
         border-left: 6px solid var(--wartime-color);
-        background: linear-gradient(90deg, rgba(153, 27, 27, 0.08) 0%, transparent 100%);
+        background: linear-gradient(90deg, rgba(153, 27, 27, 0.08) 0, transparent 100%);
       }
-
       .era-welfare {
         border-left: 6px solid var(--welfare-color);
-        background: linear-gradient(90deg, rgba(5, 150, 105, 0.08) 0%, transparent 100%);
+        background: linear-gradient(90deg, rgba(5, 150, 105, 0.08) 0, transparent 100%);
       }
-
-      /* Add era legend */
       .era-legend {
         display: flex;
         flex-wrap: wrap;
@@ -65,13 +54,11 @@
         font-size: 0.9em;
         direction: rtl;
       }
-
       .era-legend-item {
         display: flex;
         align-items: center;
         gap: 8px;
       }
-
       .era-legend-color {
         width: 20px;
         height: 4px;
@@ -111,84 +98,679 @@
           <span>🏛️ دولة الرفاه (1945-اليوم)</span>
         </div>
       </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="cursor: pointer">النوع</th>
+            <th style="cursor: pointer">التاريخ</th>
+            <th style="cursor: pointer">الاسم</th>
+            <th style="cursor: pointer">كلمات مفتاحية (دنماركي وعربي)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="era-viking">
+            <td>🏛️ Mytologisk</td>
+            <td>(Vikingetiden)</td>
+            <td>Freja og Thor</td>
+            <td>
+              <span>Guder i vikingetidens religion 'asatroen'</span><br />
+              <span>آلهة في الديانة الوثنية الإسكنافية "أساترو"</span>
+            </td>
+          </tr>
+          <tr class="era-viking">
+            <td>👑 Kongelig</td>
+            <td>(~965)</td>
+            <td>Harald Blåtand</td>
+            <td>
+              <span>Gjorde danerne kristne (Jellingstenene)</span><br />
+              <span>جعل الدنماركيين مسيحيين (أحجار جيلينغ)</span>
+            </td>
+          </tr>
+          <tr class="era-viking">
+            <td>👑 Kongelig</td>
+            <td>(1000-tallet)</td>
+            <td>Svend Tveskæg</td>
+            <td>
+              <span>Erobrede England</span><br />
+              <span>غزا إنجلترا</span>
+            </td>
+          </tr>
+          <tr class="era-medieval">
+            <td>✝️ biskop</td>
+            <td>(~1128-1201)</td>
+            <td>Absalon</td>
+            <td>
+              <span>biskop, grundlagde København</span><br />
+              <span>أسقف، أسس كوبنهاغن</span>
+            </td>
+          </tr>
+          <tr class="era-medieval">
+            <td>✍️ Forfatter</td>
+            <td>(~1200)</td>
+            <td>Saxo Grammaticus</td>
+            <td>
+              <span>Skrev Gesta Danorum (Danmarks historie)</span><br />
+              <span>كتب "أعمال الدنماركيين" (تاريخ الدنمارك)</span>
+            </td>
+          </tr>
+          <tr class="era-medieval">
+            <td>👑 Kongelig</td>
+            <td>(1397)</td>
+            <td>Margrete den 1.</td>
+            <td>
+              <span>Samlede Danmark, Norge og Sverige i Kalmarunionen</span><br />
+              <span>وحّدت الدنمارك والنرويج والسويد في اتحاد كالمار</span>
+            </td>
+          </tr>
+          <tr class="era-reformation">
+            <td>🔭 Videnskabsmand</td>
+            <td>(1546-1601)</td>
+            <td>Tycho Brahe</td>
+            <td>
+              <span>Han var astronom, opdagede Cassiopeia</span><br />
+              <span>كان عالم فلك، اكتشف نجم كاسيوبيا</span>
+            </td>
+          </tr>
+          <tr class="era-reformation">
+            <td>👑 Kongelig</td>
+            <td>(1588-1648)</td>
+            <td>Christian 4.</td>
+            <td>
+              <span>Opførelsen af Rundetårn og Rosenborg Slot</span><br />
+              <span>قام ببناء البرج المستدير وقلعة روزنبورغ</span>
+            </td>
+          </tr>
+          <tr class="era-absolutism">
+            <td>🔭 Videnskabsmand</td>
+            <td>(1676)</td>
+            <td>Ole Rømer</td>
+            <td>
+              <span>Måle lysets hastighed</span><br />
+              <span>قام بقياس سرعة الضوء</span>
+            </td>
+          </tr>
+          <tr class="era-absolutism">
+            <td>🧭 Opdagelsesrejsende</td>
+            <td>(1681-1741)</td>
+            <td>Vitus Bering</td>
+            <td>
+              <span>Han var opdagelsesrejsende</span><br />
+              <span>كان مستكشفاً</span>
+            </td>
+          </tr>
+          <tr class="era-absolutism">
+            <td>✍️ Forfatter</td>
+            <td>(1722)</td>
+            <td>Ludvig Holberg</td>
+            <td>
+              <span>Skrev komedien 'Jeppe på Bjerget'</span><br />
+              <span>كتب مسرحية "يبي فوق الجبل"</span><br />
+              <span>Repræsentant for Oplysningstiden</span><br />
+              <span>ممثل لعصر التنوير</span>
+            </td>
+          </tr>
+          <tr class="era-absolutism">
+            <td>🏛️ Politiker</td>
+            <td>(~1770)</td>
+            <td>J.F. Struensee</td>
+            <td>
+              <span>Kongens læge, opnåede stor politisk magt</span><br />
+              <span>طبيب الملك، نال سلطة سياسية كبيرة</span>
+            </td>
+          </tr>
+          <tr class="era-absolutism">
+            <td>🎨 Kunstner</td>
+            <td>(1770-1844)</td>
+            <td>Bertel Thorvaldsen</td>
+            <td>
+              <span>Kendt for sine skulpturer (billedhugger)</span><br />
+              <span>معروف بمنحوتاته (نحّات)</span>
+            </td>
+          </tr>
+          <tr class="era-absolutism">
+            <td>🔭 Videnskabsmand</td>
+            <td>(1777-1851)</td>
+            <td>H.C. Ørsted</td>
+            <td>
+              <span>Opdagelsen af elektromagnetismen</span><br />
+              <span>اكتشف الكهرومغناطيسية</span>
+            </td>
+          </tr>
+          <tr class="era-absolutism">
+            <td>🎨 Kunstner</td>
+            <td>(1783-1853)</td>
+            <td>C.W. Eckersberg</td>
+            <td>
+              <span>Kendt for kunstmaler (Guldalderen)</span><br />
+              <span>معروف كرسام (العصر الذهبي)</span>
+            </td>
+          </tr>
+          <tr class="era-absolutism">
+            <td>💡 Kulturperson</td>
+            <td>(1783-1872)</td>
+            <td>N.F.S. Grundtvig</td>
+            <td>
+              <span>folkehøjskoler, salmerne</span><br />
+              <span>ترانيم</span>
+            </td>
+          </tr>
+          <tr class="era-absolutism">
+            <td>🎨 Kunstner</td>
+            <td>(1805-1879)</td>
+            <td>August Bournonville</td>
+            <td>
+              <span>Kendt balletkoreograf fra 1800-tallet</span><br />
+              <span>مصمم رقصات باليه معروف من القرن التاسع عشر</span>
+            </td>
+          </tr>
+          <tr class="era-absolutism">
+            <td>💡 Filosof</td>
+            <td>(1813-1855)</td>
+            <td>Søren Kierkegaard</td>
+            <td>
+              <span>Filosof (levede i 1800-tallet)</span><br />
+              <span>فيلسوف (عاش في القرن التاسع عشر)</span>
+            </td>
+          </tr>
+          <tr class="era-absolutism">
+            <td>✍️ Forfatter</td>
+            <td>(1819)</td>
+            <td>Adam Oehlenschläger</td>
+            <td>
+              <span>Skrev 'Der er et yndigt land' (Danmarks nationalsang)</span><br />
+              <span>كتب "هناك بلد جميل" (النشيد الوطني الدنماركي)</span>
+            </td>
+          </tr>
+          <tr class="era-absolutism">
+            <td>👑 Kongelig</td>
+            <td>(1849)</td>
+            <td>Frederik 7.</td>
+            <td>
+              <span>Underskrev Danmarks Riges Grundlov</span><br />
+              <span>وقّع على الدستور الدنماركي</span>
+            </td>
+          </tr>
+          <tr class="era-democracy">
+            <td>🎨 Kunstner</td>
+            <td>(1851-1909)</td>
+            <td>P.S. Krøyer</td>
+            <td>
+              <span>Kendt kunstmaler (Skagensmalerne)</span><br />
+              <span>رسام معروف (من رسامي سكاغن)</span>
+            </td>
+          </tr>
+          <tr class="era-absolutism">
+            <td>🎨 Kunstnere</td>
+            <td>(Slut 1800-tallet)</td>
+            <td>Anna Ancher og Michael Ancher</td>
+            <td>
+              <span>Kunstmalere (malede ved Skagen)</span><br />
+              <span>رسامان (رسما في سكاغن)</span>
+            </td>
+          </tr>
+          <tr class="era-democracy">
+            <td>🎨 Kunstner</td>
+            <td>(1864-1916)</td>
+            <td>Vilhelm Hammershøi</td>
+            <td>
+              <span>Kendt for kunstmaler</span><br />
+              <span>معروف كرسام</span>
+            </td>
+          </tr>
+          <tr class="era-democracy">
+            <td>🎨 Komponist</td>
+            <td>(1865-1931)</td>
+            <td>Carl Nielsen</td>
+            <td>
+              <span>Kendt komponist (operaer)</span><br />
+              <span>ملحن معروف (أوبرات)</span>
+            </td>
+          </tr>
+          <tr class="era-democracy">
+            <td>✍️ Forfatter</td>
+            <td>(1869-1954)</td>
+            <td>Martin Andersen Nexø</td>
+            <td>
+              <span>Skrev 'Pelle Erobreren' og 'Ditte Menneskebarn'</span><br />
+              <span>كتب "بيله الفاتح" و "ديتي طفلة إنسان"</span>
+            </td>
+          </tr>
+          <tr class="era-democracy">
+            <td>🧭 Opdagelsesrejsende</td>
+            <td>(1879-1933)</td>
+            <td>Knud Rasmussen</td>
+            <td>
+              <span>Kendt polarforsker</span><br />
+              <span>مستكشف قطبي معروف</span>
+            </td>
+          </tr>
+          <tr class="era-democracy">
+            <td>✍️ Forfatter</td>
+            <td>(1885-1962)</td>
+            <td>Karen Blixen</td>
+            <td>
+              <span>Kendt forfatter (skrev 'Den Afrikanske Farm')</span><br />
+              <span>كاتبة معروفة (كتبت "المزرعة الأفريقية")</span>
+            </td>
+          </tr>
+          <tr class="era-democracy">
+            <td>✍️ Forfatter</td>
+            <td>(~1900)</td>
+            <td>Henrik Pontoppidan</td>
+            <td>
+              <span>Skrev romanen 'Lykke-Per'</span><br />
+              <span>كتب رواية "بير المحظوظ"</span>
+            </td>
+          </tr>
+          <tr class="era-democracy">
+            <td>🎨 Arkitekt</td>
+            <td>(1902-1971)</td>
+            <td>Arne Jacobsen</td>
+            <td>
+              <span>Kendt arkitekt (Danmarks Nationalbank)</span><br />
+              <span>مهندس معماري معروف (بنك الدنمارك الوطني)</span>
+            </td>
+          </tr>
+          <tr class="era-wartime">
+            <td>✍️ Forfatter</td>
+            <td>(1917-2023)</td>
+            <td>Lise Nørgaard</td>
+            <td>
+              <span>Forfatter til tv-serien Matador</span><br />
+              <span>مؤلفة مسلسل "ماتادور"</span>
+            </td>
+          </tr>
+          <tr class="era-wartime">
+            <td>✍️ Forfatter</td>
+            <td>(1918)</td>
+            <td>Emma Gad</td>
+            <td>
+              <span>Kendt for 'Takt og Tone – Hvordan Vi Omgås'</span><br />
+              <span>معروفة بكتاب "آداب السلوك"</span>
+            </td>
+          </tr>
+          <tr class="era-wartime">
+            <td>🎨 Arkitekt</td>
+            <td>(1918-2008)</td>
+            <td>Jørn Utzon</td>
+            <td>
+              <span>Kendt arkitekt (tegnede operahuset i Sydney)</span><br />
+              <span>مهندس معماري معروف (صمم دار الأوبرا في سيدني)</span>
+            </td>
+          </tr>
+          <tr class="era-wartime">
+            <td>🎬 Instruktør</td>
+            <td>(1918-2014)</td>
+            <td>Gabriel Axel</td>
+            <td>
+              <span>Vandt en Oscar i 1988 ('Babettes gæstebud')</span><br />
+              <span>فاز بجائزة الأوسكار عام 1988 (عن "عيد بابيت")</span>
+            </td>
+          </tr>
+          <tr class="era-wartime">
+            <td>🔭 Videnskabsmand</td>
+            <td>(1922)</td>
+            <td>Niels Bohr</td>
+            <td>
+              <span>Fik Nobelprisen i fysik (model over atomers opbygning)</span><br />
+              <span>حصل على جائزة نوبل في الفيزياء (نموذج لتركيب الذرات)</span>
+            </td>
+          </tr>
+          <tr class="era-wartime">
+            <td>🏛️ Politiker</td>
+            <td>(1922-2016)</td>
+            <td>Anker Jørgensen</td>
+            <td>
+              <span>Tidligere dansk statsminister (døde i marts 2016)</span><br />
+              <span>رئيس وزراء دنماركي سابق (توفي في مارس 2016)</span>
+            </td>
+          </tr>
+          <tr class="era-wartime">
+            <td>🏛️ Politiker</td>
+            <td>(1924)</td>
+            <td>Nina Bang</td>
+            <td>
+              <span>Danmarks første kvindelige minister</span><br />
+              <span>أول وزيرة في الدنمارك</span>
+            </td>
+          </tr>
+          <tr class="era-wartime">
+            <td>🏛️ Politiker</td>
+            <td>(1924 / 1930'erne)</td>
+            <td>Thorvald Stauning</td>
+            <td>
+              <span>Danmarks første socialdemokratiske statsminister</span><br />
+              <span>أول رئيس وزراء اشتراكي ديمقراطي للدنمارك</span>
+            </td>
+          </tr>
+          <tr class="era-wartime">
+            <td>🎬 Instruktør</td>
+            <td>(1924-2005)</td>
+            <td>Erik Balling</td>
+            <td>
+              <span>Instruktør (Olsenbanden og Matador)</span><br />
+              <span>مخرج (أولسن باندن وماتادور)</span>
+            </td>
+          </tr>
+          <tr class="era-wartime">
+            <td>✍️ Forfatter</td>
+            <td>(1935-2009)</td>
+            <td>Inger Christensen</td>
+            <td>
+              <span>Særlig kendt for at være digter</span><br />
+              <span>معروفة بشكل خاص كشاعرة</span>
+            </td>
+          </tr>
+          <tr class="era-wartime">
+            <td>🎭 Skuespiller</td>
+            <td>(1940-2024)</td>
+            <td>Ulf Pilgaard</td>
+            <td>
+              <span>Skuespiller og komiker, døde i oktober 2024</span><br />
+              <span>ممثل وكوميدي، توفي في أكتوبر 2024</span>
+            </td>
+          </tr>
+          <tr class="era-wartime">
+            <td>✍️ Forfatter</td>
+            <td>(1943)</td>
+            <td>Tove Ditlevsen</td>
+            <td>
+              <span>Skrev romanen 'Barndommens Gade'</span><br />
+              <span>كتبت رواية "شارع الطفولة"</span>
+            </td>
+          </tr>
+          <tr class="era-wartime">
+            <td>✍️ Forfatter</td>
+            <td>(1944)</td>
+            <td>Johannes V. Jensen</td>
+            <td>
+              <span>Fik Nobelprisen i litteratur (skrev 'Kongens Fald')</span><br />
+              <span>حصل على جائزة نوبل في الأدب (كتب "سقوط الملك")</span>
+            </td>
+          </tr>
+          <tr class="era-wartime">
+            <td>✍️ Forfatter</td>
+            <td>(f. 1944)</td>
+            <td>Suzanne Brøgger</td>
+            <td>
+              <span>Kendt forfatter</span><br />
+              <span>كاتبة معروفة</span>
+            </td>
+          </tr>
+          <tr class="era-wartime">
+            <td>🎤 Musiker</td>
+            <td>(1945-2018)</td>
+            <td>Kim Larsen</td>
+            <td>
+              <span>Forsangeren i bandet Gasolin (døde i september 2018)</span><br />
+              <span>المغني الرئيسي في فرقة جازولين (توفي في سبتمبر 2018)</span>
+            </td>
+          </tr>
+          <tr class="era-welfare">
+            <td>🎬 Instruktør</td>
+            <td>(f. 1948)</td>
+            <td>Bille August</td>
+            <td>
+              <span>Vandt en Oscar for 'Pelle Erobreren'</span><br />
+              <span>فاز بجائزة الأوسكار عن فيلم "بيله الفاتح"</span>
+            </td>
+          </tr>
+          <tr class="era-welfare">
+            <td>🎨 Kunstner</td>
+            <td>(1948-1951)</td>
+            <td>Asger Jorn</td>
+            <td>
+              <span>Kendt billedkunstner (Cobra-gruppen)</span><br />
+              <span>فنان تشكيلي معروف (مجموعة كوبرا)</span>
+            </td>
+          </tr>
+          <tr class="era-welfare">
+            <td>✍️ Forfatter</td>
+            <td>(1950'erne)</td>
+            <td>Klaus Rifbjerg</td>
+            <td>
+              <span>Skrev romanen 'Den kroniske uskyld'</span><br />
+              <span>كتب رواية "البراءة المزمنة"</span>
+            </td>
+          </tr>
+          <tr class="era-welfare">
+            <td>🎬 Instruktør</td>
+            <td>(f. 1956)</td>
+            <td>Lars von Trier</td>
+            <td>
+              <span>Instruktør ('Idioterne' og 'Dancer in the Dark')</span><br />
+              <span>مخرج ("الأغبياء" و "راقصة في الظلام")</span>
+            </td>
+          </tr>
+          <tr class="era-welfare">
+            <td>🎬 Instruktør</td>
+            <td>(f. 1960)</td>
+            <td>Susanne Bier</td>
+            <td>
+              <span>Kendt filminstruktør (vandt Oscar for 'Hævnen')</span><br />
+              <span>مخرجة أفلام معروفة (فازت بأوسكار عن "في عالم أفضل")</span>
+            </td>
+          </tr>
+          <tr class="era-welfare">
+            <td>✍️ Forfatter</td>
+            <td>(f. 1963)</td>
+            <td>Naja Marie Aidt</td>
+            <td>
+              <span>Kendt forfatter</span><br />
+              <span>كاتبة معروفة</span>
+            </td>
+          </tr>
+          <tr class="era-welfare">
+            <td>🎨 Kunstner</td>
+            <td>1967</td>
+            <td>Olafur Eliasson</td>
+            <td><span>ARoS rainbow</span></td>
+          </tr>
+          <tr class="era-welfare">
+            <td>🏛️ Politiker</td>
+            <td>(1971-2024)</td>
+            <td>Søren Pape Poulsen</td>
+            <td>
+              <span>Formand for Det Konservative Folkeparti (død marts 2024)</span><br />
+              <span>رئيس حزب الشعب المحافظ (توفي مارس 2024)</span>
+            </td>
+          </tr>
+          <tr class="era-welfare">
+            <td>👑 Kongelig</td>
+            <td>(1972)</td>
+            <td>Margrethe den 2.</td>
+            <td>
+              <span>Blev dronning af Danmark i 1972</span><br />
+              <span>أصبحت ملكة الدنمارك عام 1972</span>
+            </td>
+          </tr>
+          <tr class="era-welfare">
+            <td>🏛️ Politiker</td>
+            <td>(1982-1993)</td>
+            <td>Poul Schlüter</td>
+            <td>
+              <span>Statsminister (Det Konservative Folkeparti)</span><br />
+              <span>رئيس وزراء (حزب الشعب المحافظ)</span>
+            </td>
+          </tr>
+          <tr class="era-welfare">
+            <td>🏛️ Politiker</td>
+            <td>(1993-2001)</td>
+            <td>Poul Nyrup Rasmussen</td>
+            <td>
+              <span>Statsminister (Socialdemokratiet)</span><br />
+              <span>رئيس وزراء (الحزب الاشتراكي الديمقراطي)</span>
+            </td>
+          </tr>
+          <tr class="era-welfare">
+            <td>🏛️ Politiker</td>
+            <td>(1995)</td>
+            <td>Pia Kjærsgaard</td>
+            <td>
+              <span>Med til at stifte Dansk Folkeparti (1995)</span><br />
+              <span>شاركت في تأسيس حزب الشعب الدنماركي (1995)</span><br />
+              <span>Meddelte (sept 2024) at hun ikke genopstiller</span><br />
+              <span>أعلنت (سبتمبر 2024) أنها لن تترشح مرة أخرى</span>
+            </td>
+          </tr>
+          <tr class="era-welfare">
+            <td>✍️ Forfatter</td>
+            <td>(1995-2020)</td>
+            <td>Yahya Hassan</td>
+            <td>
+              <span>Særlig kendt for at være digter</span><br />
+              <span>معروف بشكل خاص كشاعر</span>
+            </td>
+          </tr>
+          <tr class="era-welfare">
+            <td>🏛️ Politiker</td>
+            <td>(2009)</td>
+            <td>Anders Fogh Rasmussen</td>
+            <td>
+              <span>Blev generalsekretær for NATO i 2009</span><br />
+              <span>أصبح الأمين العام لحلف الناتو عام 2009</span>
+            </td>
+          </tr>
+          <tr class="era-welfare">
+            <td>🏛️ Politiker</td>
+            <td>(2009-11 / 2015-19)</td>
+            <td>Lars Løkke Rasmussen</td>
+            <td>
+              <span>Statsminister (Venstre)</span><br />
+              <span>رئيس وزراء (حزب فينسترا)</span>
+            </td>
+          </tr>
+          <tr class="era-welfare">
+            <td>🏛️ Politiker</td>
+            <td>(2011-2015)</td>
+            <td>Helle Thorning-Schmidt</td>
+            <td>
+              <span>Danmarks første kvindelige statsminister</span><br />
+              <span>أول رئيسة وزراء للدنمارك</span>
+            </td>
+          </tr>
+          <tr class="era-welfare">
+            <td>🏛️ Politiker</td>
+            <td>(2014-2024)</td>
+            <td>Margrethe Vestager</td>
+            <td>
+              <span>Danmarks EU-kommissær</span><br />
+              <span>مفوضة الدنمارك في الاتحاد الأوروبي</span>
+            </td>
+          </tr>
+          <tr class="era-welfare">
+            <td>⚽ Sportsudøver</td>
+            <td>(2022)</td>
+            <td>Christian Eriksen</td>
+            <td>
+              <span>Spillede for landsholdet efter hjertestop</span><br />
+              <span>لعب للمنتخب الوطني بعد توقف قلبي</span>
+            </td>
+          </tr>
+          <tr class="era-welfare">
+            <td>🏛️ Politiker</td>
+            <td>(2022)</td>
+            <td>Morten Messerschmidt</td>
+            <td>
+              <span>Ny formand for Dansk Folkeparti (jan 2022)</span><br />
+              <span>رئيس جديد لحزب الشعب الدنماركي (يناير 2022)</span>
+            </td>
+          </tr>
+          <tr class="era-welfare">
+            <td>🏛️ Politiker</td>
+            <td>(2022)</td>
+            <td>Inger Støjberg</td>
+            <td>
+              <span>Stiftede partiet Danmarksdemokraterne (juni 2022)</span><br />
+              <span>أسست حزب ديمقراطيي الدنمارك (يونيو 2022)</span><br />
+              <span>Dømt i Rigsretten</span><br />
+              <span>أدينت في المحكمة الخاصة (Rigsretten)</span>
+            </td>
+          </tr>
+          <tr class="era-welfare">
+            <td>🚴 Sportsudøver</td>
+            <td>(2022)</td>
+            <td>Jonas Vingegaard</td>
+            <td>
+              <span>Vandt Tour de France i 2022</span><br />
+              <span>فاز بسباق فرنسا للدراجات عام 2022</span>
+            </td>
+          </tr>
+          <tr class="era-welfare">
+            <td>👑 Kongelig</td>
+            <td>(2023)</td>
+            <td>Prins Christian</td>
+            <td>
+              <span>Fejrede 18 års fødselsdag (okt 2023)</span><br />
+              <span>احتفل بعيد ميلاده الـ 18 (أكتوبر 2023)</span>
+            </td>
+          </tr>
+          <tr class="era-welfare">
+            <td>👑 Kongelig</td>
+            <td>(2024)</td>
+            <td>Frederik den 10.</td>
+            <td>
+              <span>Blev Danmarks nye konge (jan 2024)</span><br />
+              <span>أصبح ملك الدنمارك الجديد (يناير 2024)</span>
+            </td>
+          </tr>
+          <tr class="era-welfare">
+            <td>👑 Kongelig</td>
+            <td>(2024)</td>
+            <td>Dronning Mary</td>
+            <td>
+              <span>Kommer oprindeligt fra Australien</span><br />
+              <span>تنحدر في الأصل من أستراليا</span>
+            </td>
+          </tr>
+          <tr class="era-welfare">
+            <td>🤾 Sportsudøver</td>
+            <td>(2024)</td>
+            <td>Mikkel Hansen</td>
+            <td>
+              <span>Stopper som professionel håndboldspiller</span><br />
+              <span>يعتزل كلاعب كرة يد محترف</span>
+            </td>
+          </tr>
+          <tr class="era-welfare">
+            <td>🏛️ Politiker</td>
+            <td>(2024)</td>
+            <td>Dan Jørgensen</td>
+            <td>
+              <span>Indstillet til Danmarks EU-kommissær (aug 2024)</span><br />
+              <span>تم ترشيحه ليكون مفوض الدنمارك في الاتحاد الأوروبي (أغسطس 2024)</span>
+            </td>
+          </tr>
+          <tr class="era-welfare">
+            <td>🤾 Sportsudøver</td>
+            <td>(2025)</td>
+            <td>Mathias Gidsel</td>
+            <td>
+              <span>Valgt til verdens bedste mandlige håndboldspiller (marts 2025)</span><br />
+              <span>اختير كأفضل لاعب كرة يد في العالم (مارس 2025)</span>
+            </td>
+          </tr>
+          <tr class="era-welfare">
+            <td>👑 Kongelig</td>
+            <td>(2025)</td>
+            <td>Prinsesse Isabella</td>
+            <td>
+              <span>Fejrede 18 års fødselsdag (april 2025)</span><br />
+              <span>احتفلت بعيد ميلادها الـ 18 (أبريل 2025)</span>
+            </td>
+          </tr>
+          <tr class="era-welfare">
+            <td>🏛️ Politiker</td>
+            <td>(Nutid)</td>
+            <td>Pia Olsen Dyhr</td>
+            <td>
+              <span>Formanden for SF (Socialistisk Folkeparti)</span><br />
+              <span>رئيسة حزب الشعب الاشتراكي (SF)</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script type="module">
-      const text = await fetch("./characters.md").then(response => response.text());
-      const html = marked.parse(text);
-
-      // Function to determine era based on character's time period
-      function getEraClass(timeText) {
-        const text = timeText.toLowerCase();
-
-        // Extract years from text for better matching
-        const yearMatches = text.match(/(\d{3,4})/g);
-        const years = yearMatches ? yearMatches.map(y => parseInt(y)) : [];
-
-        // Check for explicit era keywords first
-        if (text.includes("vikingetiden") || text.includes("viking")) {
-          return "era-viking";
-        }
-        if (text.includes("middelalderen")) {
-          return "era-medieval";
-        }
-        if (text.includes("guldalderen")) {
-          return "era-absolutism";
-        }
-
-        // Then check by year ranges - use the earliest year found
-        if (years.length > 0) {
-          const earliestYear = Math.min(...years);
-
-          if (earliestYear >= 750 && earliestYear <= 1050) {
-            return "era-viking";
-          }
-          if (earliestYear >= 1051 && earliestYear <= 1500) {
-            return "era-medieval";
-          }
-          if (earliestYear >= 1536 && earliestYear <= 1660) {
-            return "era-reformation";
-          }
-          if (earliestYear >= 1661 && earliestYear <= 1849) {
-            return "era-absolutism";
-          }
-          if (earliestYear >= 1850 && earliestYear <= 1914) {
-            return "era-democracy";
-          }
-          if (earliestYear >= 1915 && earliestYear <= 1945) {
-            return "era-wartime";
-          }
-          if (earliestYear >= 1946) {
-            return "era-welfare";
-          }
-        }
-
-        // Default fallback
-        return "era-welfare";
-      }
-
-      // Parse the HTML and add era classes to table rows
-      const tempDiv = document.createElement("div");
-      tempDiv.innerHTML = html;
-
-      const table = tempDiv.querySelector("table");
-      if (table) {
-        const rows = table.querySelectorAll("tbody tr");
-        rows.forEach(row => {
-          const cells = row.querySelectorAll("td");
-          if (cells.length >= 2) {
-            // The date is in the second column (index 1)
-            const dateCell = cells[1];
-            const timeText = dateCell.textContent;
-            const eraClass = getEraClass(timeText);
-            row.classList.add(eraClass);
-          }
-        });
-      }
-
-      document.getElementById("content").innerHTML +=
-        tempDiv.innerHTML + `<br /><a href='./flashcard.html'>Flashcards</a>`;
-    </script>
   </body>
 </html>
