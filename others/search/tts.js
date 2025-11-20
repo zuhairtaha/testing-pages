@@ -80,7 +80,7 @@ calculateSnapWidths();
 
 toolbar.addEventListener("pointerdown", e => {
   // Don't stop propagation on selects so they can open
-  if (e.target.tagName.toLowerCase() === "select") return;
+  if (e.target.matches("select, option")) return;
   e.preventDefault();
   e.stopPropagation();
 });
@@ -415,14 +415,23 @@ function injectStyles() {
       animation: rsBounceIn 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
+    select, ::picker(select) {
+      /* link https://codepen.io/zuhairtaha/pen/emZGzzE */
+      appearance: base-select !important;
+    }
+
+    ::picker(select) {
+      border: 1px solid var(--rs-outline);
+      box-shadow: 0 2px 4px var(--rs-shadow);
+      border-radius: 4px;
+      background: var(--rs-surface);
+    }
+
     option {
       font: 14px / 1.4 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-      /* Should be working after updating to https://codepen.io/zuhairtaha/pen/emZGzzE */
-      padding: 8px 16px 8px 20px;
       color: var(--rs-on-surface);
-      cursor: pointer;
-      user-select: none;
-      white-space: nowrap;
+      padding: 4px 8px;
+      width: fit-content;
     }
   `;
   document.head.appendChild(s);
