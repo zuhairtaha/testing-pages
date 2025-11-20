@@ -1027,19 +1027,104 @@ function onSelectionUpdate() {
   tb.style.width = savedWidth ? `${savedWidth}px` : `${minToolbarWidth}px`;
 
   requestAnimationFrame(() => {
-    const tbHeight = tb.offsetHeight;
+    const sel = window.getSelection();
+    if (!sel || sel.isCollapsed) return;
+
+    // Get all selection rects
+    const range = sel.getRangeAt(0);
+    const rects = Array.from(range.getClientRects()).filter(r => r.width > 0 && r.height > 0);
+    if (rects.length === 0) return;
+
     const tbWidth = tb.offsetWidth;
-    let left = window.scrollX + info.rect.left + info.rect.width / 2 - tbWidth / 2;
-    left = Math.max(
-      window.scrollX + 10,
-      Math.min(left, window.scrollX + document.documentElement.clientWidth - tbWidth - 10)
-    );
-    let top = window.scrollY + info.rect.top - tbHeight - 10;
-    if (top < window.scrollY + 10) {
-      top = window.scrollY + info.rect.bottom + 10;
+    const tbHeight = tb.offsetHeight;
+    const margin = 10;
+    const viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+    const viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+
+    /**
+     * @param {{left: number, top: number, width: number, height: number}} rect
+     * @returns {boolean}
+     */
+    const inViewport = rect => {
+      return (
+        rect.left >= 0 &&
+        rect.top >= 0 &&
+        rect.top + rect.height <= viewportHeight &&
+        rect.left + rect.width <= viewportWidth
+      );
+    };
+
+    /**
+     * @param {{left: number, top: number, width: number, height: number}} rect
+     * @returns {boolean}
+     */
+    const overlapsRects = rect => {
+      return rects.some(
+        r =>
+          r.left <= rect.left + rect.width &&
+          rect.left <= r.left + r.width &&
+          r.top <= rect.top + rect.height &&
+          rect.top <= r.top + r.height
+      );
+    };
+
+    // Try to position toolbar above first rect
+    const firstRect = rects[0];
+    let toolbarRect = {
+      left: Math.max(margin, firstRect.left + firstRect.width / 2 - tbWidth / 2),
+      top: Math.max(margin, firstRect.top - tbHeight - margin),
+      width: tbWidth,
+      height: tbHeight
+    };
+
+    // Ensure toolbar doesn't overflow right edge
+    toolbarRect.left = Math.min(toolbarRect.left, viewportWidth - tbWidth - margin);
+
+    // If toolbar fits above and doesn't overlap, use that position
+    if (inViewport(toolbarRect) && !overlapsRects(toolbarRect)) {
+      tb.style.left = `${window.scrollX + toolbarRect.left}px`;
+      tb.style.top = `${window.scrollY + toolbarRect.top}px`;
+      return;
     }
-    tb.style.left = `${left}px`;
-    tb.style.top = `${top}px`;
+
+    // Otherwise, try below the last rect
+    const lastRect = rects[rects.length - 1];
+    toolbarRect = {
+      left: Math.max(margin, lastRect.left + lastRect.width / 2 - tbWidth / 2),
+      top: lastRect.top + lastRect.height + margin,
+      width: tbWidth,
+      height: tbHeight
+    };
+
+    // Ensure toolbar doesn't overflow right edge
+    toolbarRect.left = Math.min(toolbarRect.left, viewportWidth - tbWidth - margin);
+
+    // If toolbar fits below and is in viewport, use that position
+    if (inViewport(toolbarRect)) {
+      tb.style.left = `${window.scrollX + toolbarRect.left}px`;
+      tb.style.top = `${window.scrollY + toolbarRect.top}px`;
+      return;
+    }
+
+    // Fallback: try to position to the left of selection
+    for (const r of rects) {
+      toolbarRect = {
+        left: Math.max(margin, r.left - tbWidth - margin),
+        top: Math.max(margin, r.top),
+        width: tbWidth,
+        height: tbHeight
+      };
+
+      if (inViewport(toolbarRect) && !overlapsRects(toolbarRect)) {
+        tb.style.left = `${window.scrollX + toolbarRect.left}px`;
+        tb.style.top = `${window.scrollY + toolbarRect.top}px`;
+        return;
+      }
+    }
+
+    // Final fallback: top-left of viewport with some margin
+    tb.style.left = `${window.scrollX + margin}px`;
+    tb.style.top = `${window.scrollY + margin}px`;
   });
 }
 
