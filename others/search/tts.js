@@ -10,14 +10,11 @@ const IDS = {
   layer: "rs-highlight-layer",
   toolbar: "rs-toolbar",
   readBtn: "rs-read-btn",
-  langBtn: "rs-lang-btn",
-  voiceBtn: "rs-voice-btn",
-  rateBtn: "rs-rate-btn",
+  langSelect: "rs-lang-select",
+  voiceSelect: "rs-voice-select",
+  rateSelect: "rs-rate-select",
   resizeHandle: "rs-resize-handle",
-  langBadge: "rs-lang-badge",
-  langMenu: "rs-lang-menu",
-  voiceMenu: "rs-voice-menu",
-  rateMenu: "rs-rate-menu"
+  langBadge: "rs-lang-badge" // Added back
 };
 
 /** @type {{lang: string, voiceURI: string, rate: number}} */
@@ -78,25 +75,15 @@ const toolbar = ensureToolbar();
 /** @type {HTMLElement} */
 const layer = ensureLayer();
 
-/** @type {HTMLElement} */
-const langMenu = ensureMenu(IDS.langMenu);
-
-/** @type {HTMLElement} */
-const voiceMenu = ensureMenu(IDS.voiceMenu);
-
-/** @type {HTMLElement} */
-const rateMenu = ensureMenu(IDS.rateMenu);
-
-// Calculate snap widths once buttons are in the DOM
+// Calculate snap widths once elements are in the DOM
 calculateSnapWidths();
 
 toolbar.addEventListener("pointerdown", e => {
+  // Don't stop propagation on selects so they can open
+  if (e.target.tagName.toLowerCase() === 'select') return;
   e.preventDefault();
   e.stopPropagation();
 });
-langMenu.addEventListener("pointerdown", e => e.stopPropagation());
-voiceMenu.addEventListener("pointerdown", e => e.stopPropagation());
-rateMenu.addEventListener("pointerdown", e => e.stopPropagation());
 
 if (synth && typeof synth.addEventListener === "function") {
   synth.addEventListener("voiceschanged", () => {
@@ -104,6 +91,7 @@ if (synth && typeof synth.addEventListener === "function") {
     populateLangs();
     ensureVoiceForCurrentLang();
     populateVoices();
+    calculateSnapWidths(); 
   });
 }
 voicesCache = synth?.getVoices?.() || [];
@@ -111,22 +99,21 @@ populateLangs();
 ensureVoiceForCurrentLang();
 populateVoices();
 populateRates();
+calculateSnapWidths();
 
 document.addEventListener("pointerdown", e => {
   const t = e.target;
   const isToolbarClick = t.closest(`#${IDS.toolbar}`);
-  const isMenuClick = t.closest(`.${IDS.langMenu}`) || t.closest(`.${IDS.voiceMenu}`) || t.closest(`.${IDS.rateMenu}`);
-  if (isToolbarClick || isMenuClick) return;
+  if (isToolbarClick) return;
+  
   if (isReading) {
     synth.cancel();
   }
-  hide(langMenu);
-  hide(voiceMenu);
-  hide(rateMenu);
   if (!isReading) {
     allowToolbar = false;
   }
 });
+
 document.addEventListener("pointerup", () => {
   if (!isReading && !isResizing) {
     allowToolbar = true;
@@ -135,6 +122,7 @@ document.addEventListener("pointerup", () => {
     onSelectionUpdate();
   }
 });
+
 document.addEventListener("mouseup", onSelectionUpdate);
 document.addEventListener("keyup", onSelectionUpdate);
 document.addEventListener("selectionchange", onSelectionUpdate);
@@ -144,41 +132,8 @@ document.addEventListener("click", onDocClick, true);
 // Init Resize Handle
 initResize();
 
-[IDS.readBtn, IDS.langBtn, IDS.voiceBtn, IDS.rateBtn].forEach(id => {
-  const el = byId(id);
-  if (!el) return;
-  el.addEventListener("pointerdown", e => {
-    e.preventDefault();
-    e.stopPropagation();
-  });
-});
 byId(IDS.readBtn)?.addEventListener("click", () => {
   onReadClicked();
-});
-
-byId(IDS.langBtn)?.addEventListener("click", e => {
-  e.stopPropagation();
-  hide(voiceMenu);
-  hide(rateMenu);
-  // Re-populate to ensure current selection is correct before toggling
-  populateLangs();
-  toggleMenu(langMenu, byId(IDS.langBtn));
-});
-byId(IDS.voiceBtn)?.addEventListener("click", e => {
-  e.stopPropagation();
-  hide(langMenu);
-  hide(rateMenu);
-  // Re-populate to ensure current selection is correct before toggling
-  populateVoices();
-  toggleMenu(voiceMenu, byId(IDS.voiceBtn));
-});
-byId(IDS.rateBtn)?.addEventListener("click", e => {
-  e.stopPropagation();
-  hide(langMenu);
-  hide(voiceMenu);
-  // Re-populate to ensure current selection is correct before toggling
-  populateRates();
-  toggleMenu(rateMenu, byId(IDS.rateBtn));
 });
 
 /**
@@ -191,7 +146,7 @@ window.removeReadSelectedTools = function removeReadSelectedTools() {
   document.removeEventListener("scroll", repaintHighlight, true);
   document.removeEventListener("click", onDocClick, true);
   document.body.classList.remove("rs-reading");
-  [IDS.toolbar, IDS.layer, IDS.style, IDS.langMenu, IDS.voiceMenu, IDS.rateMenu].forEach(id => byId(id)?.remove());
+  [IDS.toolbar, IDS.layer, IDS.style].forEach(id => byId(id)?.remove());
   synth && synth.cancel();
 };
 
@@ -203,265 +158,228 @@ function injectStyles() {
   const s = document.createElement("style");
   s.id = IDS.style;
   s.textContent = `
-                      :root {
-                        --rs-surface: #ffffff;
-                        --rs-on-surface: #202124;
-                        --rs-on-surface-variant: #5f6368;
-                        --rs-outline: #dadce0;
-                        --rs-primary: #1a73e8;
-                        --rs-hover: #f1f3f4;
-                        --rs-shadow: rgba(0,0,0,.15);
-                        --rs-scrim: rgba(0,0,0,.4);
+      :root {
+        --rs-surface: #ffffff;
+        --rs-on-surface: #202124;
+        --rs-on-surface-variant: #5f6368;
+        --rs-outline: #dadce0;
+        --rs-primary: #1a73e8;
+        --rs-hover: #f1f3f4;
+        --rs-shadow: rgba(0,0,0,.15);
+        --rs-scrim: rgba(0,0,0,.4);
 
-                        /* Highlight Colors */
-                        --rs-word-bg-1: rgba(168, 203, 255, 0.7);
-                        --rs-word-bg-2: rgba(168, 203, 255, 0.5);
-                        --rs-word-outline: rgba(122, 168, 255, 0.8);
-                      }
-                      @media (prefers-color-scheme: dark) {
-                        :root {
-                          --rs-surface: #2d2e30; /* Darker surface */
-                          --rs-on-surface: #e8eaed;
-                          --rs-on-surface-variant: #bdc1c6;
-                          --rs-outline: #44474a;
-                          --rs-primary: #8ab4f8;
-                          --rs-hover: #3a3c3e;
-                          --rs-shadow: rgba(0,0,0,.3);
-                          --rs-scrim: rgba(0,0,0,.6);
+        /* Highlight Colors */
+        --rs-word-bg-1: rgba(168, 203, 255, 0.7);
+        --rs-word-bg-2: rgba(168, 203, 255, 0.5);
+        --rs-word-outline: rgba(122, 168, 255, 0.8);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --rs-surface: #2d2e30;
+          --rs-on-surface: #e8eaed;
+          --rs-on-surface-variant: #bdc1c6;
+          --rs-outline: #44474a;
+          --rs-primary: #8ab4f8;
+          --rs-hover: #3a3c3e;
+          --rs-shadow: rgba(0,0,0,.3);
+          --rs-scrim: rgba(0,0,0,.6);
 
-                          /* Dark Highlight Colors */
-                          --rs-word-bg-1: rgba(138, 180, 248, .45);
-                          --rs-word-bg-2: rgba(138, 180, 248, .25);
-                          --rs-word-outline: rgba(138, 180, 248, .85);
-                        }
-                      }
+          /* Dark Highlight Colors */
+          --rs-word-bg-1: rgba(138, 180, 248, .45);
+          --rs-word-bg-2: rgba(138, 180, 248, .25);
+          --rs-word-outline: rgba(138, 180, 248, .85);
+        }
+      }
 
-                      /* Toolbar (Google Material Design) */
-                      #${IDS.toolbar} {
-                        position: absolute;
-                        z-index: ${Z};
-                        display: none; /* Hidden by default */
-                        flex-direction: row;
-                        align-items: center;
-                        gap: 4px; /* Tighter gap */
-                        padding: 6px;
-                        background: var(--rs-surface);
-                        border: 1px solid var(--rs-outline);
-                        border-radius: 24px; /* Pill shape */
-                        box-shadow: 0 4px 8px -2px var(--rs-shadow), 0 0 1px 0 var(--rs-shadow);
-                        font: 13px/1.1 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-                        backdrop-filter: saturate(120%) blur(6px);
-                        /* MODIFIED: Added border-color to transition */
-                        transition: opacity .15s ease, transform .15s ease, width .2s cubic-bezier(0.4, 0, 0.2, 1), border-color .15s ease;
-                        overflow: hidden; /* Needed for width animation */
-                        white-space: nowrap; /* Prevent wrapping during animation */
-                        box-sizing: border-box; /* Ensure padding is included in width */
-                      }
+      /* Toolbar (Google Material Design) */
+      #${IDS.toolbar} {
+        position: absolute;
+        z-index: ${Z};
+        display: none; /* Hidden by default */
+        flex-direction: row;
+        align-items: center;
+        gap: 4px; /* Tight gap like original */
+        padding: 6px;
+        background: var(--rs-surface);
+        border: 1px solid var(--rs-outline);
+        border-radius: 24px; /* Pill shape */
+        box-shadow: 0 4px 8px -2px var(--rs-shadow), 0 0 1px 0 var(--rs-shadow);
+        font: 13px/1.1 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        backdrop-filter: saturate(120%) blur(6px);
+        transition: opacity .15s ease, transform .15s ease, width .2s cubic-bezier(0.4, 0, 0.2, 1), border-color .15s ease;
+        overflow: hidden; 
+        white-space: nowrap;
+        box-sizing: border-box;
+      }
 
-                      /* MODIFIED: Resize Handle */
-                      #${IDS.resizeHandle} {
-                        position: absolute;
-                        top: 50%;
-                        right: 0;
-                        transform: translateY(-50%);
-                        width: 16px; /* This is the hover/drag target area */
-                        height: 30px; /* Make it a bit shorter than toolbar */
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        cursor: ew-resize;
-                        z-index: 10;
-                        color: var(--rs-on-surface-variant);
-                        font-size: 16px;
-                        line-height: 1;
-                        opacity: 0; /* Hidden by default */
-                        transition: all 0.2s ease;
-                        border-radius: 4px;
-                        user-select: none;
-                      }
-                      
-                      /* Add the grip content */
-                      #${IDS.resizeHandle}::before {
-                        content: '⋮';
-                      }
+      /* Icon Button Shared Styles */
+      .rs-icon-btn {
+        position: relative;
+        width: 36px; height: 36px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        border-radius: 50%;
+        border: 1px solid transparent;
+        background: transparent;
+        color: var(--rs-on-surface-variant);
+        cursor: pointer;
+        user-select: none;
+        transition: background-color .15s ease, transform .2s ease;
+        box-sizing: border-box;
+      }
+      .rs-icon-btn:hover {
+        background: var(--rs-hover);
+      }
+      .rs-icon-btn:active {
+        background: color-mix(in srgb, var(--rs-hover) 80%, var(--rs-scrim));
+      }
+      .rs-icon-btn svg {
+        width: 20px; height: 20px;
+        pointer-events: none; /* Let clicks pass to select */
+      }
 
-                      /* Show handle on toolbar hover */
-                      #${IDS.toolbar}:hover #${IDS.resizeHandle} {
-                        opacity: 0.6;
-                      }
-                      
-                      #${IDS.resizeHandle}:hover {
-                         opacity: 1 !important; /* Use important to override parent hover */
-                         background: var(--rs-hover);
-                      }
+      /* Overlay Selects */
+      .rs-select-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+        appearance: none;
+        z-index: 5;
+      }
 
-                      /* UPDATED: Remove border change, add handle background change */
-                      /*
-                      #${IDS.toolbar}[data-resizing="true"] {
-                        border-right-color: var(--rs-primary); 
-                      }
-                      */
+      /* Read button is primary */
+      #${IDS.readBtn} {
+        color: var(--rs-primary);
+      }
 
-                      #${IDS.toolbar}[data-resizing="true"] #${IDS.resizeHandle} {
-                        opacity: 1;
-                        /* Darker 'active' state, consistent with button active state */
-                        background: color-mix(in srgb, var(--rs-hover) 80%, var(--rs-scrim));
-                      }
+      /* Language Badge */
+      #${IDS.langBadge} {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        min-width: 14px;
+        height: 14px;
+        padding: 0 3px;
+        background: var(--rs-primary);
+        color: var(--rs-surface);
+        border-radius: 7px;
+        font-size: 9px;
+        font-weight: 600;
+        line-height: 14px;
+        text-align: center;
+        box-sizing: border-box;
+        user-select: none;
+        pointer-events: none;
+        z-index: 2;
+      }
+
+      /* Resize Handle */
+      #${IDS.resizeHandle} {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+        width: 16px; 
+        height: 30px; 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: ew-resize;
+        z-index: 10;
+        color: var(--rs-on-surface-variant);
+        font-size: 16px;
+        line-height: 1;
+        opacity: 0; 
+        transition: all 0.2s ease;
+        border-radius: 4px;
+        user-select: none;
+      }
+      
+      #${IDS.resizeHandle}::before {
+        content: '⋮';
+      }
+
+      #${IDS.toolbar}:hover #${IDS.resizeHandle} {
+        opacity: 0.6;
+      }
+      
+      #${IDS.resizeHandle}:hover {
+         opacity: 1 !important;
+         background: var(--rs-hover);
+      }
+
+      #${IDS.toolbar}[data-resizing="true"] #${IDS.resizeHandle} {
+        opacity: 1;
+        background: color-mix(in srgb, var(--rs-hover) 80%, var(--rs-scrim));
+      }
+
+      /* Read/Stop Icon Toggle */
+      #${IDS.readBtn} .rs-play-icon { display: inline-flex; }
+      #${IDS.readBtn} .rs-stop-icon { display: none; }
+      #${IDS.readBtn} .rs-spinner-icon { display: none; } 
+
+      #${IDS.toolbar}[data-reading="true"] #${IDS.readBtn} .rs-play-icon { display: none; }
+      #${IDS.toolbar}[data-reading="true"] #${IDS.readBtn} .rs-stop-icon { display: inline-flex; }
+
+      /* Added loading state */
+      #${IDS.toolbar}[data-reading="loading"] #${IDS.readBtn} .rs-play-icon { display: none; }
+      #${IDS.toolbar}[data-reading="loading"] #${IDS.readBtn} .rs-spinner-icon { 
+        display: inline-flex; 
+        animation: rsSpin 1s linear infinite;
+      }
+
+      .rs-reading ::selection { 
+        background: rgba(0, 0, 0, 0.045); 
+        color: inherit; 
+      }
+      @media (prefers-color-scheme: dark) {
+        .rs-reading ::selection { 
+          background: rgba(255, 255, 255, 0.15); 
+          color: inherit; 
+        }
+      }
+      
+      @keyframes rsBounceIn {
+        0%   { transform: translateX(-10%) scaleX(.1); opacity: .15; }
+        55%  { transform: translateX(2%)   scaleX(1.05); opacity: .98; }
+        75%  { transform: translateX(-1%) scaleX(.98); }
+        100% { transform: translateX(0)   scaleX(1); opacity: 1; }
+      }
+      
+      @keyframes rsSpin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+
+      #${IDS.layer} { position: absolute; left: 0; top: 0; width: 0; height: 0; pointer-events: none; z-index: ${Z}; }
+      .rs-chunk {
+        position: absolute;
+        border-radius: 6px;
+        background-image: linear-gradient(180deg, rgba(77, 184, 255, 0.3) 15%, transparent 40%, transparent 60%, rgba(77, 184, 255, 0.4) 85%);
+        outline: 1px solid rgba(40, 150, 220, 0.9);
+        box-shadow: 0 4px 10px var(--rs-shadow), inset 0 0 0 1px rgba(255,255,255,.06);
+        transform-origin: left center;
+      }
+      .rs-chunk--animate { animation: rsBounceIn .22s cubic-bezier(.34,1.56,.64,1); }
 
 
-                      /* Icon Button */
-                      .rs-icon-btn {
-                        position: relative; /* For badge */
-                        width: 36px; height: 36px;
-                        padding: 0;
-                        display: inline-flex;
-                        align-items: center;
-                        justify-content: center;
-                        flex-shrink: 0; /* Prevent buttons from shrinking */
-                        border-radius: 50%; /* Circular */
-                        border: 1px solid transparent;
-                        background: transparent;
-                        color: var(--rs-on-surface-variant);
-                        cursor: pointer;
-                        user-select: none;
-                        transition: background-color .15s ease, transform .2s ease;
-                        box-sizing: border-box;
-                      }
-                      .rs-icon-btn:hover {
-                        background: var(--rs-hover);
-                      }
-                      .rs-icon-btn:active {
-                        background: color-mix(in srgb, var(--rs-hover) 80%, var(--rs-scrim));
-                      }
-                      .rs-icon-btn svg {
-                        width: 20px; height: 20px;
-                      }
-                      /* Read button is primary */
-                      #${IDS.readBtn} {
-                        color: var(--rs-primary);
-                      }
-
-                      /* Language Badge */
-                      #${IDS.langBadge} {
-                        position: absolute;
-                        top: 2px;
-                        right: 2px;
-                        min-width: 14px;
-                        height: 14px;
-                        padding: 0 3px;
-                        display: none; /* Hidden by default */
-                        background: var(--rs-primary);
-                        color: var(--rs-surface);
-                        border-radius: 7px;
-                        font-size: 9px;
-                        font-weight: 600;
-                        line-height: 14px;
-                        text-align: center;
-                        box-sizing: border-box;
-                        user-select: none;
-                        pointer-events: none;
-                      }
-                      
-                      /* Read/Stop Icon Toggle */
-                      #${IDS.readBtn} .rs-play-icon { display: inline-flex; }
-                      #${IDS.readBtn} .rs-stop-icon { display: none; }
-                      #${IDS.readBtn} .rs-spinner-icon { display: none; } 
-
-                      #${IDS.toolbar}[data-reading="true"] #${IDS.readBtn} .rs-play-icon { display: none; }
-                      #${IDS.toolbar}[data-reading="true"] #${IDS.readBtn} .rs-stop-icon { display: inline-flex; }
-
-                      /* Added loading state */
-                      #${IDS.toolbar}[data-reading="loading"] #${IDS.readBtn} .rs-play-icon { display: none; }
-                      #${IDS.toolbar}[data-reading="loading"] #${IDS.readBtn} .rs-spinner-icon { 
-                        display: inline-flex; 
-                        animation: rsSpin 1s linear infinite;
-                      }
-                      
-                      /* Custom Menu */
-                      .${IDS.langMenu}, .${IDS.voiceMenu}, .${IDS.rateMenu} { /* Modified */
-                        position: absolute;
-                        z-index: ${Z + 1};
-                        display: none; /* Hidden by default */
-                        background: var(--rs-surface);
-                        border: 1px solid var(--rs-outline);
-                        border-radius: 8px;
-                        box-shadow: 0 5px 15px -3px var(--rs-shadow), 0 0 1px 0 var(--rs-shadow);
-                        padding: 8px 0;
-                        min-width: 200px;
-                        max-height: 250px;
-                        overflow-x: hidden;
-                        overflow-y: auto;
-                        outline: none; /* For focus */
-                      }
-                      
-                      /* Menu Item */
-                      .rs-menu-item {
-                        display: flex;
-                        align-items: center;
-                        gap: 12px;
-                        font: 14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-                        padding: 8px 16px 8px 20px;
-                        color: var(--rs-on-surface);
-                        cursor: pointer;
-                        user-select: none;
-                        white-space: nowrap;
-                      }
-                      .rs-menu-item:hover, .rs-menu-item:focus {
-                        background: var(--rs-hover);
-                        outline: none;
-                      }
-                      .rs-menu-item .rs-check-icon {
-                        width: 18px; height: 18px;
-                        visibility: hidden; /* Hide by default */
-                        color: var(--rs-primary);
-                      }
-                      .rs-menu-item[data-selected="true"] {
-                        color: var(--rs-primary);
-                        font-weight: 500;
-                      }
-                      .rs-menu-item[data-selected="true"] .rs-check-icon {
-                        visibility: visible;
-                      }
-
-                      /* Use a light grey selection instead of transparent */
-                      .rs-reading ::selection { 
-                        background: rgba(0, 0, 0, 0.045); /* Light grey selection */
-                        color: inherit; 
-                      }
-                      @media (prefers-color-scheme: dark) {
-                        .rs-reading ::selection { 
-                          background: rgba(255, 255, 255, 0.15); /* Light grey selection (dark) */
-                          color: inherit; 
-                        }
-                      }
-                      
-                      /* Previous bounce effect (unchanged) */
-                      @keyframes rsBounceIn {
-                        0%   { transform: translateX(-10%) scaleX(.1); opacity: .15; }
-                        55%  { transform: translateX(2%)   scaleX(1.05); opacity: .98; }
-                        75%  { transform: translateX(-1%) scaleX(.98); }
-                        100% { transform: translateX(0)   scaleX(1); opacity: 1; }
-                      }
-                      
-                      /* Added spinner animation */
-                      @keyframes rsSpin {
-                        from { transform: rotate(0deg); }
-                        to { transform: rotate(360deg); }
-                      }
-
-                      #${
-                        IDS.layer
-                      } { position: absolute; left: 0; top: 0; width: 0; height: 0; pointer-events: none; z-index: ${Z}; }
-                      .rs-chunk {
-                        position: absolute;
-                        border-radius: 6px; /* Slightly larger radius */
-                        background-image: linear-gradient(180deg, rgba(77, 184, 255, 0.3) 15%, transparent 40%, transparent 60%, rgba(77, 184, 255, 0.4) 85%);
-outline: 1px solid rgba(40, 150, 220, 0.9);
-                        box-shadow: 0 4px 10px var(--rs-shadow), inset 0 0 0 1px rgba(255,255,255,.06);
-                        transform-origin: left center;
-                      }
-                      .rs-chunk--animate { animation: rsBounceIn .22s cubic-bezier(.34,1.56,.64,1); }
-                    `;
+      option {
+        font: 14px / 1.4 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        /* Should be working after updating to https://codepen.io/zuhairtaha/pen/emZGzzE */
+        padding: 8px 16px 8px 20px;
+        color: var(--rs-on-surface);
+        cursor: pointer;
+        user-select: none;
+        white-space: nowrap;
+      }
+    `;
   document.head.appendChild(s);
 }
 
@@ -473,41 +391,55 @@ function ensureToolbar() {
   if (el) return el;
   el = document.createElement("div");
   el.id = IDS.toolbar;
-  const read = iconButton(svgPlay() + svgStop() + svgSpinner(), "Read", "rs-icon-btn");
+  
+  // Read Button
+  const read = document.createElement("button");
+  read.className = "rs-icon-btn";
+  read.title = "Read";
   read.id = IDS.readBtn;
+  read.innerHTML = svgPlay() + svgStop() + svgSpinner();
 
-  const langBtn = iconButton(svgLang(), "Language", "rs-icon-btn");
-  langBtn.id = IDS.langBtn;
-
+  // Language Button Wrapper (Icon + Badge + Hidden Select)
+  const langWrap = document.createElement("div");
+  langWrap.className = "rs-icon-btn";
+  langWrap.title = "Language";
+  langWrap.innerHTML = svgLang(); // Visual Icon
+  
   const langBadge = document.createElement("span");
   langBadge.id = IDS.langBadge;
-  langBtn.appendChild(langBadge);
+  langWrap.appendChild(langBadge); // Visual Badge
 
-  const voiceBtn = iconButton(svgVoice(), "Voice", "rs-icon-btn");
-  voiceBtn.id = IDS.voiceBtn;
-  const rateBtn = iconButton(svgRate(), "Reading Speed", "rs-icon-btn");
-  rateBtn.id = IDS.rateBtn;
-  // REMOVED: divider element
+  const langSelect = document.createElement("select");
+  langSelect.id = IDS.langSelect;
+  langSelect.className = "rs-select-overlay";
+  langWrap.appendChild(langSelect); // Functional Select
 
-  // Append elements (without the divider)
+  // Voice Button Wrapper
+  const voiceWrap = document.createElement("div");
+  voiceWrap.className = "rs-icon-btn";
+  voiceWrap.title = "Voice";
+  voiceWrap.innerHTML = svgVoice();
+
+  const voiceSelect = document.createElement("select");
+  voiceSelect.id = IDS.voiceSelect;
+  voiceSelect.className = "rs-select-overlay";
+  voiceWrap.appendChild(voiceSelect);
+
+  // Rate Button Wrapper
+  const rateWrap = document.createElement("div");
+  rateWrap.className = "rs-icon-btn";
+  rateWrap.title = "Reading Speed";
+  rateWrap.innerHTML = svgRate();
+
+  const rateSelect = document.createElement("select");
+  rateSelect.id = IDS.rateSelect;
+  rateSelect.className = "rs-select-overlay";
+  rateWrap.appendChild(rateSelect);
+
   const resizeHandle = document.createElement("div");
   resizeHandle.id = IDS.resizeHandle;
 
-  el.append(read, langBtn, voiceBtn, rateBtn, resizeHandle);
-  document.body.appendChild(el);
-  return el;
-}
-
-/**
- * @param {string} id
- * @returns {HTMLElement}
- */
-function ensureMenu(id) {
-  let el = byId(id);
-  if (el) return el;
-  el = document.createElement("div");
-  el.id = id;
-  el.className = id;
+  el.append(read, langWrap, voiceWrap, rateWrap, resizeHandle);
   document.body.appendChild(el);
   return el;
 }
@@ -522,45 +454,6 @@ function ensureLayer() {
   el.id = IDS.layer;
   document.body.appendChild(el);
   return el;
-}
-
-/**
- * @param {string} iconSvg
- * @param {string} title
- * @param {string} cls
- * @returns {HTMLButtonElement}
- */
-function iconButton(iconSvg, title, cls) {
-  const b = document.createElement("button");
-  b.className = cls;
-  b.title = title;
-  b.innerHTML = iconSvg;
-  return b;
-}
-
-/**
- * @param {HTMLElement} menu
- * @param {HTMLElement} button
- * @returns {void}
- */
-function toggleMenu(menu, button) {
-  if (!menu || !button) return;
-  if (menu.style.display === "block") {
-    hide(menu);
-  } else {
-    const btnRect = button.getBoundingClientRect();
-    menu.style.display = "block";
-
-    // Set focus and scroll selected item into view
-    menu.focus();
-    const selected = menu.querySelector('.rs-menu-item[data-selected="true"]');
-    if (selected) {
-      selected.scrollIntoView({ block: "nearest" });
-    }
-
-    menu.style.left = `${window.scrollX + btnRect.left}px`;
-    menu.style.top = `${window.scrollY + btnRect.bottom + 8}px`;
-  }
 }
 
 /**
@@ -590,14 +483,12 @@ function calculateSnapWidths() {
   const originalDisplay = tb.style.display;
   tb.style.visibility = "hidden";
   tb.style.display = "inline-flex";
-  tb.style.width = "auto"; // Let it size naturally
+  tb.style.width = "auto"; 
 
-  const readBtn = byId(IDS.readBtn);
-  const langBtn = byId(IDS.langBtn);
-  const voiceBtn = byId(IDS.voiceBtn);
-  const rateBtn = byId(IDS.rateBtn);
-
-  if (!readBtn || !langBtn || !voiceBtn || !rateBtn) {
+  // The elements are wrappers now, but still .rs-icon-btn
+  // Widths should be consistent (36px)
+  const btns = tb.querySelectorAll('.rs-icon-btn');
+  if (btns.length < 4) {
     tb.style.display = originalDisplay;
     tb.style.visibility = "visible";
     return;
@@ -605,22 +496,18 @@ function calculateSnapWidths() {
 
   const gap = 4; // From CSS
   const padding = 6; // Single side padding from CSS
+  const btnWidth = 36;
 
-  const readWidth = readBtn.offsetWidth;
-  const langWidth = langBtn.offsetWidth;
-  const voiceWidth = voiceBtn.offsetWidth;
-  const rateWidth = rateBtn.offsetWidth;
-
-  // Snap Widths based on the visible buttons (Formula: 2*padding + sum(button_widths) + sum(gaps))
+  // Snap Widths 
   snapWidths = [
-    // 1. Read (1 button, 0 gaps)
-    padding * 2 + readWidth, // 6 + 36 + 6 = 48px
-    // 2. Read + Lang (2 buttons, 1 gap)
-    padding * 2 + readWidth + gap + langWidth, // 48 + 4 + 36 = 88px
-    // 3. Read + Lang + Voice (3 buttons, 2 gaps)
-    padding * 2 + readWidth + gap * 2 + langWidth + voiceWidth, // 88 + 4 + 36 = 128px
-    // 4. Read + All (4 buttons, 3 gaps)
-    padding * 2 + readWidth + gap * 3 + langWidth + voiceWidth + rateWidth // 128 + 4 + 36 = 168px
+    // 1. Read
+    padding * 2 + btnWidth, 
+    // 2. Read + Lang
+    padding * 2 + btnWidth * 2 + gap,
+    // 3. Read + Lang + Voice
+    padding * 2 + btnWidth * 3 + gap * 2,
+    // 4. Read + All
+    padding * 2 + btnWidth * 4 + gap * 3
   ];
 
   minToolbarWidth = snapWidths[0];
@@ -629,7 +516,7 @@ function calculateSnapWidths() {
   // Restore original style
   tb.style.display = originalDisplay;
   tb.style.visibility = "visible";
-  tb.style.width = ""; // Clear inline width
+  tb.style.width = ""; 
 }
 
 /**
@@ -654,7 +541,7 @@ function initResize() {
     startX = e.clientX;
     startWidth = toolbar.offsetWidth;
     toolbar.dataset.resizing = "true";
-    toolbar.style.transition = "none"; // Disable animation while dragging
+    toolbar.style.transition = "none"; 
     document.addEventListener("pointermove", onPointerMove);
     document.addEventListener("pointerup", onPointerUp);
     document.addEventListener("pointercancel", onPointerUp);
@@ -669,7 +556,6 @@ function initResize() {
     if (!isResizing) return;
     const dx = e.clientX - startX;
     let newWidth = startWidth + dx;
-    // Clamp width, allowing small overdrag buffer
     newWidth = Math.max(minToolbarWidth - 5, Math.min(newWidth, maxToolbarWidth + 5));
     toolbar.style.width = `${newWidth}px`;
   };
@@ -682,13 +568,12 @@ function initResize() {
     if (!isResizing) return;
     isResizing = false;
     toolbar.dataset.resizing = "false";
-    toolbar.style.transition = ""; // Re-enable animation
+    toolbar.style.transition = ""; 
     document.removeEventListener("pointermove", onPointerMove);
     document.removeEventListener("pointerup", onPointerUp);
     document.removeEventListener("pointercancel", onPointerUp);
     handle.releasePointerCapture(e.pointerId);
 
-    // Find the closest snap width
     let targetSnap = snapWidths[0];
     let minDiff = Infinity;
 
@@ -703,7 +588,6 @@ function initResize() {
     toolbar.style.width = `${targetSnap}px`;
     localStorage.setItem(WIDTH_KEY, targetSnap);
 
-    // Allow selection again
     setTimeout(() => {
       allowToolbar = true;
     }, 10);
@@ -721,74 +605,37 @@ function populateLangs() {
   const langs = Array.from(langSet).sort((a, b) =>
     langDisplayName(String(a)).localeCompare(langDisplayName(String(b)))
   );
-  const menu = byId(IDS.langMenu);
-  if (!menu) return;
-  menu.replaceChildren();
+  
+  const select = byId(IDS.langSelect);
+  if (!select) return;
+  
+  select.innerHTML = "";
 
-  menu.tabIndex = -1; // Make it focusable
-  menu.addEventListener("keydown", e => {
-    if (e.key.length === 1 && e.key.match(/[a-z0-9]/i)) {
-      e.preventDefault();
-      e.stopPropagation();
-      const key = e.key.toLowerCase();
-      const items = Array.from(menu.querySelectorAll(".rs-menu-item"));
-      const currentIdx = items.findIndex(item => item === document.activeElement);
-      // Start search from next item
-      const searchPool = [...items.slice(currentIdx + 1), ...items.slice(0, currentIdx + 1)];
-
-      const found = searchPool.find(item => (item.textContent || "").trim().toLowerCase().startsWith(key));
-
-      if (found) {
-        found.focus();
-        found.scrollIntoView({ block: "nearest" });
-      }
-    }
-  });
-
-  const checkIcon = svgCheck();
   if (pref.lang && !langs.includes(pref.lang)) {
     langs.unshift(pref.lang);
   }
+  
   for (const code of langs) {
     if (!code) continue;
-    const item = document.createElement("div");
-    item.className = "rs-menu-item";
-    item.dataset.value = code;
-    item.tabIndex = 0; // Make item focusable
-
     const nativeName = langDisplayName(code);
-    item.innerHTML = `<span class="rs-check-icon">${checkIcon}</span><span>${nativeName}</span>`;
-
-    // Fix 3: Ensure initial selection is correct
+    const option = new Option(nativeName, code);
     if (code.toLowerCase() === (pref.lang || "").toLowerCase()) {
-      item.dataset.selected = "true";
+      option.selected = true;
     }
-
-    const onItemClick = () => {
-      pref.lang = code;
-      localStorage.setItem("RS_LANG", pref.lang);
-      if (isReading) synth.cancel();
-
-      // Fix 3: Update DOM selection
-      menu.querySelectorAll(".rs-menu-item").forEach(el => (el.dataset.selected = "false"));
-      item.dataset.selected = "true";
-
-      ensureVoiceForCurrentLang();
-      populateVoices();
-      updateLangBadge();
-      hide(menu);
-    };
-
-    item.addEventListener("click", onItemClick);
-    item.addEventListener("keydown", e => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        onItemClick();
-      }
-    });
-    menu.appendChild(item);
+    select.add(option);
   }
+
   updateLangBadge();
+
+  select.onchange = () => {
+    pref.lang = select.value;
+    localStorage.setItem("RS_LANG", pref.lang);
+    if (isReading) synth.cancel();
+    ensureVoiceForCurrentLang();
+    populateVoices();
+    updateLangBadge();
+    calculateSnapWidths(); 
+  };
 }
 
 /**
@@ -829,37 +676,30 @@ function ensureVoiceForCurrentLang() {
  */
 function langDisplayName(code) {
   try {
-    // Get the primary language code (e.g., "en" from "en-US")
     const lang = code.split(/[-_]/)[0];
     if (!lang) return code;
 
     let dn;
     if (hasIntlDisplayNames()) {
-      // Get the language name IN ITS OWN LANGUAGE
       dn = new Intl.DisplayNames([lang], {
         type: "language"
       }).of(lang);
     } else {
       dn = fallbackLangName(lang);
     }
-
-    // Capitalize
     dn = capitalize(dn);
 
-    // Try to get region name (e.g., "US" from "en-US")
     const regionMatch = code.match(/[-_]([a-zA-Z]{2,3}|\d{3})$/);
     const region = regionMatch ? regionMatch[1] : null;
 
     if (region && hasIntlDisplayNames()) {
       let dr;
       try {
-        // Get region name in the current browser language
         dr = new Intl.DisplayNames([navigator.language || "en"], {
           type: "region"
         }).of(region.toUpperCase());
         return `${dn} (${dr})`;
       } catch (regionError) {
-        // Fallback if region code is invalid (e.g., 'es-419')
         return `${dn} (${region.toUpperCase()})`;
       }
     }
@@ -913,75 +753,49 @@ function populateVoices() {
   const filtered = (voicesCache || [])
     .filter(v => !pref.lang || (v.lang && v.lang.toLowerCase().startsWith(pref.lang.toLowerCase())))
     .sort((a, b) => (a.name || "").localeCompare(b.name || ""));
-  const menu = byId(IDS.voiceMenu);
-  if (!menu) return;
-  menu.replaceChildren();
-  menu.tabIndex = -1; // Make focusable
+    
+  const select = byId(IDS.voiceSelect);
+  if (!select) return;
+  
+  select.innerHTML = "";
 
-  const checkIcon = svgCheck();
   if (!filtered.length) {
-    const item = document.createElement("div");
-    item.className = "rs-menu-item";
-    item.style.fontStyle = "italic";
-    item.style.color = "var(--rs-on-surface-variant)";
-    item.textContent = "No voices for this language";
-    menu.appendChild(item);
+    const option = new Option("No voices", "");
+    option.disabled = true;
+    select.add(option);
     pref.voiceURI = "";
     localStorage.setItem("RS_VOICE_URI", pref.voiceURI);
   } else {
     let currentVoiceInList = false;
     filtered.forEach(v => {
-      const item = document.createElement("div");
-      item.className = "rs-menu-item";
-      item.dataset.value = v.voiceURI;
-      item.tabIndex = 0; // Make item focusable
-      item.innerHTML = `<span class="rs-check-icon">${checkIcon}</span><span>${v.name} (${v.lang})${
-        v.default ? " - Default" : ""
-      }</span>`;
-
-      // Fix 3: Ensure initial selection is correct
+      const label = `${v.name}${v.default ? " (Default)" : ""}`;
+      const option = new Option(label, v.voiceURI);
       if (v.voiceURI === pref.voiceURI) {
-        item.dataset.selected = "true";
+        option.selected = true;
         currentVoiceInList = true;
       }
-
-      const onItemClick = () => {
-        pref.voiceURI = v.voiceURI;
-        localStorage.setItem("RS_VOICE_URI", pref.voiceURI);
-        if (isReading) synth.cancel();
-        const map = getVoiceMap();
-        map[pref.lang] = v.voiceURI;
-        setVoiceMap(map);
-
-        // Fix 3: Update DOM selection
-        menu.querySelectorAll(".rs-menu-item").forEach(el => (el.dataset.selected = "false"));
-        item.dataset.selected = "true";
-
-        hide(menu);
-      };
-
-      item.addEventListener("click", onItemClick);
-      item.addEventListener("keydown", e => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          onItemClick();
-        }
-      });
-      menu.appendChild(item);
+      select.add(option);
     });
-    if (!currentVoiceInList && menu.children.length > 0) {
-      const firstItem = menu.children[0];
-      if (firstItem && firstItem.classList.contains("rs-menu-item")) {
-        firstItem.dataset.selected = "true";
-        const firstVoiceURI = firstItem.dataset.value || "";
+
+    if (!currentVoiceInList && select.options.length > 0) {
+        select.selectedIndex = 0;
+        const firstVoiceURI = select.value;
         pref.voiceURI = firstVoiceURI;
         localStorage.setItem("RS_VOICE_URI", pref.voiceURI);
         const map = getVoiceMap();
         if (pref.lang) map[pref.lang] = firstVoiceURI;
         setVoiceMap(map);
-      }
     }
   }
+
+  select.onchange = () => {
+    pref.voiceURI = select.value;
+    localStorage.setItem("RS_VOICE_URI", pref.voiceURI);
+    if (isReading) synth.cancel();
+    const map = getVoiceMap();
+    map[pref.lang] = select.value;
+    setVoiceMap(map);
+  };
 }
 
 /**
@@ -1010,9 +824,6 @@ function setVoiceMap(obj) {
  */
 function onSelectionUpdate() {
   if (isReading || !allowToolbar || isResizing) return;
-  hide(langMenu);
-  hide(voiceMenu);
-  hide(rateMenu);
   const info = getSelectionInfo();
   const tb = byId(IDS.toolbar);
   if (!tb) return;
@@ -1137,19 +948,11 @@ function onDocClick(e) {
   const t = e.target;
   if (!(t instanceof Element)) return;
 
-  if (
-    t.closest(`#${IDS.toolbar}`) ||
-    t.closest(`.${IDS.langMenu}`) ||
-    t.closest(`.${IDS.voiceMenu}`) ||
-    t.closest(`.${IDS.rateMenu}`)
-  )
-    return;
+  if (t.closest(`#${IDS.toolbar}`)) return;
+    
   const sel = window.getSelection();
   if (!sel || sel.isCollapsed) {
     hide(byId(IDS.toolbar));
-    hide(langMenu);
-    hide(voiceMenu);
-    hide(rateMenu);
   }
 }
 
@@ -1323,11 +1126,6 @@ function onReadClicked() {
   if (!info) return;
   if (!synth) return;
 
-  console.log("reading", info);
-
-  hide(langMenu);
-  hide(voiceMenu);
-  hide(rateMenu);
   allowToolbar = false;
   synth.cancel();
   byId(IDS.layer)?.replaceChildren();
@@ -1355,7 +1153,6 @@ function onReadClicked() {
   };
 
   utter.onend = utter.onerror = error => {
-    console.log("Speech synthesis ended with error:", error);
     lastSlice = null;
     byId(IDS.layer)?.replaceChildren();
     document.body.classList.remove("rs-reading");
@@ -1387,56 +1184,27 @@ function onReadClicked() {
  */
 function populateRates() {
   const rates = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0];
-  const menu = byId(IDS.rateMenu);
-  if (!menu) return;
-  menu.replaceChildren();
-  menu.tabIndex = -1;
+  const select = byId(IDS.rateSelect);
+  if (!select) return;
+  
+  select.innerHTML = "";
 
-  const checkIcon = svgCheck();
   for (const rate of rates) {
-    const item = document.createElement("div");
-    item.className = "rs-menu-item";
-    item.dataset.value = rate;
-    item.tabIndex = 0;
-
-    item.innerHTML = `<span class="rs-check-icon">${checkIcon}</span><span>${rate.toFixed(2)}x</span>`;
-
-    // Fix 3: Ensure initial selection is correct
+    const option = new Option(`${rate.toFixed(2)}x`, rate);
     if (rate === pref.rate) {
-      item.dataset.selected = "true";
+      option.selected = true;
     }
-
-    const onItemClick = () => {
-      pref.rate = rate;
-      localStorage.setItem("RS_RATE", pref.rate);
-      if (isReading) {
-        synth.cancel();
-        onReadClicked();
-      }
-
-      // Fix 3: Update DOM selection
-      menu.querySelectorAll(".rs-menu-item").forEach(el => (el.dataset.selected = "false"));
-      item.dataset.selected = "true";
-
-      hide(menu);
-    };
-
-    item.addEventListener("click", onItemClick);
-    item.addEventListener("keydown", e => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        onItemClick();
-      }
-    });
-    menu.appendChild(item);
+    select.add(option);
   }
-}
 
-/**
- * @returns {string}
- */
-function svgRate() {
-  return `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>`;
+  select.onchange = () => {
+    pref.rate = parseFloat(select.value);
+    localStorage.setItem("RS_RATE", pref.rate);
+    if (isReading) {
+      synth.cancel();
+      onReadClicked();
+    }
+  };
 }
 
 /**
@@ -1456,6 +1224,15 @@ function svgStop() {
 /**
  * @returns {string}
  */
+function svgSpinner() {
+  return `<svg class="rs-spinner-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+            <path d="M12 2 A10 10 0 0 1 22 12 A10 10 0 0 1 12 22 A10 10 0 0 1 2 12"></path>
+          </svg>`;
+}
+
+/**
+ * @returns {string}
+ */
 function svgLang() {
   return `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v2h11.17c-.7 2.36-1.95 4.5-3.71 6.53l-.03.03-2.54 2.51L1 18.07l2.12 2.12 6.4-6.4 2.54-2.51 6.4 6.4L23 18.07l-3.72-3.72-2.54 2.51zM10 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>`;
 }
@@ -1470,15 +1247,6 @@ function svgVoice() {
 /**
  * @returns {string}
  */
-function svgCheck() {
-  return `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>`;
-}
-
-/**
- * @returns {string}
- */
-function svgSpinner() {
-  return `<svg class="rs-spinner-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
-            <path d="M12 2 A10 10 0 0 1 22 12 A10 10 0 0 1 12 22 A10 10 0 0 1 2 12"></path>
-          </svg>`;
+function svgRate() {
+  return `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>`;
 }
