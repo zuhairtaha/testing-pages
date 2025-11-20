@@ -9,6 +9,7 @@
 | **1700-tallet** | `Dansk slavehandel`تجارة الرقيق الدنماركية |
 | **1733** | `Stavnsbåndet`نظام الستافنسبوند (تقييد الفلاحين بالأرض)<br>`Bønderne fik begrænset deres rettigheder`قيود على حقوق الفلاحين/المزارعين |
 | **~1770** | `Struensee`الطبيب الملكي ستروينسي<br>`Opnåede stor politisk magt`نال سلطة سياسية كبيرة |
+| **1800-t** | andelsbevægelsen, mejerier |
 | **1801** | `Slaget på Reden`معركة كوبنهاغن البحرية<br>`Danmark angrebet af Storbritannien`الدنمارك هُزمت من بريطانيا العظمى |
 | **1814** | `Unionen mellem Danmark og Norge ophørte`نهاية الاتحاد بين الدنمارك والنرويج<br>`Skolepligt (7 år)`فرض التعليم الإلزامي (7 سنوات) |
 | **Guldalderen**<br>(1. halvdel af 1800-tallet) | `Dansk kultur blomstrede`ازدهار الثقافة الدنماركية<br>`Kunstnere rejste til Rom i Italien`سفر الفنانين إلى روما في إيطاليا |
