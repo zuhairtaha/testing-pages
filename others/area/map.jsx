@@ -42,28 +42,27 @@ const DanishHistoryMap = () => {
             year: 1814,
             title: "معاهدة كييل (Kielerfreden) - خسارة النرويج",
             description: "بسبب التحالف مع نابليون الخاسر، أُجبرت الدنمارك على التنازل عن النرويج للسويد. لكنها احتفظت بالمستعمرات (أيسلندا، جزر فارو، غرينلاند).",
-            examTip: "مهم: احتفظت الدنمارك بـ 'جزر الأطلسي' (التي كانت تابعة للنرويج أصلاً) وهذا هو أساس Rigsfællesskabet اليوم.",
+            examTip: "أصبح التعليم الإلزامي 7 سنوات reform om skolepligt",
             activeRegions: ['jylland', 'sjaelland_fyn', 'bornholm', 'nordslesvig', 'sydslesvig', 'holsten', 'island', 'faeroerne', 'gronland']
         },
         {
             year: 1864,
             title: "معركة ديبول (Slaget ved Dybbøl)",
             description: "الهزيمة الكبرى أمام بروسيا (ألمانيا). خسارة دوقيات شليسفيغ وهولشتاين. أصبح الشعار 'ما خسرناه في الخارج، سنكسبه في الداخل' (زراعة الأرض).",
-            examTip: "كلمات مفتاحية: 'Dybbøl Mølle' (طاحونة ديبول)، الهزيمة الوطنية، بداية سياسة الحياد.",
+            examTip: "",
             activeRegions: ['jylland', 'sjaelland_fyn', 'bornholm', 'island', 'faeroerne', 'gronland']
         },
         {
             year: 1920,
             title: "إعادة التوحيد (Genforeningen)",
             description: "بعد استفتاء سلمي (Afstemning)، عاد شمال شليسفيغ للدنمارك. عبر الملك كريستيان العاشر الحدود على حصان أبيض.",
-            examTip: "كلمات مفتاحية: 'Christian 10.'، 'Den hvide hest'، التغيير تم عبر 'Folkeafstemning' (استفتاء) وليس حرب.",
             activeRegions: ['jylland', 'sjaelland_fyn', 'bornholm', 'nordslesvig', 'island', 'faeroerne', 'gronland']
         },
         {
             year: 1944,
             title: "استقلال أيسلندا (Islands selvstændighed)",
             description: "أثناء الحرب العالمية الثانية، بينما كانت الدنمارك محتلة من ألمانيا، أعلنت أيسلندا استقلالها التام وأصبحت جمهورية.",
-            examTip: "سؤال متكرر: متى استقلت أيسلندا؟ 1944. العلاقة انتهت.",
+            examTip: "بنفس العام أخذ Johannes V. Jensen جائزة نوبل في الأدب",
             activeRegions: ['jylland', 'sjaelland_fyn', 'bornholm', 'nordslesvig', 'faeroerne', 'gronland']
         },
         {
