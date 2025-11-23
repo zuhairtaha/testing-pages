@@ -7398,7 +7398,7 @@ export const lastYearsQuestions = {
         "Nej, Danmarks forsvar består udelukkende af professionelle soldater",
         "Ja, men kun for mænd"
       ],
-      correctIndex: 2
+      correctIndex: 0
     },
     {
       question: "Hvilket parti er Villy Søvndal formand for?",

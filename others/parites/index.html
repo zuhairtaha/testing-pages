@@ -8,38 +8,204 @@
     <link rel="stylesheet" href="../global.css" />
 
     <style>
-      .tag {
-        display: inline-block;
-        background-color: #e0e0e0;
-        color: #333;
-        padding: 2px 6px;
-        margin: 2px;
-        border-radius: 4px;
-        text-decoration: none;
+      .rtl {
+        direction: rtl;
       }
 
-      .tag:hover {
-        background-color: #c0c0c0;
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: right;
+      }
+
+      th {
+        background-color: #f2f2f2;
       }
     </style>
   </head>
   <body>
-    <div id="content"></div>
+    <div id="content">
+      <table>
+        <thead>
+          <tr>
+            <th><span class="rtl">الحزب</span></th>
+            <th><span class="rtl">سنة التأسيس</span></th>
+            <th><span class="rtl">كلمات مفتاحية</span></th>
+            <th><span class="rtl">شخصيات</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Socialdemokratiet</strong></td>
+            <td>1871</td>
+            <td>
+              <span class="rtl">الحركة العمالية</span> arbejderbevægelsen<br />
+              <span class="rtl">حزب حاكم</span> regeringsparti<br />
+              <span class="rtl">الحزب الأكبر</span> største parti
+            </td>
+            <td>
+              <span class="rtl">أول رئيس وزراء</span> Thorvald Stauning<br />
+              <span class="rtl">أول رئيسة وزراء</span> Helle Thorning-Schmidt<br />
+              Poul Nyrup Rasmussen
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Venstre</strong></td>
+            <td>1870</td>
+            <td>
+              <span class="rtl">المزارعون</span> landmænd / bønder<br />
+              <span class="rtl">رؤساء البلديات</span> borgmestre<br />
+              <span class="rtl">حزب حاكم</span> regeringsparti
+            </td>
+            <td>
+              Lars Løkke Rasmussen<br />
+              <span class="rtl">عضو سابق</span> Inger Støjberg<br />
+              Jakob Ellemann-Jensen
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Det Konservative Folkeparti</strong></td>
+            <td>1916</td>
+            <td>
+              <span class="rtl">من أقدم الأحزاب</span> ældste parti
+            </td>
+            <td>
+              <span class="rtl">رئيس وزراء 1982-93</span> Poul Schlüter<br />
+              <span class="rtl">توفي 2024</span> Søren Pape Poulsen
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Socialistisk Folkeparti (SF)</strong></td>
+            <td>1959</td>
+            <td>
+              <span class="rtl">تأسس بانشقاق عن الحزب الشيوعي</span> stiftet af DKP-udbrydere<br />
+              <span class="rtl">فاز بانتخابات الاتحاد الأوروبي 2024</span> EU-valg 2024
+            </td>
+            <td>
+              <span class="rtl">الرئيسة الحالية</span> Pia Olsen Dyhr<br />
+              <span class="rtl">رئيس سابق</span> Villy Søvndal
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Radikale Venstre</strong></td>
+            <td>1905</td>
+            <td>
+              <span class="rtl">تأسس بانشقاق عن فينسترا</span> dannet af Venstre-udbrydere<br />
+              <span class="rtl">صغار المزارعين</span> husmænd
+            </td>
+            <td>
+              <span class="rtl">مفوضة أوروبية</span> Margrethe Vestager
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Enhedslisten</strong></td>
+            <td>1989</td>
+            <td>
+              <span class="rtl">لم يشارك في الحكومة قط</span> aldrig i regering<br />
+              <span class="rtl">انتُخب أول مرة 1994</span> valgt første gang 1994
+            </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td><strong>Liberal Alliance</strong></td>
+            <td>2007</td>
+            <td>
+              <span class="rtl">من أحدث الأحزاب</span> nyeste parti
+            </td>
+            <td>
+              <span class="rtl">رئيس سابق</span> Anders Samuelsen
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Dansk Folkeparti (DF)</strong></td>
+            <td><b>1995</b></td>
+            <td>
+              <span class="rtl">تأسس 1995</span> stiftet 1995<br />
+              <span class="rtl">موقفه من تحفظ الدفاع الأوروبي</span> EU-forsvarsforbehold
+            </td>
+            <td>
+              <span class="rtl">المؤسسة</span> Pia Kjærsgaard<br />
+              <span class="rtl">الرئيس الحالي</span> Morten Messerschmidt
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Moderaterne</strong></td>
+            <td>2022</td>
+            <td>
+              <span class="rtl">انتُخب أول مرة 2022</span> valgt første gang 2022<br />
+              <span class="rtl">حزب حاكم</span> regeringsparti
+            </td>
+            <td>
+              <span class="rtl">المؤسس</span> Lars Løkke Rasmussen
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Alternativet</strong></td>
+            <td>2013</td>
+            <td>
+              <span class="rtl">من أحدث الأحزاب</span> nyeste parti
+            </td>
+            <td>
+              <span class="rtl">المؤسس</span> Uffe Elbæk
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Danmarksdemokraterne</strong></td>
+            <td>2022</td>
+            <td>
+              <span class="rtl">تأسس 2022</span> stiftet 2022
+            </td>
+            <td>
+              <span class="rtl">المؤسسة</span> Inger Støjberg
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Nye Borgerlige</strong></td>
+            <td>2015</td>
+            <td>
+              <span class="rtl">تأهل للانتخابات 2019</span> opstillingsberettiget 2019<br />
+              <span class="rtl">موقفه من تحفظ الدفاع الأوروبي</span> EU-forsvarsforbehold
+            </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td><strong>Kommunistiske Parti</strong></td>
+            <td>1919</td>
+            <td>
+              <span class="rtl">تاريخي</span> DKP<br />
+              <span class="rtl">المنشقون عنه أسسوا SF</span> udbrydere stiftede SF
+            </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td><strong>Fremskridtspartiet</strong></td>
+            <td>1972</td>
+            <td>
+              <span class="rtl">انتخابات 1973</span> Jordskredsvalget 1973<br />
+              <span class="rtl">تأسس حزب الشعب الدنماركي بانشقاق عنه</span> DF stiftet af udbrydere
+            </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td><strong>Danmarks Kommunistiske Parti</strong></td>
+            <td>1919</td>
+            <td>
+              <span class="rtl">تاريخي</span> DKP<br />
+              <span class="rtl">المنشقون عنه أسسوا SF</span> udbrydere stiftede SF
+            </td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <danish-parties />
 
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="./timeline.js"></script>
-    <script type="module">
-      const text = await fetch("./parties.md").then(response => response.text());
-      const html = marked.parse(text);
-      // replace <code>xxx</code> with <a href="https://zuhairtaha.github.io/testing-pages/others/search/index.html?q=xxx">xxx</a>
-      const linkedHtml = html.replace(/<code>(.*?)<\/code>/g, (match, codeSegment) => {
-        const query = encodeURIComponent(codeSegment);
-        return `<a target="_blank" class="tag" href="https://zuhairtaha.github.io/testing-pages/others/search/index.html?q=${query}">${codeSegment}</a>`;
-      });
-      document.getElementById("content").innerHTML = linkedHtml;
-    </script>
-
     <script src="../tts/tts.js"></script>
   </body>
 </html>
