@@ -11,10 +11,8 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <div class="container">
-      <h1>🔎 Søgemaskine til Indfødsretsprøven</h1>
-
-      <div id="search-controls">
+    <div id="search-controls">
+      <div class="search-controls-inner">
         <input type="text" id="search-input" placeholder="Søg i spørgsmål eller det korrekte svar..." />
 
         <div id="options-container">
@@ -22,7 +20,9 @@
           <label for="include-wrong-answers">Inkluder forkerte svar i søgningen</label>
         </div>
       </div>
+    </div>
 
+    <div class="container">
       <div id="results-header"></div>
 
       <div id="results-container">

@@ -1,20 +1,22 @@
 /* CSS her */
 body {
   font-family: "Roboto", sans-serif;
-  margin: 20px;
+  margin: 0;
   background-color: #f4f4f9;
   color: #333;
   direction: ltr;
   text-align: left;
 }
+
 .container {
   max-width: 900px;
-  margin: auto;
+  margin: 20px auto;
   background: #fff;
   padding: 25px;
   border-radius: 10px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
 }
+
 h1 {
   color: #2196f3;
   text-align: center;
@@ -22,36 +24,60 @@ h1 {
   padding-bottom: 10px;
   margin-bottom: 25px;
 }
+
 #search-controls {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-bottom: 25px;
-  padding: 20px;
-  border: 1px solid #b3e5fc;
-  border-radius: 8px;
-  background-color: #e3f2fd;
-}
-#search-input {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: #2196f3;
+  padding: 12px 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   width: 100%;
-  padding: 12px;
+  box-sizing: border-box;
+}
+
+.search-controls-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+#search-input {
+  flex: 1;
+  padding: 10px 15px;
   border: 1px solid #90caf9;
   border-radius: 6px;
   font-size: 16px;
   box-sizing: border-box;
 }
+
 #search-input:focus {
   outline: none;
   border-color: #4285f4;
+  box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
 }
+
 #options-container {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  gap: 10px;
+  gap: 8px;
   font-size: 14px;
   font-weight: 500;
+  color: white;
+  white-space: nowrap;
 }
+
+#options-container label {
+  cursor: pointer;
+  user-select: none;
+}
+
+#include-wrong-answers {
+  cursor: pointer;
+}
+
 #results-header {
   font-size: 1.1em;
   font-weight: bold;
@@ -226,11 +252,29 @@ h1 {
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+  #search-controls {
+    padding: 10px 15px;
+  }
+
+  .search-controls-inner {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  #search-input {
+    width: 100%;
+  }
+
+  #options-container {
+    align-self: flex-start;
+  }
+
   .tooltip {
     max-width: 250px;
     font-size: 13px;
     padding: 6px 10px;
   }
+
   .scroll-to-top {
     bottom: 20px;
     right: 20px;
@@ -238,6 +282,7 @@ h1 {
     height: 45px;
     border-radius: 50%;
   }
+
   .scroll-to-top svg {
     width: 20px;
     height: 20px;
