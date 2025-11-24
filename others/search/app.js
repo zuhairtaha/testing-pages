@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const resultsContainer = document.getElementById("results-container");
   const resultsHeader = document.getElementById("results-header");
   const scrollToTopButton = document.getElementById("scroll-to-top");
+  const clearButton = document.getElementById("clear-search");
 
   // Translation cache to avoid repeated API calls
   const translationCache = new Map();
@@ -416,6 +417,25 @@ document.addEventListener("DOMContentLoaded", () => {
       resultsContainer.appendChild(examSection);
     }
   };
+
+  // Clear button functionality
+  function updateClearButton() {
+    if (searchInput.value.trim().length > 0) {
+      clearButton.classList.add("visible");
+    } else {
+      clearButton.classList.remove("visible");
+    }
+  }
+
+  searchInput.addEventListener("input", updateClearButton);
+
+  clearButton.addEventListener("click", () => {
+    searchInput.value = "";
+    clearButton.classList.remove("visible");
+    searchInput.focus();
+    // Trigger input event to update search results
+    searchInput.dispatchEvent(new Event("input"));
+  });
 
   // Scroll to top functionality
   const handleScrollToTop = () => {

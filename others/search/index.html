@@ -13,7 +13,14 @@
   <body>
     <div id="search-controls">
       <div class="search-controls-inner">
-        <input type="text" id="search-input" placeholder="Søg i spørgsmål eller det korrekte svar..." />
+        <div class="search-input-wrapper">
+          <input type="text" id="search-input" placeholder="Søg i spørgsmål eller det korrekte svar..." />
+          <button type="button" id="clear-search" class="clear-button" aria-label="Clear search">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
 
         <div id="options-container">
           <input type="checkbox" id="include-wrong-answers" />
