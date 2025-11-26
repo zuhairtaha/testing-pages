@@ -1,4 +1,257 @@
 export const lastYearsQuestions = {
+  "27.11.2025": [
+    {
+      question: "Hvilken politisk bevægelse var rødstrømpebevægelsen en del af?",
+      answers: ["Arbejderbevægelsen i 30'erne", "Kvindebevægelsen i 70'erne", "Miljøbevægelsen i 90'erne"],
+      correctIndex: 1
+    },
+    {
+      question: "Var Danmark besat af tyske tropper under 1. verdenskrig (1914-18)?",
+      answers: ["Ja", "Nej"],
+      correctIndex: 1
+    },
+    {
+      question: "Over hvilket farvand åbnede en bro i 1935?",
+      answers: ["Øresund", "Storebælt", "Lillebælt"],
+      correctIndex: 2
+    },
+    {
+      question:
+        "Hvornår blev det ved en folkeafstemning i Island besluttet at oprette en republik, der var uafhængig af Danmark?",
+      answers: ["1904", "1944", "1984"],
+      correctIndex: 1
+    },
+    {
+      question: "Hvilket parti tilhørte Helle Thorning-Schmidt, da hun var statsminister i perioden 2011-15?",
+      answers: ["Socialdemokraterne", "Radikale Venstre", "Venstre"],
+      correctIndex: 0
+    },
+    {
+      question: "Kan en regering bestå af et eller flere partier, der ikke tilsammen har flertal i Folketinget?",
+      answers: ["Ja", "Nej"],
+      correctIndex: 0
+    },
+    {
+      question: "Hvor høj er valgdeltagelsen normalt til folketingsvalg?",
+      answers: ["Cirka 55 procent", "Cirka 70 procent", "Cirka 85 procent"],
+      correctIndex: 2
+    },
+    {
+      question: "Hvem er den lovgivende, den udøvende og den dømmende magt fordelt mellem?",
+      answers: [
+        "Folketinget, regeringen og domstolene",
+        "Folketinget, kommunerne og domstolene",
+        "Regeringen, regionerne og kommunerne"
+      ],
+      correctIndex: 0
+    },
+    {
+      question: "Hvad er Sofie Gråbøl (f. 1968) særligt kendt for?",
+      answers: ["Hun er forfatter", "Hun er skuespiller", "Hun er kunstmaler"],
+      correctIndex: 1
+    },
+    {
+      question: "Hvad hed forsangeren i bandet Gasolin?",
+      answers: ["Steffen Brandt", "Michael Bundesen", "Kim Larsen"],
+      correctIndex: 2
+    },
+    {
+      question: "Hvilken af følgende fortællinger er skrevet af H.C. Andersen?",
+      answers: ["Hans og Grete", "Skønheden og udyret", "Den grimme ælling"],
+      correctIndex: 2
+    },
+    {
+      question: "Hvem er kendt for at have skrevet manuskriptet til tv-serien Matador?",
+      answers: ["Anders Thomas Jensen", "Lise Nørgaard", "Nils Malmros"],
+      correctIndex: 1
+    },
+    {
+      question:
+        "Hvilket af følgende årtier var især kendetegnet ved høj vækst, fuld beskæftigelse og stor stigning i produktionen?",
+      answers: ["1960'erne", "1970'erne", "1980'erne"],
+      correctIndex: 0
+    },
+    {
+      question: "Hvilken af følgende virksomheder er kendt for at producere vindmøller?",
+      answers: ["Novo Nordisk", "Mærsk", "Vestas"],
+      correctIndex: 2
+    },
+    {
+      question: "Hvad er den kriminelle lavalder i Danmark?",
+      answers: ["12 år", "15 år", "18 år"],
+      correctIndex: 1
+    },
+    {
+      question: "Hvilken ændring trådte i kraft i 2025 angående den fri abort?",
+      answers: [
+        "Grænsen for fri abort blev hævet fra 12 til 18 uger",
+        "Grænsen for fri abort blev sænket fra 12 til 9 uger"
+      ],
+      correctIndex: 0
+    },
+    {
+      question: "Hvad indebar den seneste ændring af grundloven i 1953 blandt andet?",
+      answers: [
+        "At valgretsalderen blev sænket til 18 år",
+        "At kvinder fik mulighed for at arve tronen",
+        "At Danmark blev medlem af FN"
+      ],
+      correctIndex: 1
+    },
+    {
+      question: "Hvilket af følgende partier er ældst?",
+      answers: ["Radikale Venstre", "SF", "Enhedslisten"],
+      correctIndex: 0
+    },
+    {
+      question: "Hvilket land blev Dansk Vestindien solgt til i 1917?",
+      answers: ["Frankrig", "Storbritannien", "USA"],
+      correctIndex: 2
+    },
+    {
+      question: "Fik kvinder valgret til Folketinget med grundloven i 1849?",
+      answers: ["Ja", "Nej"],
+      correctIndex: 1
+    },
+    {
+      question: "Hvilket symbol indgår i Grønlands flag?",
+      answers: ["Et kors", "En trekant", "En cirkel"],
+      correctIndex: 2
+    },
+    {
+      question: "Gælder grundloven på Færøerne og i Grønland?",
+      answers: ["Ja", "Nej"],
+      correctIndex: 0
+    },
+    {
+      question: "Hvilken tidligere dansk statsminister var generalsekretær for NATO i 2009-2014?",
+      answers: ["Poul Nyrup Rasmussen", "Anders Fogh Rasmussen", "Lars Løkke Rasmussen"],
+      correctIndex: 1
+    },
+    {
+      question: "Hvilket kontinent modtager den største andel af Danmarks udviklingsbistand?",
+      answers: ["Asien", "Sydamerika", "Afrika"],
+      correctIndex: 2
+    },
+    {
+      question: "Er Europa-Parlamentets medlemmer direkte valgt af befolkningerne i EU's medlemslande?",
+      answers: ["Ja", "Nej"],
+      correctIndex: 0
+    },
+    {
+      question: "Hvad handler Paris-aftalen, som FN vedtog i 2015, især om?",
+      answers: ["Klima", "Forsvar", "Kriminalitet"],
+      correctIndex: 0
+    },
+    {
+      question: "Har Danmark forbehold for EU's forsvars- og sikkerhedspolitik?",
+      answers: ["Ja", "Nej"],
+      correctIndex: 1
+    },
+    {
+      question: "Hvilket af følgende lande blev erobret af Svend Tveskæg i 1000-tallet?",
+      answers: ["Frankrig", "Polen", "England"],
+      correctIndex: 2
+    },
+    {
+      question: "Hvad hedder den ældste by i Danmark?",
+      answers: ["Ribe", "Esbjerg", "Frederikshavn"],
+      correctIndex: 0
+    },
+    {
+      question: "Hvad indebar stavnsbåndet i 1700-tallet?",
+      answers: [
+        "At kongen havde eneret på at handle med udlandet",
+        "At bønderne havde begrænset ret til at flytte",
+        "At kristendommen var den eneste tilladte religion"
+      ],
+      correctIndex: 1
+    },
+    {
+      question: "Hvilken af følgende åbnede i Danmark i 1840'erne?",
+      answers: ["Den første lufthavn", "Den første motorvej", "Den første jernbane"],
+      correctIndex: 2
+    },
+    {
+      question: "På hvilket slot i København bor kongen og hans familie en del af året?",
+      answers: ["Christiansborg", "Rosenborg", "Amalienborg"],
+      correctIndex: 2
+    },
+    {
+      question: "Hvilket af følgende områder har kommunerne ansvaret for at drive?",
+      answers: ["Folkeskolerne", "Domstolene", "Sygehusene"],
+      correctIndex: 0
+    },
+    {
+      question: "Hvilke myndigheder udskriver skatter?",
+      answers: ["Staten og regionerne", "Staten og kommunerne", "Regionerne og kommunerne"],
+      correctIndex: 1
+    },
+    {
+      question: "Hvilket år fik personer af samme køn ret til at indgå et registreret partnerskab?",
+      answers: ["1955", "1972", "1989"],
+      correctIndex: 2
+    },
+    {
+      question: "Hvad har Danmark formandskabet for mellem 1. juli og 31. december 2025?",
+      answers: ["FN's Sikkerhedsråd", "Rådet for Den Europæiske Union", "Nordisk Ministerråd"],
+      correctIndex: 1
+    },
+    {
+      question: "Hvilket parti fik flest stemmer på landsplan ved kommunalvalget den 18. november 2025?",
+      answers: ["Socialdemokratiet", "Venstre", "Det Konservative Folkeparti"],
+      correctIndex: 0
+    },
+    {
+      question: "Hvilken dansk cykelrytter vandt Vuelta a España i 2025?",
+      answers: ["Magnus Cort", "Mattias Skjelmose", "Jonas Vingegaard"],
+      correctIndex: 2
+    },
+    {
+      question:
+        "På hvilke af følgende dagligvarer er priserne i butikkerne steget mest det seneste år (fra oktober 2024 til oktober 2025 ifølge Danmarks Statistiks Forbrugerprisindeks)?",
+      answers: ["Friske grøntsager", "Mel og gryn", "Okse- og kalvekød"],
+      correctIndex: 2
+    },
+    {
+      question: "Hvorfor blev Københavns Lufthavn lukket om aftenen den 22. september 2025?",
+      answers: [
+        "Medarbejderne i lufthavnen strejkede",
+        "Der var rapporteret droner ved lufthavnen",
+        "En stormflod med kraftig blæst og oversvømmelser ramte lufthavnen"
+      ],
+      correctIndex: 1
+    },
+    {
+      question:
+        "Kan man ifølge dansk lov blive straffet med fængsel i 16 år, hvis man med vold eller trussel om vold forsøger at forhindre Folketinget i at træffe en beslutning?",
+      answers: ["Ja", "Nej"],
+      correctIndex: 0
+    },
+    {
+      question:
+        "Er der i dansk lov en regel om, at en arbejdsgiver skal give kvinder og mænd lige løn for samme arbejde?",
+      answers: ["Ja", "Nej"],
+      correctIndex: 0
+    },
+    {
+      question: "Er det som udgangspunkt strafbart at udtale sig kritisk om andres religion?",
+      answers: ["Ja", "Nej"],
+      correctIndex: 1
+    },
+    {
+      question:
+        "Hvor stor en andel af borgerne i Danmark synes, at det er uacceptabelt, at en mand indimellem slår sin kone/kæreste (ifølge Europabarometer, Kønsstereotyper – vold mod kvinder, 2024)?",
+      answers: ["37 procent", "65 procent", "94 procent"],
+      correctIndex: 2
+    },
+    {
+      question:
+        "Hvor stor en andel af borgerne i Danmark har tillid til, at politiet vil hjælpe dem, hvis de har brug for det (ifølge Justitsministeriets Tryghedsundersøgelse 2023)?",
+      answers: ["Cirka 35 procent", "Cirka 60 procent", "Cirka 85 procent"],
+      correctIndex: 2
+    }
+  ],
   "27.05.2025": [
     {
       question: "Er det lovligt at lade sit barn under 18 år blive religiøst viet?",
