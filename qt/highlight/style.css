@@ -4,12 +4,12 @@ body {
   margin: 0 auto;
 }
 
-::highlight(search-term-highlight) {
+::highlight(yellow-highlight) {
   background-color: yellow;
   color: black;
 }
 
 ::highlight(blue-highlight) {
-  background-color: green;
+  background-color: blue;
   color: white;
 }
