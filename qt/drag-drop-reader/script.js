@@ -4,6 +4,58 @@ const copyBtn = /** @type {HTMLButtonElement} */ (document.getElementById("copyB
 const downloadBtn = /** @type {HTMLButtonElement} */ (document.getElementById("downloadBtn"));
 let fileData = [];
 
+// Common folders and files to ignore
+const IGNORED_FOLDERS = [
+  'node_modules',
+  'dist',
+  'build',
+  '.git',
+  '.next',
+  '.cache',
+  'coverage',
+  '.vscode',
+  '.idea',
+  'out',
+  'target',
+  'vendor',
+  '.svn',
+  '.hg',
+  'bower_components',
+  '.nuxt',
+  '.output',
+  '__pycache__'
+];
+
+const IGNORED_FILES = [
+  'package-lock.json',
+  'yarn.lock',
+  'pnpm-lock.yaml'
+];
+
+/**
+ * Checks if a file or folder should be ignored.
+ * @param {string} name - The name of the file or folder.
+ * @returns {boolean} - True if should be ignored, false otherwise.
+ */
+function shouldIgnore(name) {
+  // Ignore files/folders starting with a dot
+  if (name.startsWith('.')) {
+    return true;
+  }
+  
+  // Ignore specific folders
+  if (IGNORED_FOLDERS.includes(name)) {
+    return true;
+  }
+  
+  // Ignore specific files
+  if (IGNORED_FILES.includes(name)) {
+    return true;
+  }
+  
+  return false;
+}
+
 dropZone.addEventListener("dragover", event => {
   event.preventDefault();
   dropZone.classList.add("dragover");
@@ -57,6 +109,12 @@ dropZone.addEventListener("drop", async event => {
  * @returns {Promise<void>}
  */
 async function processEntry(entry, path = "") {
+  // Skip ignored files and folders
+  if (shouldIgnore(entry.name)) {
+    console.log(`Skipping ignored: ${path}${entry.name}`);
+    return;
+  }
+
   if (entry.isFile) {
     await processFile(/** @type {FileSystemFileEntry} */ (entry), path);
   } else if (entry.isDirectory) {
