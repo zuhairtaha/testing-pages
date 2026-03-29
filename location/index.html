@@ -1,500 +1,527 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Drive Location Announcer</title>
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Leaflet Map CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-    
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>DriveSpeak — Location Announcer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  :root {
+    --bg: #0a0c10;
+    --surface: #111318;
+    --border: #1e2229;
+    --accent: #00e5a0;
+    --accent2: #ff6b35;
+    --text: #e8eaf0;
+    --muted: #5a6070;
+    --card: #14171e;
+  }
 
-    <style>
-        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
-        #map { height: 100%; width: 100%; z-index: 1; }
-        
-        .overlay-ui {
-            z-index: 1000;
-            position: absolute;
-            pointer-events: none; /* Let clicks pass through to map where transparent */
-        }
-        
-        .interactive {
-            pointer-events: auto;
-        }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* Pulse animation for the live tracking indicator */
-        @keyframes pulse-ring {
-            0% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
-            100% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
-        }
-        .live-indicator {
-            animation: pulse-ring 2s infinite;
-        }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
 
-        /* Custom styles for surrounding map labels */
-        .surrounding-label-container {
-            background: transparent;
-            border: none;
-        }
-        .surrounding-label-content {
-            transform: translate(-50%, -50%); /* Center precisely on coordinates */
-            padding: 4px 10px;
-            background-color: rgba(30, 41, 59, 0.8); /* Slate 800 with opacity */
-            backdrop-filter: blur(4px);
-            color: rgba(241, 245, 249, 1); /* Slate 100 */
-            font-size: 0.85rem;
-            font-weight: 600;
-            border-radius: 0.5rem;
-            border: 1px solid rgba(100, 116, 139, 0.5); /* Slate 500 */
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-            white-space: nowrap;
-            pointer-events: none;
-            text-shadow: 0px 1px 3px rgba(0,0,0,0.8);
-            transition: all 0.3s ease;
-        }
-    </style>
+  /* ── Header ── */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    z-index: 10;
+    flex-shrink: 0;
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--accent);
+  }
+  .logo span { color: var(--text); }
+
+  .status-pill {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.68rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--muted);
+    transition: background 0.4s;
+  }
+  .dot.active { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+  .dot.pulse { animation: pulse 1.5s infinite; }
+
+  @keyframes pulse {
+    0%,100% { opacity:1; transform:scale(1); }
+    50% { opacity:.5; transform:scale(0.8); }
+  }
+
+  /* ── Map ── */
+  #map {
+    flex: 1;
+    width: 100%;
+    z-index: 1;
+  }
+
+  /* ── Bottom Panel ── */
+  #bottom {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 16px 20px;
+    z-index: 10;
+    flex-shrink: 0;
+  }
+
+  .place-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+
+  .place-icon {
+    width: 42px; height: 42px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #00e5a022, #00e5a011);
+    border: 1px solid #00e5a044;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .place-label {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin-bottom: 2px;
+  }
+
+  #place-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1;
+    transition: all 0.3s;
+  }
+  #place-name.flash {
+    color: var(--accent);
+  }
+
+  #place-sub {
+    font-size: 0.68rem;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+
+  .controls {
+    display: flex;
+    gap: 10px;
+  }
+
+  button {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+
+  button:hover { border-color: var(--accent); color: var(--accent); }
+
+  button.primary {
+    background: var(--accent);
+    color: #000;
+    border-color: var(--accent);
+    font-weight: 600;
+  }
+  button.primary:hover { background: #00fdb5; }
+  button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* Announce toast */
+  #toast {
+    position: fixed;
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    background: var(--accent);
+    color: #000;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 10px 24px;
+    border-radius: 100px;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 999;
+    white-space: nowrap;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  #toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* Coords display */
+  #coords {
+    font-size: 0.6rem;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 8px;
+    letter-spacing: 0.05em;
+  }
+
+  /* History chips */
+  #history {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    max-height: 46px;
+    overflow: hidden;
+  }
+
+  .hist-chip {
+    font-size: 0.62rem;
+    padding: 3px 10px;
+    border-radius: 100px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    opacity: 0;
+    transform: scale(0.8);
+    animation: chipIn 0.3s forwards;
+  }
+  @keyframes chipIn {
+    to { opacity:1; transform:scale(1); }
+  }
+
+  .speed-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.65rem;
+    color: var(--accent2);
+    background: #ff6b3515;
+    border: 1px solid #ff6b3530;
+    padding: 2px 8px;
+    border-radius: 100px;
+  }
+
+  /* Leaflet overrides */
+  .leaflet-container { background: #0d0f14 !important; }
+  .custom-marker {
+    width: 20px; height: 20px;
+    background: var(--accent);
+    border-radius: 50%;
+    border: 3px solid #fff;
+    box-shadow: 0 0 0 3px var(--accent), 0 0 20px var(--accent);
+  }
+  .leaflet-tile { filter: brightness(0.7) saturate(0.8) hue-rotate(180deg); }
+</style>
 </head>
-<body class="bg-slate-900 text-white font-sans antialiased">
+<body>
 
-    <!-- Map Container -->
-    <div id="map" class="absolute inset-0"></div>
+<header>
+  <div class="logo">Drive<span>Speak</span></div>
+  <div class="status-pill">
+    <div class="dot" id="statusDot"></div>
+    <span id="statusText">Waiting</span>
+  </div>
+</header>
 
-    <!-- Top Overlay: Current Location Display -->
-    <div class="overlay-ui top-0 left-0 right-0 p-4 sm:p-6 flex flex-col items-center justify-start bg-gradient-to-b from-black/80 to-transparent pb-12 transition-all duration-500">
-        <div id="status-badge" class="interactive flex items-center gap-2 bg-slate-800/90 backdrop-blur px-4 py-1.5 rounded-full text-xs font-semibold text-slate-300 mb-3 border border-slate-700 shadow-lg">
-            <div id="status-dot" class="w-2 h-2 rounded-full bg-slate-500"></div>
-            <span id="status-text">Ready to start</span>
-        </div>
-        
-        <h1 id="current-place" class="text-4xl sm:text-6xl font-extrabold text-center drop-shadow-md text-white tracking-tight transition-all duration-300 scale-100">
-            Unknown Location
-        </h1>
-        <p id="current-region" class="text-lg sm:text-xl text-slate-300 mt-1 font-medium drop-shadow-md text-center">
-            Press Start to locate
-        </p>
+<div id="map"></div>
+
+<div id="bottom">
+  <div class="place-row">
+    <div class="place-icon">📍</div>
+    <div>
+      <div class="place-label">Current Location</div>
+      <div id="place-name">—</div>
+      <div id="place-sub">Press Start to begin tracking</div>
     </div>
+  </div>
 
-    <!-- Bottom Overlay: Controls -->
-    <div class="overlay-ui bottom-0 left-0 right-0 p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-center gap-4 bg-gradient-to-t from-black/90 to-transparent pt-24">
-        
-        <button id="btn-start" onclick="toggleTracking()" class="interactive flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-full font-bold text-lg shadow-[0_0_20px_rgba(37,99,235,0.4)] transition-all hover:scale-105 active:scale-95 w-full sm:w-auto">
-            <i data-lucide="navigation"></i>
-            <span id="btn-start-text">Start Driving Mode</span>
-        </button>
+  <div class="controls">
+    <button class="primary" id="startBtn" onclick="startTracking()">▶ Start</button>
+    <button id="stopBtn" onclick="stopTracking()" disabled>■ Stop</button>
+    <button id="muteBtn" onclick="toggleMute()">🔊 Audio</button>
+  </div>
 
-        <button id="btn-demo" onclick="toggleDemo()" class="interactive flex items-center justify-center gap-2 bg-slate-700 hover:bg-slate-600 text-white px-6 py-4 rounded-full font-semibold text-md shadow-lg transition-all hover:scale-105 active:scale-95 w-full sm:w-auto border border-slate-600">
-            <i data-lucide="route"></i>
-            <span id="btn-demo-text">Simulate Drive</span>
-        </button>
+  <div id="history"></div>
+  <div id="coords">—</div>
+</div>
 
-    </div>
+<div id="toast"></div>
 
-    <!-- Leaflet Map JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    
-    <script>
-        // Initialize Lucide icons
-        lucide.createIcons();
+<script>
+// ── State ──────────────────────────────────────────────
+let map, marker, circle, watchId;
+let lastPlace = '';
+let lastLat = null, lastLng = null;
+let muted = false;
+let tracking = false;
+let placeHistory = [];
+const MOVE_THRESHOLD = 80; // metres before re-checking
 
-        // --- State Variables ---
-        let map;
-        let userMarker;
-        let watchId = null;
-        let isTracking = false;
-        let isDemoMode = false;
-        let demoInterval = null;
-        let demoStep = 0;
-        
-        let currentPlaceName = "";
-        let lastGeocodedPos = null;
-        let ttsUtterance = null; 
-        let currentPolygonLayer = null; 
-        let surroundingMarkers = []; // Array to hold markers for nearby places
+// ── Map Init ───────────────────────────────────────────
+function initMap(lat, lng) {
+  if (map) return;
+  map = L.map('map', { zoomControl: false, attributionControl: false }).setView([lat, lng], 14);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19
+  }).addTo(map);
+  L.control.zoom({ position: 'topright' }).addTo(map);
+}
 
-        // Copenhagen Simulation Path (Lat, Lng)
-        // Starts near Vesterbro, goes through Frederiksberg, Nørrebro, to Nørreport
-        const demoPath = [
-            { lat: 55.6669, lng: 12.5539 }, // Vesterbro
-            { lat: 55.6720, lng: 12.5480 }, // Moving...
-            { lat: 55.6780, lng: 12.5330 }, // Frederiksberg
-            { lat: 55.6850, lng: 12.5450 }, // Moving...
-            { lat: 55.6920, lng: 12.5490 }, // Nørrebro
-            { lat: 55.6890, lng: 12.5600 }, // Moving...
-            { lat: 55.6833, lng: 12.5714 }, // Nørreport
-            { lat: 55.6761, lng: 12.5683 }, // Indre By (City Center)
-        ];
+function updateMapMarker(lat, lng, accuracy) {
+  if (!map) initMap(lat, lng);
 
-        // --- Initialization ---
-        function initMap() {
-            // Default center: Copenhagen area
-            map = L.map('map', {
-                zoomControl: false // Hide default zoom for cleaner UI
-            }).setView([55.6761, 12.5683], 12);
+  const icon = L.divIcon({ className: '', html: '<div class="custom-marker"></div>', iconSize: [20,20], iconAnchor: [10,10] });
 
-            // Add standard OpenStreetMap tiles
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>',
-                maxZoom: 19
-            }).addTo(map);
+  if (!marker) {
+    marker = L.marker([lat, lng], { icon }).addTo(map);
+    circle = L.circle([lat, lng], { radius: accuracy, color: '#00e5a0', fillColor: '#00e5a0', fillOpacity: 0.08, weight: 1 }).addTo(map);
+  } else {
+    marker.setLatLng([lat, lng]);
+    circle.setLatLng([lat, lng]);
+    circle.setRadius(accuracy);
+  }
 
-            // Custom car/location icon
-            const carIcon = L.divIcon({
-                className: 'custom-div-icon',
-                html: `<div class="w-6 h-6 bg-blue-600 rounded-full border-4 border-white shadow-xl flex items-center justify-center relative">
-                           <div class="absolute inset-0 rounded-full bg-blue-500 live-indicator opacity-0" id="pulse-ring"></div>
-                       </div>`,
-                iconSize: [24, 24],
-                iconAnchor: [12, 12]
-            });
+  map.panTo([lat, lng], { animate: true, duration: 1 });
+}
 
-            userMarker = L.marker([55.6761, 12.5683], {icon: carIcon}).addTo(map);
-            userMarker.setOpacity(0); // Hide until we have a location
+// ── Geocoding (Nominatim) ──────────────────────────────
+async function getPlaceName(lat, lng) {
+  try {
+    const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=da,en&zoom=14`;
+    const res = await fetch(url, { headers: { 'Accept-Language': 'da,en' } });
+    const data = await res.json();
+    const a = data.address || {};
+
+    // Priority: suburb > neighbourhood > quarter > city_district > village > town > city
+    const place =
+      a.suburb ||
+      a.neighbourhood ||
+      a.quarter ||
+      a.city_district ||
+      a.village ||
+      a.town ||
+      a.city ||
+      a.county ||
+      a.state ||
+      'Unknown';
+
+    const city = a.city || a.town || a.village || '';
+    const country = a.country_code?.toUpperCase() || '';
+    const sub = city && city !== place ? `${city}, ${country}` : country;
+
+    return { place, sub, full: data.display_name };
+  } catch(e) {
+    console.error('Geocode error', e);
+    return { place: 'Unknown', sub: '', full: '' };
+  }
+}
+
+// ── Speech ─────────────────────────────────────────────
+function speak(text) {
+  if (muted) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+
+  // Try Danish voice first, then English
+  const voices = window.speechSynthesis.getVoices();
+  const daVoice = voices.find(v => v.lang.startsWith('da'));
+  const enVoice = voices.find(v => v.lang.startsWith('en'));
+  u.voice = daVoice || enVoice || null;
+  u.rate = 0.95;
+  u.pitch = 1;
+  u.volume = 1;
+  window.speechSynthesis.speak(u);
+}
+
+// ── Toast ──────────────────────────────────────────────
+function showToast(text) {
+  const t = document.getElementById('toast');
+  t.textContent = text;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ── Place Update ───────────────────────────────────────
+async function onLocationUpdate(pos) {
+  const { latitude: lat, longitude: lng, accuracy, speed } = pos.coords;
+
+  document.getElementById('coords').textContent =
+    `${lat.toFixed(5)}, ${lng.toFixed(5)}  •  acc ±${Math.round(accuracy)}m` +
+    (speed ? `  •  ${Math.round(speed * 3.6)} km/h` : '');
+
+  updateMapMarker(lat, lng, accuracy);
+
+  // Only re-geocode if moved enough
+  if (lastLat !== null) {
+    const dist = haversine(lastLat, lastLng, lat, lng);
+    if (dist < MOVE_THRESHOLD) return;
+  }
+
+  lastLat = lat; lastLng = lng;
+
+  const { place, sub } = await getPlaceName(lat, lng);
+
+  if (place && place !== lastPlace) {
+    lastPlace = place;
+
+    // Update UI
+    const nameEl = document.getElementById('place-name');
+    nameEl.textContent = place;
+    nameEl.classList.add('flash');
+    setTimeout(() => nameEl.classList.remove('flash'), 1000);
+
+    document.getElementById('place-sub').textContent = sub || 'Denmark';
+
+    // Add map popup
+    if (marker) {
+      marker.bindPopup(`<b>${place}</b><br><small>${sub}</small>`).openPopup();
+    }
+
+    // History
+    if (!placeHistory.includes(place)) {
+      placeHistory.unshift(place);
+      if (placeHistory.length > 8) placeHistory.pop();
+      renderHistory();
+    }
+
+    // Announce
+    speak(place);
+    showToast(place);
+  }
+}
+
+function renderHistory() {
+  const el = document.getElementById('history');
+  el.innerHTML = placeHistory.slice(1).map((p, i) =>
+    `<span class="hist-chip" style="animation-delay:${i*0.05}s">${p}</span>`
+  ).join('');
+}
+
+// ── Haversine distance (metres) ────────────────────────
+function haversine(lat1, lon1, lat2, lon2) {
+  const R = 6371000;
+  const dLat = (lat2-lat1)*Math.PI/180;
+  const dLon = (lon2-lon1)*Math.PI/180;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+// ── Controls ───────────────────────────────────────────
+function startTracking() {
+  if (!navigator.geolocation) {
+    alert('Geolocation is not supported by your browser.');
+    return;
+  }
+
+  tracking = true;
+  document.getElementById('startBtn').disabled = true;
+  document.getElementById('stopBtn').disabled = false;
+  setStatus('Locating…', false);
+
+  // Load voices
+  if (speechSynthesis.onvoiceschanged !== undefined) {
+    speechSynthesis.onvoiceschanged = () => {};
+  }
+  speechSynthesis.getVoices();
+
+  watchId = navigator.geolocation.watchPosition(
+    (pos) => {
+      setStatus('Tracking', true);
+      onLocationUpdate(pos);
+    },
+    (err) => {
+      setStatus('GPS Error', false);
+      console.error(err);
+      if (err.code === 1) alert('Location permission denied. Please allow location access.');
+    },
+    { enableHighAccuracy: true, maximumAge: 5000, timeout: 15000 }
+  );
+}
+
+function stopTracking() {
+  if (watchId) navigator.geolocation.clearWatch(watchId);
+  tracking = false;
+  watchId = null;
+  lastLat = null; lastLng = null;
+  document.getElementById('startBtn').disabled = false;
+  document.getElementById('stopBtn').disabled = true;
+  setStatus('Stopped', false);
+}
+
+function toggleMute() {
+  muted = !muted;
+  document.getElementById('muteBtn').textContent = muted ? '🔇 Muted' : '🔊 Audio';
+  document.getElementById('muteBtn').style.borderColor = muted ? '#ff6b35' : '';
+  document.getElementById('muteBtn').style.color = muted ? '#ff6b35' : '';
+}
+
+function setStatus(text, active) {
+  document.getElementById('statusText').textContent = text;
+  const d = document.getElementById('statusDot');
+  d.className = 'dot' + (active ? ' active pulse' : '');
+}
+
+// ── Demo mode (if no GPS / testing) ───────────────────
+// Tap the map to simulate driving to a location
+window.addEventListener('load', () => {
+  // Init map at Copenhagen as default
+  initMap(55.6761, 12.5683);
+});
+
+// Allow clicking map to simulate position (useful for desktop testing)
+setTimeout(() => {
+  if (map) {
+    map.on('click', async (e) => {
+      if (!tracking) return;
+      const fakePos = {
+        coords: {
+          latitude: e.latlng.lat,
+          longitude: e.latlng.lng,
+          accuracy: 20,
+          speed: null
         }
-
-        // --- Speech Synthesis ---
-        function speakPlace(placeName) {
-            if (!window.speechSynthesis) return;
-
-            // Cancel any ongoing speech
-            window.speechSynthesis.cancel();
-
-            const textToSpeak = placeName;
-            ttsUtterance = new SpeechSynthesisUtterance(textToSpeak);
-            ttsUtterance.lang = 'da-DK'; // Force Danish pronunciation
-            
-            // Try to find a specific Danish voice
-            const voices = window.speechSynthesis.getVoices();
-            let preferredVoice = voices.find(v => v.lang.includes('da-') || v.lang === 'da');
-            if(preferredVoice) ttsUtterance.voice = preferredVoice;
-
-            ttsUtterance.rate = 0.9; // Slightly slower, easier to understand while driving
-            ttsUtterance.pitch = 1.0;
-
-            window.speechSynthesis.speak(ttsUtterance);
-        }
-
-        // --- Fetch Surrounding Places (Visual Labels Only) ---
-        async function fetchSurroundingPlaces(lat, lng) {
-            try {
-                // Query OpenStreetMap (Overpass API) for places within a 4km radius
-                const query = `[out:json][timeout:5];
-                (
-                  node["place"~"city|town|suburb|neighbourhood|quarter"](around:4000, ${lat}, ${lng});
-                );
-                out body;`;
-                
-                const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
-                const response = await fetch(url);
-                
-                if (!response.ok) return;
-                const data = await response.json();
-                
-                // Clear old markers
-                surroundingMarkers.forEach(m => map.removeLayer(m));
-                surroundingMarkers = [];
-                
-                if (data && data.elements) {
-                    // Use a Set to avoid duplicating names and to filter out the current place
-                    const seenNames = new Set([currentPlaceName]); 
-                    
-                    data.elements.forEach(el => {
-                        const name = el.tags && el.tags.name;
-                        if (name && !seenNames.has(name)) {
-                            seenNames.add(name);
-                            
-                            // Create custom floating label
-                            const icon = L.divIcon({
-                                className: 'surrounding-label-container',
-                                html: `<div class="surrounding-label-content">${name}</div>`,
-                                iconSize: [0, 0] // Let CSS handle the positioning
-                            });
-                            
-                            const marker = L.marker([el.lat, el.lon], {icon, interactive: false}).addTo(map);
-                            surroundingMarkers.push(marker);
-                        }
-                    });
-                }
-            } catch (error) {
-                console.error("Failed to fetch surrounding places:", error);
-            }
-        }
-
-        // --- Geocoding (Lat/Lon to Address) ---
-        async function fetchPlaceName(lat, lng) {
-            try {
-                // Nominatim OpenStreetMap API (Free, no key required. Using Accept-Language to prefer local names)
-                // Added polygon_geojson=1 to get the actual boundaries of the area
-                const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=14&addressdetails=1&polygon_geojson=1`;
-                
-                const response = await fetch(url, {
-                    headers: { 'Accept-Language': 'da,en-US,en;q=0.9' } // Prefer Danish/English names
-                });
-                
-                if (!response.ok) return null;
-                const data = await response.json();
-                
-                if (data && data.address) {
-                    const addr = data.address;
-                    // Hierarchy of preferred area names for driving
-                    const place = addr.neighbourhood || addr.suburb || addr.city_district || addr.quarter || addr.village || addr.town || addr.city || addr.municipality;
-                    const region = addr.city || addr.state || addr.country;
-                    
-                    return { place, region, geojson: data.geojson };
-                }
-            } catch (error) {
-                console.error("Geocoding error:", error);
-            }
-            return null;
-        }
-
-        // --- Location Update Logic ---
-        async function handleLocationUpdate(lat, lng) {
-            // 1. Update Map Marker
-            userMarker.setLatLng([lat, lng]);
-            userMarker.setOpacity(1);
-            map.panTo([lat, lng], { animate: true, duration: 1 });
-            
-            document.getElementById('pulse-ring').classList.remove('opacity-0');
-
-            // 2. Check if we moved enough to warrant an API call (e.g., > 200 meters)
-            // This prevents spamming the API when sitting at a red light.
-            if (lastGeocodedPos) {
-                const distance = map.distance([lat, lng], [lastGeocodedPos.lat, lastGeocodedPos.lng]);
-                if (distance < 200) {
-                    return; // Haven't moved far enough
-                }
-            }
-
-            // 3. Fetch Place Name
-            const locationData = await fetchPlaceName(lat, lng);
-            
-            if (locationData && locationData.place) {
-                lastGeocodedPos = { lat, lng };
-                const newPlace = locationData.place;
-
-                // 4. Announce if place changed
-                if (newPlace !== currentPlaceName) {
-                    currentPlaceName = newPlace;
-                    updateUIPlace(currentPlaceName, locationData.region);
-                    speakPlace(currentPlaceName);
-                    
-                    // Fetch surrounding areas to display on map as text labels
-                    fetchSurroundingPlaces(lat, lng);
-                    
-                    // 5. Draw the boundaries of the new area
-                    if (currentPolygonLayer) {
-                        map.removeLayer(currentPolygonLayer);
-                    }
-                    
-                    if (locationData.geojson) {
-                        currentPolygonLayer = L.geoJSON(locationData.geojson, {
-                            style: {
-                                color: '#3b82f6', // Blue border
-                                weight: 3,
-                                opacity: 0.8,
-                                fillColor: '#3b82f6', // Light blue fill
-                                fillOpacity: 0.15
-                            }
-                        }).addTo(map);
-                    }
-                }
-            }
-        }
-
-        function updateUIPlace(place, region) {
-            const placeEl = document.getElementById('current-place');
-            const regionEl = document.getElementById('current-region');
-            
-            // Animation effect
-            placeEl.style.transform = 'scale(0.95)';
-            placeEl.style.opacity = '0.5';
-            
-            setTimeout(() => {
-                placeEl.innerText = place;
-                regionEl.innerText = region ? region : '';
-                placeEl.style.transform = 'scale(1)';
-                placeEl.style.opacity = '1';
-            }, 150);
-        }
-
-        // --- Real GPS Tracking ---
-        function toggleTracking() {
-            if (isDemoMode) stopDemo();
-
-            if (isTracking) {
-                stopTracking();
-            } else {
-                startTracking();
-            }
-        }
-
-        function startTracking() {
-            if (!navigator.geolocation) {
-                alert("Geolocation is not supported by your browser");
-                return;
-            }
-
-            // Init audio context securely on user click
-            const initUtterance = new SpeechSynthesisUtterance("GPS initialized.");
-            initUtterance.volume = 0; // Silent init
-            window.speechSynthesis.speak(initUtterance);
-
-            isTracking = true;
-            updateStatus("Acquiring GPS signal...", "bg-yellow-500");
-            
-            document.getElementById('btn-start').classList.replace('bg-blue-600', 'bg-red-600');
-            document.getElementById('btn-start').classList.replace('hover:bg-blue-500', 'hover:bg-red-500');
-            document.getElementById('btn-start-text').innerText = "Stop Driving Mode";
-            document.querySelector('#btn-start i').setAttribute('data-lucide', 'square');
-            lucide.createIcons();
-
-            watchId = navigator.geolocation.watchPosition(
-                (position) => {
-                    updateStatus("Live GPS Tracking", "bg-green-500");
-                    handleLocationUpdate(position.coords.latitude, position.coords.longitude);
-                },
-                (error) => {
-                    console.error("GPS Error:", error);
-                    let errorMsg = "GPS Error";
-                    // Improved error handling to tell the user what went wrong
-                    switch(error.code) {
-                        case error.PERMISSION_DENIED:
-                            errorMsg = "Location Access Denied";
-                            alert("Please allow location permissions in your browser to use Driving Mode.");
-                            break;
-                        case error.POSITION_UNAVAILABLE:
-                            errorMsg = "Position Unavailable";
-                            break;
-                        case error.TIMEOUT:
-                            errorMsg = "GPS Timeout - Retrying...";
-                            break;
-                    }
-                    updateStatus(errorMsg, "bg-red-500");
-                },
-                { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 } // Increased timeout to 10s to give more time for prompts/desktop locks
-            );
-        }
-
-        function stopTracking() {
-            if (watchId !== null) navigator.geolocation.clearWatch(watchId);
-            isTracking = false;
-            lastGeocodedPos = null;
-            currentPlaceName = "";
-            document.getElementById('pulse-ring').classList.add('opacity-0');
-            
-            if (currentPolygonLayer) {
-                map.removeLayer(currentPolygonLayer);
-                currentPolygonLayer = null;
-            }
-            
-            // Clear surrounding labels
-            surroundingMarkers.forEach(m => map.removeLayer(m));
-            surroundingMarkers = [];
-            
-            updateStatus("Tracking Stopped", "bg-slate-500");
-            document.getElementById('btn-start').classList.replace('bg-red-600', 'bg-blue-600');
-            document.getElementById('btn-start').classList.replace('hover:bg-red-500', 'hover:bg-blue-500');
-            document.getElementById('btn-start-text').innerText = "Start Driving Mode";
-            document.querySelector('#btn-start i').setAttribute('data-lucide', 'navigation');
-            lucide.createIcons();
-            
-            document.getElementById('current-place').innerText = "Unknown Location";
-            document.getElementById('current-region').innerText = "Press Start to locate";
-        }
-
-        // --- Demo Mode ---
-        function toggleDemo() {
-            if (isTracking) stopTracking();
-
-            if (isDemoMode) {
-                stopDemo();
-            } else {
-                startDemo();
-            }
-        }
-
-        function startDemo() {
-            // Init audio context securely on user click
-            const initUtterance = new SpeechSynthesisUtterance("");
-            initUtterance.volume = 0;
-            window.speechSynthesis.speak(initUtterance);
-
-            isDemoMode = true;
-            demoStep = 0;
-            lastGeocodedPos = null;
-            currentPlaceName = "";
-            
-            updateStatus("Simulation Active", "bg-purple-500");
-            document.getElementById('btn-demo').classList.replace('bg-slate-700', 'bg-purple-600');
-            document.getElementById('btn-demo').classList.replace('hover:bg-slate-600', 'hover:bg-purple-500');
-            document.getElementById('btn-demo-text').innerText = "Stop Simulation";
-            
-            // Zoom in a bit for demo
-            map.setZoom(14);
-
-            // Run simulation steps
-            runDemoStep();
-            demoInterval = setInterval(runDemoStep, 4000); // Move every 4 seconds
-        }
-
-        function runDemoStep() {
-            if (demoStep >= demoPath.length) {
-                demoStep = 0; // Loop back
-            }
-            const pos = demoPath[demoStep];
-            handleLocationUpdate(pos.lat, pos.lng);
-            demoStep++;
-        }
-
-        function stopDemo() {
-            clearInterval(demoInterval);
-            isDemoMode = false;
-            document.getElementById('pulse-ring').classList.add('opacity-0');
-            
-            if (currentPolygonLayer) {
-                map.removeLayer(currentPolygonLayer);
-                currentPolygonLayer = null;
-            }
-            
-            // Clear surrounding labels
-            surroundingMarkers.forEach(m => map.removeLayer(m));
-            surroundingMarkers = [];
-            
-            updateStatus("Ready to start", "bg-slate-500");
-            document.getElementById('btn-demo').classList.replace('bg-purple-600', 'bg-slate-700');
-            document.getElementById('btn-demo').classList.replace('hover:bg-purple-500', 'hover:bg-slate-600');
-            document.getElementById('btn-demo-text').innerText = "Simulate Drive";
-            
-            document.getElementById('current-place').innerText = "Unknown Location";
-            document.getElementById('current-region').innerText = "Press Start to locate";
-        }
-
-        // --- Utilities ---
-        function updateStatus(text, colorClass) {
-            document.getElementById('status-text').innerText = text;
-            const dot = document.getElementById('status-dot');
-            dot.className = `w-2 h-2 rounded-full ${colorClass}`;
-            if(colorClass.includes('green') || colorClass.includes('purple')) {
-                dot.classList.add('animate-pulse');
-            } else {
-                dot.classList.remove('animate-pulse');
-            }
-        }
-
-        // Initialize Map on Load
-        window.onload = () => {
-            initMap();
-            // Try to load voices proactively
-            if(window.speechSynthesis) window.speechSynthesis.getVoices();
-        };
-
-    </script>
+      };
+      lastLat = null; // force update
+      await onLocationUpdate(fakePos);
+    });
+  }
+}, 500);
+</script>
 </body>
 </html>
