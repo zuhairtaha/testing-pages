@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Embedded PDF variants — Readalix test page</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Segoe UI', system-ui, sans-serif; color: #2a3441; background: #fff; }
+  header { padding: 18px 48px; border-bottom: 1px solid #e7ecf1; }
+  header h1 { margin: 0; font-size: 20px; color: #12365b; }
+  header p { margin: 4px 0 0; font-size: 14px; color: #8a97a6; }
+  main { max-width: 1040px; margin: 0 auto; padding: 24px 24px 90px; }
+  .note { background: #f4f8fb; border-left: 4px solid #22b8cd; padding: 14px 18px; margin: 0 0 30px; font-size: 14.5px; line-height: 1.6; }
+  section { border-top: 1px solid #e7ecf1; padding-top: 22px; margin-top: 34px; }
+  h2 { font-size: 17px; color: #12365b; margin: 0 0 6px; }
+  .expect { font-size: 14px; line-height: 1.65; color: #5f6d7e; margin: 0 0 16px; }
+  .expect b { color: #12365b; }
+  code { background: #eef3f7; padding: 1px 5px; border-radius: 3px; font-size: 13px; }
+  embed.pdf, object.pdf, iframe.pdf { display: block; width: 820px; height: 520px; margin-left: 50px; border: 1px solid #d6dee6; }
+  .pair { display: flex; gap: 22px; margin-left: 30px; }
+  .pair iframe { width: 480px; height: 420px; border: 1px solid #d6dee6; }
+  .wrapper { width: 900px; height: 560px; margin-left: 70px; border: 2px dashed #c9d6e2; padding: 14px; }
+  .wrapper iframe { width: 100%; height: 100%; border: 0; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Embedded PDF variants</h1>
+  <p>The same case as <a href="./embedded-pdf.html">embedded-pdf.html</a>, in the other shapes a real
+     site can produce.</p>
+</header>
+
+<main>
+
+  <p class="note">
+    Each section is a separate embedded document, so each one has its own viewer. Chrome builds the
+    identical embedder → viewer → plugin stack for every one of them; what differs is the element
+    that hosts it and where it sits on the page.
+  </p>
+
+  <section>
+    <h2>1. <code>&lt;embed type="application/pdf"&gt;</code></h2>
+    <p class="expect"><b>Expect</b> the same as an iframe: play reads the document from the top,
+       words highlighted in place, no leftover blue selection.</p>
+    <embed class="pdf" type="application/pdf" src="./Readalix%20reads%20PDFs.pdf">
+  </section>
+
+  <section>
+    <h2>2. <code>&lt;object type="application/pdf"&gt;</code></h2>
+    <p class="expect"><b>Expect</b> the same again. <code>&lt;object&gt;</code> is the oldest of the
+       three and still turns up in intranets and generated invoice pages.</p>
+    <object class="pdf" type="application/pdf" data="./voyage.pdf">
+      <p>Your browser did not create a PDF view for this object.</p>
+    </object>
+  </section>
+
+  <section>
+    <h2>3. Two different PDFs on one page</h2>
+    <p class="expect">
+      <b>Expect</b> each frame to read <i>its own</i> document, never the other one — every viewer
+      reports the same internal address, so they can only be told apart by the file each renders.
+      Read the left one (<b>“Readalix reads PDFs aloud…”</b>), stop, then read the right one
+      (<b>“Voyage…”</b>). <b>Also expect</b> that pressing play with nothing selected starts exactly
+      <i>one</i> of them, not both at once.
+    </p>
+    <div class="pair">
+      <iframe title="Readalix reads PDFs" src="./Readalix%20reads%20PDFs.pdf"></iframe>
+      <iframe title="Voyage" src="./voyage.pdf"></iframe>
+    </div>
+  </section>
+
+  <section>
+    <h2>4. A PDF two frames deep</h2>
+    <p class="expect"><b>Expect</b> no difference. The viewer is nested inside another element here
+       (and could just as well be inside another iframe, as in a preview pane) — depth is not what
+       the reader keys on.</p>
+    <div class="wrapper">
+      <iframe title="Readalix reads PDFs, nested" src="./Readalix%20reads%20PDFs.pdf"></iframe>
+    </div>
+  </section>
+
+</main>
+
+</body>
+</html>

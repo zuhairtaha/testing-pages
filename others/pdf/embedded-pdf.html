@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDF embedded in a page — Readalix test page</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Segoe UI', system-ui, sans-serif; color: #2a3441; background: #fff; }
+  header { padding: 18px 48px; border-bottom: 1px solid #e7ecf1; }
+  header h1 { margin: 0; font-size: 20px; color: #12365b; }
+  header p { margin: 4px 0 0; font-size: 14px; color: #8a97a6; }
+  main { max-width: 980px; margin: 0 auto; padding: 28px 24px 80px; }
+  .note { background: #f4f8fb; border-left: 4px solid #22b8cd; padding: 14px 18px; margin: 0 0 26px; font-size: 14.5px; line-height: 1.6; }
+  .note code { background: #e7eef4; padding: 1px 5px; border-radius: 3px; font-size: 13px; }
+  ol.cases { font-size: 14.5px; line-height: 1.7; padding-left: 22px; margin: 0 0 30px; }
+  ol.cases b { color: #12365b; }
+  .page-text { font-family: Georgia, 'Times New Roman', serif; font-size: 18px; line-height: 1.75; }
+  /* The left margin is deliberate: it puts the viewer at a non-zero page offset,
+     which is what makes the embedded viewer's own coordinates differ from the
+     tab's. A clear-click routed to the tab instead of the viewer lands here. */
+  iframe.pdf { display: block; width: 900px; height: 640px; margin: 28px 0 28px 60px; border: 1px solid #d6dee6; }
+  footer { border-top: 1px solid #e7ecf1; padding: 18px 48px; font-size: 13.5px; color: #8a97a6; }
+  footer a { color: #22b8cd; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>PDF embedded in a page</h1>
+  <p>An ordinary page that shows a PDF inside an <code>&lt;iframe&gt;</code> — the shape Google Drive
+     and Gmail use to preview attachments, and course sites to show a handout.</p>
+</header>
+
+<main>
+
+  <p class="note">
+    <b>What to check.</b> The PDF below is not a PDF tab — it is a frame inside this page, so the
+    viewer sits at a page offset and this page competes with it for the same Read command.
+    Host-page sentences here begin with <b>“This page…”</b>; every sentence in the document begins
+    with something else, so you can always hear which one is being read.
+  </p>
+
+  <ol class="cases">
+    <li><b>Press play with nothing selected.</b> The document reads from the top —
+        “Readalix reads PDFs aloud…” — with each spoken word highlighted inside the frame.
+        No “select text first” note, and no blue select-all tint left behind on the pages.</li>
+    <li><b>Select a passage inside the PDF, then play.</b> Only that passage is read, and the blue
+        selection disappears as reading starts so it can’t bury the word highlight.</li>
+    <li><b>Select a paragraph of this page, then play.</b> The page text is read and the document
+        stays silent — the page owns that read.</li>
+    <li><b>Click anywhere on the PDF while it reads.</b> Reading stops. Scrolling it does not.</li>
+    <li><b>Escape</b> stops, and the read shortcut toggles, while the focus is inside the PDF.</li>
+  </ol>
+
+  <p class="page-text" id="above">
+    This page is the host document, and this paragraph belongs to it rather than to the PDF below.
+    This page exists to sit around the embedded viewer so there is real page text above and below it
+    to select. This page should be read aloud in this voice only when one of its own paragraphs is
+    selected first.
+  </p>
+
+  <iframe class="pdf" title="Readalix reads PDFs" src="./Readalix%20reads%20PDFs.pdf"></iframe>
+
+  <p class="page-text" id="below">
+    This page continues after the embedded document, so the frame is not the last thing on it.
+    This page keeps a second selectable block of host text down here, useful for checking that a
+    selection made after the PDF still wins over it.
+  </p>
+
+</main>
+
+<footer>
+  Variants of the same case — <code>&lt;embed&gt;</code>, <code>&lt;object&gt;</code>, two PDFs on one
+  page, and a PDF nested two frames deep — are on
+  <a href="./embedded-pdf-variants.html">embedded-pdf-variants.html</a>.
+</footer>
+
+</body>
+</html>
