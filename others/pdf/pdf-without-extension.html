@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDF at a URL with no .pdf extension — Readalix test page</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Segoe UI', system-ui, sans-serif; color: #2a3441; background: #fff; }
+  header { padding: 18px 48px; border-bottom: 1px solid #e7ecf1; }
+  header h1 { margin: 0; font-size: 20px; color: #12365b; }
+  header p { margin: 4px 0 0; font-size: 14px; color: #8a97a6; }
+  main { max-width: 980px; margin: 0 auto; padding: 28px 24px 80px; }
+  .note { background: #f4f8fb; border-left: 4px solid #22b8cd; padding: 14px 18px; margin: 0 0 26px; font-size: 14.5px; line-height: 1.6; }
+  .note code, li code, p code { background: #e7eef4; padding: 1px 5px; border-radius: 3px; font-size: 13px; }
+  ol.cases { font-size: 14.5px; line-height: 1.7; padding-left: 22px; margin: 0 0 30px; }
+  ol.cases b { color: #12365b; }
+  ul.links { list-style: none; padding: 0; margin: 0 0 30px; font-size: 15px; line-height: 2.1; }
+  ul.links a { color: #12365b; }
+  ul.links span { color: #8a97a6; font-size: 13.5px; }
+  footer { border-top: 1px solid #e7ecf1; padding: 18px 48px; font-size: 13.5px; color: #8a97a6; }
+  footer a { color: #22b8cd; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>PDF at a URL with no <code>.pdf</code> extension</h1>
+  <p>The shape a download endpoint uses — <code>/download?id=8421</code> — instead of a plain
+     <code>file.pdf</code>. Same document either way; only the address changes.</p>
+</header>
+
+<main>
+
+  <p class="note">
+    <b>Why this page exists.</b> Chrome opens its built-in PDF viewer from the response's
+    <code>Content-Type: application/pdf</code>, so a PDF needs no <code>.pdf</code> in its address.
+    Readalix has two ways of noticing a PDF: the content script asks the document
+    (<code>document.contentType</code>, which is always right), while the popup and the background
+    match the tab's address against <code>/\.pdf(\?|#|$)/i</code>, which these links defeat. So
+    <b>reading is expected to work here, and the popup is expected to be wrong</b> — that is the
+    thing to look for.
+  </p>
+
+  <ul class="links">
+    <li><a href="./download?id=8421">./download?id=8421</a>
+        <span>— a query string, like a real download endpoint</span></li>
+    <li><a href="./download">./download</a>
+        <span>— the same file, bare</span></li>
+    <li><a href="./Readalix%20reads%20PDFs.pdf">./Readalix reads PDFs.pdf</a>
+        <span>— the control: identical document, ordinary <code>.pdf</code> address</span></li>
+  </ul>
+
+  <ol class="cases">
+    <li><b>Open a link with no extension and press play with nothing selected.</b> The document
+        reads from the top — “Readalix reads PDFs aloud…” — with each spoken word highlighted by the
+        viewer, exactly as on the control link.</li>
+    <li><b>Select a passage, then play.</b> Only that passage is read, and the blue selection
+        disappears as reading starts.</li>
+    <li><b>Look at the popup on the extensionless links.</b> The pick-element button is expected to
+        be <i>shown</i> even though a PDF tab has nothing to pick, and the note explaining that play
+        reads from the top is expected to be <i>missing</i>. Both are correct on the control link.</li>
+    <li><b>Click the page while it reads</b> stops it; <b>Escape</b> stops; the read shortcut
+        toggles — on every link here.</li>
+  </ol>
+
+  <p>
+    Real examples of the same shape: <code>https://arxiv.org/pdf/2401.12345</code> (no extension at
+    all), attachment endpoints such as <code>/mail/attachment?id=…</code>, and invoice or statement
+    downloads such as <code>/documents/download?ref=…</code>.
+  </p>
+
+</main>
+
+<footer>
+  Other PDF cases — a PDF inside an <code>&lt;iframe&gt;</code>, and the
+  <code>&lt;embed&gt;</code>/<code>&lt;object&gt;</code>/nested variants — are on
+  <a href="./embedded-pdf.html">embedded-pdf.html</a> and
+  <a href="./embedded-pdf-variants.html">embedded-pdf-variants.html</a>.
+</footer>
+
+</body>
+</html>
