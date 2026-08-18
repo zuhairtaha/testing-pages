@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PDF at a URL with no .pdf extension — Readalix test page</title>
+<title>PDF at a URL with no .pdf in it — Readalix test page</title>
 <style>
   * { box-sizing: border-box; }
   body { margin: 0; font-family: 'Segoe UI', system-ui, sans-serif; color: #2a3441; background: #fff; }
@@ -12,62 +12,79 @@
   header p { margin: 4px 0 0; font-size: 14px; color: #8a97a6; }
   main { max-width: 980px; margin: 0 auto; padding: 28px 24px 80px; }
   .note { background: #f4f8fb; border-left: 4px solid #22b8cd; padding: 14px 18px; margin: 0 0 26px; font-size: 14.5px; line-height: 1.6; }
-  .note code, li code, p code { background: #e7eef4; padding: 1px 5px; border-radius: 3px; font-size: 13px; }
-  ol.cases { font-size: 14.5px; line-height: 1.7; padding-left: 22px; margin: 0 0 30px; }
-  ol.cases b { color: #12365b; }
-  ul.links { list-style: none; padding: 0; margin: 0 0 30px; font-size: 15px; line-height: 2.1; }
-  ul.links a { color: #12365b; }
-  ul.links span { color: #8a97a6; font-size: 13.5px; }
+  .warn { background: #fdf6f0; border-left-color: #e08c4a; }
+  code { background: #e7eef4; padding: 1px 5px; border-radius: 3px; font-size: 13px; }
+  h2 { font-size: 16px; color: #12365b; margin: 34px 0 10px; }
+  ol.cases, ul.cases { font-size: 14.5px; line-height: 1.7; padding-left: 22px; margin: 0 0 18px; }
+  ol.cases b, ul.cases b { color: #12365b; }
+  button { font: inherit; font-size: 14px; padding: 8px 16px; margin: 0 8px 8px 0; border: 1px solid #22b8cd; background: #fff; color: #12365b; border-radius: 4px; cursor: pointer; }
+  button:hover { background: #f4f8fb; }
+  iframe.pdf { display: block; width: 900px; height: 520px; margin: 16px 0 8px 60px; border: 1px solid #d6dee6; }
+  .page-text { font-family: Georgia, 'Times New Roman', serif; font-size: 18px; line-height: 1.75; }
   footer { border-top: 1px solid #e7ecf1; padding: 18px 48px; font-size: 13.5px; color: #8a97a6; }
-  footer a { color: #22b8cd; }
+  footer a, ul.cases a { color: #22b8cd; }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>PDF at a URL with no <code>.pdf</code> extension</h1>
-  <p>The shape a download endpoint uses — <code>/download?id=8421</code> — instead of a plain
-     <code>file.pdf</code>. Same document either way; only the address changes.</p>
+  <h1>PDF at a URL with no <code>.pdf</code> in it</h1>
+  <p>Chrome opens its PDF viewer from the response's <code>Content-Type</code>, not from the file
+     name. So a PDF address does not need to end in <code>.pdf</code>.</p>
 </header>
 
 <main>
 
   <p class="note">
-    <b>Why this page exists.</b> Chrome opens its built-in PDF viewer from the response's
-    <code>Content-Type: application/pdf</code>, so a PDF needs no <code>.pdf</code> in its address.
-    Readalix has two ways of noticing a PDF: the content script asks the document
-    (<code>document.contentType</code>, which is always right), while the popup and the background
-    match the tab's address against <code>/\.pdf(\?|#|$)/i</code>, which these links defeat. So
-    <b>reading is expected to work here, and the popup is expected to be wrong</b> — that is the
-    thing to look for.
+    <b>Why this matters.</b> Readalix has two ways of noticing a PDF. The content script asks the
+    document — <code>document.contentType</code> — which is always right. The popup and the
+    background match the tab address against <code>/\.pdf(\?|#|$)/i</code>, which every address on
+    this page defeats. So <b>reading is expected to work, and the popup is expected to be wrong</b>:
+    the pick-element button shows although a PDF tab has nothing to pick, and the note that explains
+    that play reads from the top is missing.
   </p>
 
-  <ul class="links">
-    <li><a href="./download?id=8421">./download?id=8421</a>
-        <span>— a query string, like a real download endpoint</span></li>
-    <li><a href="./download">./download</a>
-        <span>— the same file, bare</span></li>
-    <li><a href="./Readalix%20reads%20PDFs.pdf">./Readalix reads PDFs.pdf</a>
-        <span>— the control: identical document, ordinary <code>.pdf</code> address</span></li>
-  </ul>
+  <p class="note warn">
+    <b>A download endpoint cannot be hosted here.</b> The shape
+    <code>https://example.com/download?id=8421</code> needs a file with no extension, and GitHub
+    Pages then sends <code>Content-Type: application/octet-stream</code> (measured), which Chrome
+    downloads instead of showing. GitHub Pages sends <code>application/pdf</code> only for a name
+    that ends in <code>.pdf</code> — and that name matches the address test again. Use a live
+    example for that case instead:
+    <a href="https://arxiv.org/pdf/2401.12345">https://arxiv.org/pdf/2401.12345</a> — a real PDF with
+    no extension in its address.
+  </p>
 
-  <ol class="cases">
-    <li><b>Open a link with no extension and press play with nothing selected.</b> The document
-        reads from the top — “Readalix reads PDFs aloud…” — with each spoken word highlighted by the
-        viewer, exactly as on the control link.</li>
-    <li><b>Select a passage, then play.</b> Only that passage is read, and the blue selection
-        disappears as reading starts.</li>
-    <li><b>Look at the popup on the extensionless links.</b> The pick-element button is expected to
-        be <i>shown</i> even though a PDF tab has nothing to pick, and the note explaining that play
-        reads from the top is expected to be <i>missing</i>. Both are correct on the control link.</li>
-    <li><b>Click the page while it reads</b> stops it; <b>Escape</b> stops; the read shortcut
-        toggles — on every link here.</li>
-  </ol>
+  <h2>Blob URL — the same gap, reproducible here</h2>
+
+  <p class="page-text">
+    A blob address holds no file name at all: <code>blob:https://zuhairtaha.github.io/&lt;uuid&gt;</code>.
+    Web applications use this shape often — they fetch a statement, an invoice or a report with
+    JavaScript and open the bytes, so the address of the PDF tab is a blob address. The buttons below
+    fetch <code>Readalix reads PDFs.pdf</code> from this folder and open it that way.
+  </p>
 
   <p>
-    Real examples of the same shape: <code>https://arxiv.org/pdf/2401.12345</code> (no extension at
-    all), attachment endpoints such as <code>/mail/attachment?id=…</code>, and invoice or statement
-    downloads such as <code>/documents/download?ref=…</code>.
+    <button id="tab">Open the PDF in this tab</button>
+    <button id="win">Open the PDF in a new tab</button>
+    <button id="frame">Show the PDF in a frame below</button>
+  </p>
+
+  <ul class="cases">
+    <li><b>Press play with nothing selected.</b> Expected result unknown — a content script does not
+        run on a <code>blob:</code> document, so Readalix may read nothing at all. Write down what
+        happens.</li>
+    <li><b>Select a passage, then play.</b> Same check.</li>
+    <li><b>Compare with the control</b> —
+        <a href="./Readalix%20reads%20PDFs.pdf">the identical document at an ordinary .pdf address</a>,
+        which reads and highlights.</li>
+  </ul>
+
+  <div id="host"></div>
+
+  <p class="page-text" id="below">
+    This page keeps a block of its own text down here. This page is the host document, so a selection
+    made in this paragraph must be read in place of any PDF above it.
   </p>
 
 </main>
@@ -78,6 +95,33 @@
   <a href="./embedded-pdf.html">embedded-pdf.html</a> and
   <a href="./embedded-pdf-variants.html">embedded-pdf-variants.html</a>.
 </footer>
+
+<script>
+  const PDF = './Readalix%20reads%20PDFs.pdf'
+  let cached = null
+  // One fetch, reused by every button: the blob url stays valid for this document's lifetime.
+  async function blobUrl() {
+    if (cached) return cached
+    const r = await fetch(PDF)
+    if (!r.ok) throw new Error('fetch failed: ' + r.status)
+    // Force the pdf type: the response carries it, but a blob built from a
+    // typeless copy would be downloaded instead of shown.
+    const b = new Blob([await r.arrayBuffer()], { type: 'application/pdf' })
+    return (cached = URL.createObjectURL(b))
+  }
+  const run = (fn) => async () => { try { fn(await blobUrl()) } catch (e) { alert(String(e)) } }
+  document.getElementById('tab').onclick = run((u) => { location.href = u })
+  document.getElementById('win').onclick = run((u) => { window.open(u, '_blank') })
+  document.getElementById('frame').onclick = run((u) => {
+    const host = document.getElementById('host')
+    host.innerHTML = ''
+    const f = document.createElement('iframe')
+    f.className = 'pdf'
+    f.title = 'Readalix reads PDFs (blob url)'
+    f.src = u
+    host.append(f)
+  })
+</script>
 
 </body>
 </html>
