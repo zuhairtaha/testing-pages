@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rotated Text - Sticky Notes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Kalam:wght@400;700&display=swap");
+
+      body {
+        /* A subtle textured background to simulate a board */
+        background-color: #d1c8b8;
+        background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+        font-family: "Helvetica Neue", sans-serif;
+      }
+
+      .font-handwriting-1 {
+        font-family: "Caveat", cursive;
+      }
+      .font-handwriting-2 {
+        font-family: "Kalam", cursive;
+      }
+
+      /* Base styles for the notes to give them a paper-like feel */
+      .sticky-note {
+        box-shadow:
+          2px 4px 6px rgba(0, 0, 0, 0.15),
+          inset 0 -2px 10px rgba(0, 0, 0, 0.05);
+        transition:
+          transform 0.2s ease-in-out,
+          box-shadow 0.2s ease-in-out;
+      }
+
+      .sticky-note:hover {
+        box-shadow:
+          4px 8px 12px rgba(0, 0, 0, 0.2),
+          inset 0 -2px 10px rgba(0, 0, 0, 0.05);
+        z-index: 50; /* Bring to front on hover */
+      }
+
+      /* A subtle curl effect for the bottom corner */
+      .sticky-note::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 20px;
+        height: 20px;
+        background: linear-gradient(135deg, transparent 50%, rgba(0, 0, 0, 0.1) 50%);
+        border-bottom-right-radius: inherit;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen flex flex-col items-center justify-center py-12 px-4 overflow-x-hidden relative">
+    <main class="w-full max-w-5xl relative flex flex-wrap justify-center gap-8 lg:gap-12 p-8">
+      <!-- Note 1: Slight right rotation -->
+      <div
+        class="sticky-note bg-yellow-200 w-64 h-64 p-6 flex flex-col transform rotate-2 hover:rotate-0 hover:scale-105 relative group"
+      >
+        <!-- Pin -->
+        <div
+          class="absolute -top-3 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-red-500 shadow-sm border border-red-700"
+        ></div>
+        <h2 class="font-bold text-gray-800 text-lg mb-2">Design Todo</h2>
+        <ul class="font-handwriting-1 text-2xl text-gray-800 leading-tight space-y-2 flex-grow">
+          <li>- Finish new hero banner</li>
+          <li>- Check contrast on buttons</li>
+          <li>- Add more organic shapes</li>
+        </ul>
+      </div>
+
+      <!-- Note 2: Larger left rotation, different color -->
+      <div
+        class="sticky-note bg-green-200 w-72 h-64 p-6 flex flex-col transform -rotate-6 hover:-rotate-2 hover:scale-105 relative group mt-8 sm:mt-0"
+      >
+        <!-- Tape -->
+        <div
+          class="absolute -top-4 left-1/2 -translate-x-1/2 w-16 h-6 bg-white/50 backdrop-blur-sm shadow-sm border border-white/20 transform rotate-3"
+        ></div>
+        <h2 class="font-bold text-gray-800 text-lg mb-2 border-b border-green-300 pb-1">Meeting Notes</h2>
+        <p class="font-handwriting-2 text-xl text-gray-800 leading-relaxed mt-2 flex-grow">
+          Client wants it to look "more dynamic." Maybe try scattering the elements instead of a strict grid? CSS
+          transforms are perfect for this!
+        </p>
+      </div>
+
+      <!-- Note 3: Small note, steep left rotation -->
+      <div
+        class="sticky-note bg-pink-200 w-56 h-56 p-6 flex flex-col transform -rotate-12 hover:-rotate-3 hover:scale-105 relative group mt-4 lg:mt-0"
+      >
+        <!-- Tape -->
+        <div
+          class="absolute top-2 -right-4 w-12 h-5 bg-white/50 backdrop-blur-sm shadow-sm border border-white/20 transform rotate-45"
+        ></div>
+        <p class="font-handwriting-1 text-3xl text-gray-800 text-center flex items-center justify-center h-full">
+          Don't forget the milk! 🥛
+        </p>
+      </div>
+
+      <!-- Note 4: Center note, slight rotation -->
+      <div
+        class="sticky-note bg-orange-200 w-72 h-72 p-6 flex flex-col transform rotate-1 hover:rotate-0 hover:scale-105 relative group z-0 hover:z-50 mt-8 sm:mt-12"
+      >
+        <!-- Pin -->
+        <div
+          class="absolute -top-3 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-blue-500 shadow-sm border border-blue-700"
+        ></div>
+        <h2 class="font-bold text-gray-800 text-xl mb-4 text-center">Why this works:</h2>
+        <p class="font-handwriting-2 text-xl text-gray-800 leading-relaxed flex-grow">
+          Applying varying degrees of rotation mimics how physical objects settle when dropped or pinned hastily. It
+          adds a human touch to an otherwise sterile digital canvas.
+        </p>
+      </div>
+    </main>
+  </body>
+</html>
